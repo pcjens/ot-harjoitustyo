@@ -1,0 +1,105 @@
+commit fbc3e090a19a6e1db3302ee2c4f32ef5aeb0b73c
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Thu Mar 14 00:21:05 2019 +0200
+
+    Final changes
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 61ed17977f6895660a397a040b335ba76f2c2588
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Thu Mar 14 00:19:35 2019 +0200
+
+    Add files
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 99615267f8446ce80d599fee065512ad0affb07b
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Thu Mar 14 00:07:54 2019 +0200
+
+    Patch stuff
+
+ eka.txt    | 7 -------
+ kolmas.txt | 2 ++
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+commit 757ad0805b076148b593018885c10e1f5203ccd1
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Thu Mar 14 00:05:39 2019 +0200
+
+    Rename tiedosto.txt
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 88617a36ffa8a25c1a9930a98f04d9dd68403151
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Thu Mar 14 00:05:10 2019 +0200
+
+    Delete toinen.txt
+
+ toinen.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 7f234ae5930b29b71a86782caa8bc98c299f6088
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Thu Mar 14 00:02:28 2019 +0200
+
+    Remaster tiedosto.txt, director's cut
+
+ tiedosto.txt | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+commit c18a47ed10cf309115f40f728b961e446dc1c4d0
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Thu Mar 14 00:01:07 2019 +0200
+
+    Add slipsum
+
+ tiedosto.txt | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+commit 89370eeb50233ba7fa395c25e9734089248d642d
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Wed Mar 13 23:56:52 2019 +0200
+
+    Add pöö
+
+    Note: git seems to not like non-ascii characters.
+
+ "stuff/p\303\266\303\266" | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 602e0ae50c7ea909b25fa2e8ab21dd3ce9fb1cd0
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Wed Mar 13 23:53:56 2019 +0200
+
+    Add kolmas.txt
+
+ kolmas.txt | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+commit 5794602951dace78fb58d4e560b8f30a95dca764
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Wed Mar 13 23:49:39 2019 +0200
+
+    Muuta ja lisää
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit fbaabc98ebe8ef2dfbbce1f85c2cde3f55ed8778
+Author: Jens Pitkanen <jens.pitkanen@helsinki.fi>
+Date:   Wed Mar 13 23:47:55 2019 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
