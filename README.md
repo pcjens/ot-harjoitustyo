@@ -1,6 +1,8 @@
 # Ohjelmistotekniikka-kurssin harjoitustyö
 Tämä repo sisältää mitä otsikossa lukee. Tai tulee mahdollisesti
-joskus sisältämään. *Saattaa sisältää pieniä määriä laskareita.*
+joskus sisältämään.
+
+<small>Saattaa sisältää pieniä määriä laskareita.</small>
 
 ## Tehtävät
 ### Viikko 1
