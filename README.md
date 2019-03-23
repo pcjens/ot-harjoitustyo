@@ -8,3 +8,6 @@ joskus sisältämään.
 ### Viikko 1
 - [gitlog.txt](laskarit/viikko1/gitlog.txt)
 - [komentorivi.txt](laskarit/viikko1/komentorivi.txt)
+
+## Viikko 2
+- [codecov-screenshot.png](laskarit/viikko2/codecov-screenshot.png)
