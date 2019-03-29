@@ -1,6 +1,12 @@
-# Ohjelmistotekniikka-kurssin harjoitustyö
-Tämä repo sisältää mitä otsikossa lukee. Tai tulee mahdollisesti
-joskus sisältämään.
+# Roguesque
+Roguesque on Roguen kaltainen peli. Pelaaja seikkailee luolastoissa
+vuoropohjaisilla mekaniikoilla, löytäen aarteita ja taistellen
+kaikenlaisia vastustajia vastaan. Peli toimii harjoitustyönä
+Ohjelmistotekniikan kurssille.
+
+## Dokumentaatio
+- [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
+- [Tuntikirjanpito](dokumentaatio/tuntikirjanpito.md)
 
 ## Komennot
 ### Pelin käynnistäminen
@@ -22,6 +28,6 @@ mvn test
 
 #### Testien kattavuus
 ```sh
-mvn jacoco:report
+mvn test jacoco:report
 ```
 Tulos löytyy tiedostosta [`target/site/jacoco/index.html`](target/site/jacoco/index.html).
