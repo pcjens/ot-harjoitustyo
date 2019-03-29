@@ -1,0 +1,21 @@
+title Machine Operation
+
+Application-->+Machine: Machine()
+Machine-->+FuelTank: FuelTank()
+FuelTank-->-Machine: FuelTank
+Machine-->FuelTank: fill(40)
+Machine-->+Engine: Engine(tank)
+Engine-->-Machine: Engine
+Machine-->-Application: Machine
+Application-->+Machine: drive()
+Machine-->+Engine: start()
+Engine-->FuelTank: consume(5)
+Engine-->-Machine:
+Machine-->+Engine: isRunning()
+Engine-->+FuelTank: contentsLeft()
+FuelTank-->-Engine: 35
+Engine-->-Machine: true
+Machine-->+Engine: useEnergy()
+Engine-->FuelTank: consume(10)
+Engine-->-Machine:
+Machine-->-Application:

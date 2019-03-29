@@ -1,0 +1,43 @@
+title HSL laitehallinta
+
+Application-->+HKLLaitehallinto: HKLLaitehallinto()
+HKLLaitehallinto-->-Application: HKLLaitehallinto
+
+Application-->+Lataajalaite: Lataajalaite()
+Lataajalaite-->-Application: Lataajalaite
+
+Application-->+Lukijalaite: Lukijalaite()
+Lukijalaite-->-Application: Lukijalaite
+
+Application-->+Lukijalaite: Lukijalaite()
+Lukijalaite-->-Application: Lukijalaite
+
+Application-->HKLLaitehallinto: lisaaLataaja(rautatietori)
+
+Application-->HKLLaitehallinto: lisaaLukija(ratikka6)
+
+Application-->HKLLaitehallinto: lisaaLukija(bussi244)
+
+Application-->+Kioski: Kioski()
+Kioski-->-Application: Kioski
+
+Application-->+Kioski: ostaMatkakortti("Arto")
+Kioski-->+Matkakortti: Matkakortti("Arto")
+Matkakortti-->-Kioski: Matkakortti
+Kioski-->-Application: Matkakortti
+
+Application-->+Lataajalaite: lataaArvoa(artonKortti, 3)
+Lataajalaite-->Matkakortti: kasvataArvoa(3)
+Lataajalaite-->-Application:
+
+Application-->+Lukijalaite: ostaLippu(artonKortti, 0)
+Lukijalaite-->+Matkakortti: getArvo()
+Matkakortti-->-Lukijalaite:
+Lukijalaite-->Matkakortti: vahennaArvoa(0)
+Lukijalaite-->-Application: 
+
+Application-->+Lukijalaite: ostaLippu(artonKortti, 2)
+Lukijalaite-->+Matkakortti: getArvo()
+Matkakortti-->-Lukijalaite:
+Lukijalaite-->Matkakortti: vahennaArvoa(2)
+Lukijalaite-->-Application: 
