@@ -25,7 +25,10 @@ public class Rat extends Entity implements AI {
 
     @Override
     public void processRound(Dungeon dungeon) {
-        if (rand.nextBoolean()) {
+        Player player = dungeon.getPlayer();
+        int dx = player.getX() - x;
+        int dy = player.getY() - y;
+        if (dx > 6 || dy > 6 || rand.nextBoolean()) {
             switch (rand.nextInt(4)) {
                 case 0:
                     move(1, 0);
@@ -41,9 +44,6 @@ public class Rat extends Entity implements AI {
                     break;
             }
         } else {
-            Player player = dungeon.getPlayer();
-            int dx = player.getX() - x;
-            int dy = player.getY() - y;
             if (Math.abs(dx) > Math.abs(dy)) {
                 this.move((int) Math.signum(dx), 0);
             } else {
