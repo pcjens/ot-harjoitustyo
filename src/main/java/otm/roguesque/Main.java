@@ -71,13 +71,21 @@ public class Main extends Application {
         if (keysPressed.contains(KeyCode.F3)) {
             showPerformanceDetails = !showPerformanceDetails;
         }
-        if (keysPressed.contains(KeyCode.W)) {
+        if (keysPressed.contains(KeyCode.W)
+                || keysPressed.contains(KeyCode.UP)
+                || keysPressed.contains(KeyCode.K)) {
             player.move(0, -1);
-        } else if (keysPressed.contains(KeyCode.A)) {
+        } else if (keysPressed.contains(KeyCode.A)
+                || keysPressed.contains(KeyCode.LEFT)
+                || keysPressed.contains(KeyCode.H)) {
             player.move(-1, 0);
-        } else if (keysPressed.contains(KeyCode.S)) {
+        } else if (keysPressed.contains(KeyCode.S)
+                || keysPressed.contains(KeyCode.DOWN)
+                || keysPressed.contains(KeyCode.J)) {
             player.move(0, 1);
-        } else if (keysPressed.contains(KeyCode.D)) {
+        } else if (keysPressed.contains(KeyCode.D)
+                || keysPressed.contains(KeyCode.RIGHT)
+                || keysPressed.contains(KeyCode.L)) {
             player.move(1, 0);
         }
     }
