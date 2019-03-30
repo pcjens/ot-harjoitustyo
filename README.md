@@ -7,6 +7,7 @@ Ohjelmistotekniikan kurssille.
 ## Dokumentaatio
 - [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
 - [Tuntikirjanpito](dokumentaatio/tuntikirjanpito.md)
+- [Manuaali](dokumentaatio/manual.md)
 
 ## Komennot
 ### Pelin käynnistäminen
