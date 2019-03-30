@@ -9,22 +9,35 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import otm.roguesque.entities.Dungeon;
+import otm.roguesque.entities.Player;
+import otm.roguesque.ui.DungeonRenderer;
 
 public class Main extends Application {
 
     // UI
     private final BorderPane mainPanel;
     private final Scene mainScene;
-    private final ArrayList<KeyCode> keysTyped = new ArrayList();
+    private final ArrayList<KeyCode> keysPressed = new ArrayList();
 
     // Performance statistics
-    private boolean showPerformanceDetails = true;
+    private boolean showPerformanceDetails = false;
     private final float[] deltaSecondsHistory = new float[100];
     private int deltaSecondsHistoryCounter = 0;
+
+    // Game specific stuff
+    private final DungeonRenderer dungeonRenderer;
+    private final Dungeon dungeon;
+    private final Player player;
 
     public Main() {
         mainPanel = new BorderPane();
         mainScene = new Scene(mainPanel, 640.0, 480.0);
+        dungeonRenderer = new DungeonRenderer();
+        dungeon = new Dungeon(10, 10);
+        dungeonRenderer.setDungeon(dungeon);
+        player = new Player();
+        dungeon.spawnEntity(player, 2, 2);
     }
 
     private void drawGame(GraphicsContext ctx, float deltaSeconds) {
@@ -47,13 +60,25 @@ public class Main extends Application {
         if (showPerformanceDetails) {
             ctx.fillText("Average frame time: " + (int) (averageDeltaSeconds * 1000.0) + " ms", 10.0, 20.0);
         }
+
+        // Render dungeon
+        dungeonRenderer.draw(ctx);
     }
 
-    /* This is separated from drawGame just in case we want to switch to a 
+    /* This is separated from drawGame just in case we want to switch to a
      * fixed timestemp sometime in the future */
     private void update(float deltaSeconds) {
-        if (keysTyped.contains(KeyCode.F3)) {
+        if (keysPressed.contains(KeyCode.F3)) {
             showPerformanceDetails = !showPerformanceDetails;
+        }
+        if (keysPressed.contains(KeyCode.W)) {
+            player.move(0, -1);
+        } else if (keysPressed.contains(KeyCode.A)) {
+            player.move(-1, 0);
+        } else if (keysPressed.contains(KeyCode.S)) {
+            player.move(0, 1);
+        } else if (keysPressed.contains(KeyCode.D)) {
+            player.move(1, 0);
         }
     }
 
@@ -72,15 +97,15 @@ public class Main extends Application {
         });
 
         mainScene.setOnKeyPressed((event) -> {
-            keysTyped.add(event.getCode());
+            keysPressed.add(event.getCode());
         });
 
         new AnimationTimer() {
             long lastTime = 0;
-            
-            /* The currentTime argument doesn't start at 0, so lastTime is 
-             * wrong during the first frame, causing a big spike in delta time 
-             * at the very start. I'd rather just skip a frame to avoid that. 
+
+            /* The currentTime argument doesn't start at 0, so lastTime is
+             * wrong during the first frame, causing a big spike in delta time
+             * at the very start. I'd rather just skip a frame to avoid that.
              */
             boolean firstRun = true;
 
@@ -92,14 +117,15 @@ public class Main extends Application {
                     firstRun = false;
                     return;
                 }
-                
+
                 update(deltaSeconds);
                 drawGame(ctx, deltaSeconds);
-                keysTyped.clear();
+                keysPressed.clear();
             }
         }.start();
 
         stage.setScene(mainScene);
+        stage.setTitle("Roguesque");
         stage.show();
     }
 
