@@ -2,15 +2,14 @@ package otm.roguesque.ui;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import otm.roguesque.entities.Dungeon;
 import otm.roguesque.entities.Entity;
-import otm.roguesque.entities.Player;
 import otm.roguesque.entities.TileType;
 
 public class DungeonRenderer {
 
     // Sprites
-    private final Image playerImage;
     private final Image[] tileTypes;
 
     // Dungeon
@@ -20,8 +19,6 @@ public class DungeonRenderer {
     private Image[] tileImages;
 
     public DungeonRenderer() {
-        playerImage = new Image(getClass().getResourceAsStream("/sprites/player.png"), 32, 32, true, false);
-
         // Check the tiles in TileType.java, these should be in the same order
         tileTypes = new Image[]{
             new Image(getClass().getResourceAsStream("/sprites/floor.png"), 32, 32, true, false),
@@ -54,12 +51,23 @@ public class DungeonRenderer {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Entity entity = dungeon.getEntityAt(x, y);
-                if (entity instanceof Player) {
-                    ctx.drawImage(playerImage, x * 32, y * 32);
-                } else if (entity != null) {
-                    // TODO: Entity rendering
-                } else {
+                if (entity == null) {
                     ctx.drawImage(tileImages[x + y * width], x * 32, y * 32);
+                } else {
+                    ctx.drawImage(entity.getImage(), x * 32, y * 32);
+
+                    int maxHp = entity.getMaxHealth();
+                    int hp = entity.getHealth();
+                    if (hp < maxHp) {
+                        ctx.setFill(Color.BLACK);
+                        ctx.fillRect(x * 32 + 2, y * 32 - 5, 26, 6);
+                        ctx.setFill(Color.RED);
+                        ctx.fillRect(x * 32 + 3, y * 32 - 4, 24, 4);
+                        ctx.setFill(Color.GREEN);
+                        ctx.fillRect(x * 32 + 3, y * 32 - 4, 24.0 * hp / maxHp, 4);
+                        // Set back to default, just in case
+                        ctx.setFill(Color.BLACK);
+                    }
                 }
             }
         }

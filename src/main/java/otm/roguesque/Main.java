@@ -71,22 +71,33 @@ public class Main extends Application {
         if (keysPressed.contains(KeyCode.F3)) {
             showPerformanceDetails = !showPerformanceDetails;
         }
+
+        boolean progressRound = false;
         if (keysPressed.contains(KeyCode.W)
                 || keysPressed.contains(KeyCode.UP)
                 || keysPressed.contains(KeyCode.K)) {
             player.move(0, -1);
+            progressRound = true;
         } else if (keysPressed.contains(KeyCode.A)
                 || keysPressed.contains(KeyCode.LEFT)
                 || keysPressed.contains(KeyCode.H)) {
             player.move(-1, 0);
+            progressRound = true;
         } else if (keysPressed.contains(KeyCode.S)
                 || keysPressed.contains(KeyCode.DOWN)
                 || keysPressed.contains(KeyCode.J)) {
             player.move(0, 1);
+            progressRound = true;
         } else if (keysPressed.contains(KeyCode.D)
                 || keysPressed.contains(KeyCode.RIGHT)
                 || keysPressed.contains(KeyCode.L)) {
             player.move(1, 0);
+            progressRound = true;
+        }
+
+        if (progressRound) {
+            dungeon.processRound();
+            dungeon.cleanupDeadEntities();
         }
     }
 
