@@ -35,7 +35,7 @@ public class Main extends Application {
         mainScene = new Scene(mainPanel, 640.0, 480.0);
         dungeonRenderer = new DungeonRenderer();
         dungeon = new Dungeon(10, 10);
-        dungeonRenderer.setDungeon(dungeon);
+        dungeonRenderer.loadDungeon(dungeon);
         player = new Player();
         dungeon.spawnEntity(player, 2, 2);
     }

@@ -10,6 +10,7 @@ import otm.roguesque.entities.TileType;
 public class DungeonRenderer {
 
     // Sprites
+    private final String[] tileTypeNames;
     private final Image[] tileTypes;
 
     // Dungeon
@@ -20,17 +21,24 @@ public class DungeonRenderer {
 
     public DungeonRenderer() {
         // Check the tiles in TileType.java, these should be in the same order
-        tileTypes = new Image[]{
-            new Image(getClass().getResourceAsStream("/sprites/floor.png"), 32, 32, true, false),
-            new Image(getClass().getResourceAsStream("/sprites/wallHorizontal.png"), 32, 32, true, false),
-            new Image(getClass().getResourceAsStream("/sprites/wallVertical.png"), 32, 32, true, false),
-            new Image(getClass().getResourceAsStream("/sprites/door.png"), 32, 32, true, false),
-            new Image(getClass().getResourceAsStream("/sprites/corridor.png"), 32, 32, true, false),
-            new Image(getClass().getResourceAsStream("/sprites/stairs.png"), 32, 32, true, false)
+        // (This is also tested in TileGraphicTest.java)
+        tileTypeNames = new String[]{
+            "/sprites/floor.png",
+            "/sprites/wallHorizontal.png",
+            "/sprites/wallVertical.png",
+            "/sprites/door.png",
+            "/sprites/corridor.png",
+            "/sprites/stairs.png"
         };
+
+        tileTypes = new Image[tileTypeNames.length];
+        for (int i = 0; i < tileTypeNames.length; i++) {
+            tileTypes[i] = new Image(getClass().getResourceAsStream(tileTypeNames[i]),
+                    32, 32, true, false);
+        }
     }
 
-    public void setDungeon(Dungeon dungeon) {
+    public void loadDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
         this.width = this.dungeon.getWidth();
         this.height = this.dungeon.getHeight();
@@ -71,5 +79,9 @@ public class DungeonRenderer {
                 }
             }
         }
+    }
+
+    public String getTileImageName(TileType tileType) {
+        return tileTypeNames[tileType.ordinal()];
     }
 }
