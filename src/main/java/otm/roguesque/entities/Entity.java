@@ -47,28 +47,36 @@ public abstract class Entity {
     }
 
     public boolean move(int deltaX, int deltaY) {
-        // If we don't exist anywhere, we can't move
         if (dungeon == null) {
             return false;
         }
 
-        // Calculate new position
         int newX = x + deltaX;
         int newY = y + deltaY;
 
-        // Combat
+        if (hitAndCollide(newX, newY)) {
+            return false;
+        }
+
+        return moveAndCollide(newX, newY);
+    }
+
+    private boolean hitAndCollide(int newX, int newY) {
         Entity hitEntity = dungeon.getEntityAt(newX, newY);
         if (hitEntity != null) {
             if (hitEntity.friendlyGroup.equals(this.friendlyGroup)) {
-                return false;
+                return true;
             }
             hitEntity.takeDamage(attack);
             if (!hitEntity.isDead()) {
-                return false;
+                return true;
             }
         }
 
-        // Movement
+        return false;
+    }
+
+    private boolean moveAndCollide(int newX, int newY) {
         if (!dungeon.solid(newX, newY)) {
             this.x = newX;
             this.y = newY;

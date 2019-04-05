@@ -62,20 +62,7 @@ public class DungeonRenderer {
                 if (entity == null) {
                     ctx.drawImage(tileImages[x + y * width], x * 32, y * 32);
                 } else {
-                    ctx.drawImage(entity.getImage(), x * 32, y * 32);
-
-                    int maxHp = entity.getMaxHealth();
-                    int hp = entity.getHealth();
-                    if (hp < maxHp) {
-                        ctx.setFill(Color.BLACK);
-                        ctx.fillRect(x * 32 + 2, y * 32 - 5, 26, 6);
-                        ctx.setFill(Color.RED);
-                        ctx.fillRect(x * 32 + 3, y * 32 - 4, 24, 4);
-                        ctx.setFill(Color.GREEN);
-                        ctx.fillRect(x * 32 + 3, y * 32 - 4, 24.0 * hp / maxHp, 4);
-                        // Set back to default, just in case
-                        ctx.setFill(Color.BLACK);
-                    }
+                    drawEntity(ctx, entity, x, y);
                 }
             }
         }
@@ -83,5 +70,22 @@ public class DungeonRenderer {
 
     public String getTileImageName(TileType tileType) {
         return tileTypeNames[tileType.ordinal()];
+    }
+
+    private void drawEntity(GraphicsContext ctx, Entity entity, int x, int y) {
+        ctx.drawImage(entity.getImage(), x * 32, y * 32);
+
+        int maxHp = entity.getMaxHealth();
+        int hp = entity.getHealth();
+        if (hp < maxHp) {
+            ctx.setFill(Color.BLACK);
+            ctx.fillRect(x * 32 + 2, y * 32 - 5, 26, 6);
+            ctx.setFill(Color.RED);
+            ctx.fillRect(x * 32 + 3, y * 32 - 4, 24, 4);
+            ctx.setFill(Color.GREEN);
+            ctx.fillRect(x * 32 + 3, y * 32 - 4, 24.0 * hp / maxHp, 4);
+            // Set back to default, just in case
+            ctx.setFill(Color.BLACK);
+        }
     }
 }

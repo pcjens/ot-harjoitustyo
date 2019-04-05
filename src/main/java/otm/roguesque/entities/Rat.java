@@ -29,20 +29,10 @@ public class Rat extends Entity implements AI {
         int dx = player.getX() - x;
         int dy = player.getY() - y;
         if (dx > 6 || dy > 6 || rand.nextBoolean()) {
-            switch (rand.nextInt(4)) {
-                case 0:
-                    move(1, 0);
-                    break;
-                case 1:
-                    move(-1, 0);
-                    break;
-                case 2:
-                    move(0, 1);
-                    break;
-                case 3:
-                    move(0, -1);
-                    break;
-            }
+            int r = rand.nextInt(4);
+            int x = (int) Math.cos(r * Math.PI / 2.0);
+            int y = (int) Math.sin(r * Math.PI / 2.0);
+            move(x, y);
         } else {
             if (Math.abs(dx) > Math.abs(dy)) {
                 this.move((int) Math.signum(dx), 0);

@@ -14,10 +14,26 @@ import otm.roguesque.entities.Player;
 
 public class RoguesqueApp extends Application {
 
+    // Controls
+    private static final KeyCode[] CONTROL_MOVE_UP = new KeyCode[]{
+        KeyCode.W, KeyCode.UP, KeyCode.K
+    };
+    private static final KeyCode[] CONTROL_MOVE_LEFT = new KeyCode[]{
+        KeyCode.A, KeyCode.LEFT, KeyCode.H
+    };
+    private static final KeyCode[] CONTROL_MOVE_DOWN = new KeyCode[]{
+        KeyCode.S, KeyCode.DOWN, KeyCode.J
+    };
+    private static final KeyCode[] CONTROL_MOVE_RIGHT = new KeyCode[]{
+        KeyCode.D, KeyCode.RIGHT, KeyCode.L
+    };
+
     // UI
     private final BorderPane mainPanel;
     private final Scene mainScene;
     private final ArrayList<KeyCode> keysPressed = new ArrayList();
+    private GraphicsContext ctx;
+    private Canvas canvas;
 
     // Performance statistics
     private boolean showPerformanceDetails = false;
@@ -39,9 +55,8 @@ public class RoguesqueApp extends Application {
         dungeon.spawnEntity(player, 2, 2);
     }
 
-    private void drawGame(GraphicsContext ctx, float deltaSeconds) {
+    private void drawGame(float deltaSeconds) {
         // Clear screen
-        Canvas canvas = ctx.getCanvas();
         ctx.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         // Update performance stats
@@ -71,28 +86,7 @@ public class RoguesqueApp extends Application {
             showPerformanceDetails = !showPerformanceDetails;
         }
 
-        boolean progressRound = false;
-        if (keysPressed.contains(KeyCode.W)
-                || keysPressed.contains(KeyCode.UP)
-                || keysPressed.contains(KeyCode.K)) {
-            player.move(0, -1);
-            progressRound = true;
-        } else if (keysPressed.contains(KeyCode.A)
-                || keysPressed.contains(KeyCode.LEFT)
-                || keysPressed.contains(KeyCode.H)) {
-            player.move(-1, 0);
-            progressRound = true;
-        } else if (keysPressed.contains(KeyCode.S)
-                || keysPressed.contains(KeyCode.DOWN)
-                || keysPressed.contains(KeyCode.J)) {
-            player.move(0, 1);
-            progressRound = true;
-        } else if (keysPressed.contains(KeyCode.D)
-                || keysPressed.contains(KeyCode.RIGHT)
-                || keysPressed.contains(KeyCode.L)) {
-            player.move(1, 0);
-            progressRound = true;
-        }
+        boolean progressRound = movePlayer();
 
         if (progressRound) {
             dungeon.processRound();
@@ -100,47 +94,73 @@ public class RoguesqueApp extends Application {
         }
     }
 
+    private boolean movePlayer() {
+        if (isPressed(CONTROL_MOVE_UP)) {
+            player.move(0, -1);
+        } else if (isPressed(CONTROL_MOVE_LEFT)) {
+            player.move(-1, 0);
+        } else if (isPressed(CONTROL_MOVE_DOWN)) {
+            player.move(0, 1);
+        } else if (isPressed(CONTROL_MOVE_RIGHT)) {
+            player.move(1, 0);
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isPressed(KeyCode[] codes) {
+        for (KeyCode kc : codes) {
+            if (keysPressed.contains(kc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private final AnimationTimer mainLoop = new AnimationTimer() {
+        long lastTime = 0;
+
+        /* The currentTime argument doesn't start at 0, so lastTime is
+             * wrong during the first frame, causing a big spike in delta time
+             * at the very start. I'd rather just skip a frame to avoid that.
+         */
+        boolean firstRun = true;
+
+        @Override
+        public void handle(long currentTime /* note: timestamp in nanoseconds */) {
+            float deltaSeconds = (float) ((currentTime - lastTime) / 1_000_000_000.0);
+            lastTime = currentTime;
+            if (firstRun) {
+                firstRun = false;
+                return;
+            }
+
+            update(deltaSeconds);
+            drawGame(deltaSeconds);
+            keysPressed.clear();
+        }
+    };
+
     @Override
     public void start(Stage stage) {
-        Canvas canvas = new Canvas();
-        GraphicsContext ctx = canvas.getGraphicsContext2D();
+        canvas = new Canvas();
+        ctx = canvas.getGraphicsContext2D();
         mainPanel.setCenter(canvas);
         canvas.widthProperty().bind(mainScene.widthProperty());
         canvas.widthProperty().addListener((observable, oldValue, newValue) -> {
-            drawGame(ctx, 0.0001f);
+            drawGame(0.0001f);
         });
         canvas.heightProperty().bind(mainScene.heightProperty());
         canvas.heightProperty().addListener((observable, oldValue, newValue) -> {
-            drawGame(ctx, 0.0001f);
+            drawGame(0.0001f);
         });
 
         mainScene.setOnKeyPressed((event) -> {
             keysPressed.add(event.getCode());
         });
 
-        new AnimationTimer() {
-            long lastTime = 0;
-
-            /* The currentTime argument doesn't start at 0, so lastTime is
-             * wrong during the first frame, causing a big spike in delta time
-             * at the very start. I'd rather just skip a frame to avoid that.
-             */
-            boolean firstRun = true;
-
-            @Override
-            public void handle(long currentTime /* note: timestamp in nanoseconds */) {
-                float deltaSeconds = (float) ((currentTime - lastTime) / 1_000_000_000.0);
-                lastTime = currentTime;
-                if (firstRun) {
-                    firstRun = false;
-                    return;
-                }
-
-                update(deltaSeconds);
-                drawGame(ctx, deltaSeconds);
-                keysPressed.clear();
-            }
-        }.start();
+        mainLoop.start();
 
         stage.setScene(mainScene);
         stage.setTitle("Roguesque");
