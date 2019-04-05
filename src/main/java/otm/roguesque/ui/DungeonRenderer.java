@@ -83,12 +83,11 @@ public class DungeonRenderer {
         int maxHp = entity.getMaxHealth();
         int hp = entity.getHealth();
         if (hp < maxHp) {
+            double hpBarWidth = 24.0 * hp / maxHp;
             ctx.setFill(Color.WHITE);
-            ctx.fillRect(x * 32 + 2, y * 32 - 5, 26, 6);
-            ctx.setFill(Color.RED);
-            ctx.fillRect(x * 32 + 3, y * 32 - 4, 24, 4);
-            ctx.setFill(Color.GREEN);
-            ctx.fillRect(x * 32 + 3, y * 32 - 4, 24.0 * hp / maxHp, 4);
+            ctx.fillRect(x * 32 + 2, y * 32 - 6, 26, 6);
+            ctx.setFill(Color.BLACK);
+            ctx.fillRect(x * 32 + 3 + hpBarWidth, y * 32 - 5, 24 - hpBarWidth, 4);
         }
     }
 }
