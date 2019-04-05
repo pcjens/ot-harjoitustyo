@@ -30,6 +30,14 @@ public abstract class Entity {
         return health;
     }
 
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
     public int getX() {
         return x;
     }
