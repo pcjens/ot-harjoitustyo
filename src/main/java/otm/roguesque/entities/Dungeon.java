@@ -13,13 +13,13 @@ public class Dungeon {
     private ArrayList<Entity> entities;
     private Player player;
 
-    public Dungeon(int width, int height) {
+    public Dungeon(int width, int height, int seed) {
         this.width = width;
         this.height = height;
         this.entities = new ArrayList();
         this.tiles = new TileType[width * height];
 
-        Random rand = new Random(12);
+        Random rand = new Random(seed);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (y == 0 || y == height - 1) {
@@ -35,7 +35,7 @@ public class Dungeon {
                 }
             }
         }
-        tiles[(width - 2) + (height - 2) * width] = TileType.Stairs;
+        tiles[(rand.nextInt(width - 2) + 1) + (rand.nextInt(height - 2) + 1) * width] = TileType.Stairs;
 
         this.solid = new boolean[]{
             false, true, true, false, false, false

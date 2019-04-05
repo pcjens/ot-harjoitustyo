@@ -16,7 +16,7 @@ public class InGameState implements GameState {
     private final Player player;
 
     private String statusLine;
-    private String descriptionBox;
+    private String descriptionText;
     private int descriptionBoxLines;
     private float descriptionBoxFadeAway;
     private final float descriptionBoxFadeAwayDuration = 0.15f;
@@ -26,12 +26,12 @@ public class InGameState implements GameState {
 
     public InGameState() {
         dungeonRenderer = new DungeonRenderer();
-        dungeon = new Dungeon(10, 10);
+        dungeon = new Dungeon(10, 10, 12);
         dungeonRenderer.loadDungeon(dungeon);
         player = new Player();
         dungeon.spawnEntity(player, 2, 2);
         statusLine = "Loading...";
-        descriptionBox = null;
+        descriptionText = null;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class InGameState implements GameState {
         ctx.setFont(RoguesqueApp.FONT_UI);
         ctx.fillText(statusLine, 40.0, height - 42.5);
 
-        if (descriptionBox != null || descriptionBoxFadeAway > 0) {
+        if (descriptionText != null || descriptionBoxFadeAway > 0) {
             drawDescriptionBox(ctx, deltaSeconds, width, height);
         }
     }
@@ -57,7 +57,7 @@ public class InGameState implements GameState {
         double boxHeight = descriptionBoxLines * 28.0 + 14.0;
         if (descriptionBoxFadeAway == -1) {
             drawBox(ctx, width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
-            ctx.fillText(descriptionBox, width - 190.0, height - (70.0 + boxHeight));
+            ctx.fillText(descriptionText, width - 190.0, height - (70.0 + boxHeight));
         } else if (descriptionBoxFadeAway > 0) {
             descriptionBoxFadeAway -= deltaSeconds;
             float fadeOut = descriptionBoxFadeAway / descriptionBoxFadeAwayDuration;
@@ -130,23 +130,28 @@ public class InGameState implements GameState {
 
     private void updateTexts() {
         statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense());
-        descriptionBox = player.getExaminationText();
-        if (descriptionBox == null && selectionX >= 0 && selectionY >= 0) {
-            Entity e = dungeon.getEntityAt(selectionX, selectionY);
-            if (e != null) {
-                descriptionBox = e.getDescription();
-            } else {
-                TileType tile = dungeon.getTileAt(selectionX, selectionY);
-                if (tile != null) {
-                    descriptionBox = tile.getDescription();
-                }
-            }
+        descriptionText = player.getExaminationText();
+        if (descriptionText == null && selectionX >= 0 && selectionY >= 0) {
+            descriptionText = getDescriptionFromSelection();
         }
-        if (descriptionBox != null) {
+        if (descriptionText != null) {
             descriptionBoxFadeAway = -1.0f;
-            descriptionBoxLines = descriptionBox.split("\n").length;
+            descriptionBoxLines = descriptionText.split("\n").length;
         } else if (descriptionBoxFadeAway == -1) {
             descriptionBoxFadeAway = descriptionBoxFadeAwayDuration;
         }
+    }
+
+    private String getDescriptionFromSelection() {
+        Entity e = dungeon.getEntityAt(selectionX, selectionY);
+        if (e != null) {
+            return e.getDescription();
+        } else {
+            TileType tile = dungeon.getTileAt(selectionX, selectionY);
+            if (tile != null) {
+                return tile.getDescription();
+            }
+        }
+        return null;
     }
 }
