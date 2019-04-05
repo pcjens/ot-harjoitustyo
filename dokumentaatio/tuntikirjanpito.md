@@ -8,3 +8,4 @@
 | 30.3. | 2        | JavaFX tutkimista ja koodausta |
 | 30.3. | 2        | Luolarenderöinnin kirjoittamista |
 | 30.3. | 1        | Taistelumekaniikkojen kirjoittamista |
+| 30.3. | 1        | Testien kirjoittamista |
