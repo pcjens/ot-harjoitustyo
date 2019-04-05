@@ -20,6 +20,10 @@ public class Player extends Entity {
         return gold;
     }
 
+    public String getDescriptionText() {
+        return null;
+    }
+
     @Override
     public Image getImage() {
         return playerImage;

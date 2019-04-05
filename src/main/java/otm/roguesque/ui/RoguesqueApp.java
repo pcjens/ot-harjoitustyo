@@ -12,9 +12,9 @@ import javafx.stage.Stage;
 
 public class RoguesqueApp extends Application {
 
-    public static final Font FONT_LOGO = Font.font("serif", 50.0);
-    public static final Font FONT_LOGO_SMALL = Font.font("serif", 40.0);
-    public static final Font FONT_UI = Font.font("monospace", 20.0);
+    public static final Font FONT_LOGO = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 70.0);
+    public static final Font FONT_LOGO_SMALL = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 50.0);
+    public static final Font FONT_UI = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 28.0);
 
     // UI
     private final BorderPane mainPanel;

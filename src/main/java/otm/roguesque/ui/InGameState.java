@@ -13,6 +13,8 @@ public class InGameState implements GameState {
     private final Player player;
 
     private String statusLine;
+    private String descriptionBox;
+    private int descriptionBoxLines;
 
     public InGameState() {
         dungeonRenderer = new DungeonRenderer();
@@ -21,6 +23,7 @@ public class InGameState implements GameState {
         player = new Player();
         dungeon.spawnEntity(player, 2, 2);
         statusLine = "Loading...";
+        descriptionBox = null;
     }
 
     @Override
@@ -39,6 +42,16 @@ public class InGameState implements GameState {
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_UI);
         ctx.fillText(statusLine, 40.0, height - 42.5);
+
+        if (descriptionBox != null) {
+            double boxHeight = descriptionBoxLines * 30.0;
+            ctx.setFill(Color.WHITE);
+            ctx.fillRect(width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
+            ctx.setFill(Color.BLACK);
+            ctx.fillRect(width - 196.0, height - (100.0 + boxHeight - 4.0), 172.0, boxHeight - 8.0);
+            ctx.setFill(Color.WHITE);
+            ctx.fillText(descriptionBox, width - 190.0, height - (70.0 + boxHeight));
+        }
     }
 
     @Override
@@ -54,6 +67,10 @@ public class InGameState implements GameState {
         }
 
         statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d   GOLD: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense(), player.getGold());
+        descriptionBox = player.getDescriptionText();
+        if (descriptionBox != null) {
+            descriptionBoxLines = descriptionBox.split("\n").length;
+        }
 
         return -1;
     }
