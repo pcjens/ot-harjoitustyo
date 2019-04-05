@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import otm.roguesque.entities.Dungeon;
+import otm.roguesque.entities.Entity;
 import otm.roguesque.entities.Player;
 
 public class InGameState implements GameState {
@@ -15,6 +16,8 @@ public class InGameState implements GameState {
     private String statusLine;
     private String descriptionBox;
     private int descriptionBoxLines;
+    private float descriptionBoxFadeAway;
+    private final float descriptionBoxFadeAwayDuration = 0.15f;
 
     public InGameState() {
         dungeonRenderer = new DungeonRenderer();
@@ -34,24 +37,35 @@ public class InGameState implements GameState {
         double width = canvas.getWidth();
         double height = canvas.getHeight();
 
-        ctx.setFill(Color.WHITE);
-        ctx.fillRect(20.0, height - 80.0, width - 40.0, 60.0);
-        ctx.setFill(Color.BLACK);
-        ctx.fillRect(24.0, height - 76.0, width - 48.0, 52.0);
+        drawBox(ctx, 20.0, height - 80.0, width - 40.0, 60.0);
 
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_UI);
         ctx.fillText(statusLine, 40.0, height - 42.5);
 
         if (descriptionBox != null) {
-            double boxHeight = descriptionBoxLines * 30.0;
-            ctx.setFill(Color.WHITE);
-            ctx.fillRect(width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
-            ctx.setFill(Color.BLACK);
-            ctx.fillRect(width - 196.0, height - (100.0 + boxHeight - 4.0), 172.0, boxHeight - 8.0);
-            ctx.setFill(Color.WHITE);
-            ctx.fillText(descriptionBox, width - 190.0, height - (70.0 + boxHeight));
+            double boxHeight = descriptionBoxLines * 30.5;
+            if (descriptionBoxFadeAway == -1) {
+                drawBox(ctx, width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
+                ctx.fillText(descriptionBox, width - 190.0, height - (70.0 + boxHeight));
+            } else if (descriptionBoxFadeAway > 0) {
+                descriptionBoxFadeAway -= deltaSeconds;
+                float fadeOut = descriptionBoxFadeAway / descriptionBoxFadeAwayDuration;
+                float fadeIn = 1.0f - fadeOut;
+                drawBox(ctx, width - 200.0 + 100.0 * fadeIn,
+                        height - (100.0 + boxHeight) + boxHeight / 2.0 * fadeIn,
+                        180.0 * fadeOut,
+                        boxHeight * fadeOut);
+            }
         }
+    }
+
+    private void drawBox(GraphicsContext ctx, double x, double y, double w, double h) {
+        ctx.setFill(Color.WHITE);
+        ctx.fillRect(x, y, w, h);
+        ctx.setFill(Color.BLACK);
+        ctx.fillRect(x + 4.0, y + 4.0, w - 8.0, h - 8.0);
+        ctx.setFill(Color.WHITE);
     }
 
     @Override
@@ -66,10 +80,18 @@ public class InGameState implements GameState {
             dungeon.cleanupDeadEntities();
         }
 
-        statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d   GOLD: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense(), player.getGold());
-        descriptionBox = player.getDescriptionText();
-        if (descriptionBox != null) {
-            descriptionBoxLines = descriptionBox.split("\n").length;
+        statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense());
+        Entity examinationTarget = player.getLastEntityInteractedWith();
+        if (examinationTarget != null) {
+            if (examinationTarget.isDead()) {
+                if (descriptionBoxFadeAway == -1) {
+                    descriptionBoxFadeAway = descriptionBoxFadeAwayDuration;
+                }
+            } else {
+                descriptionBoxFadeAway = -1.0f;
+                descriptionBox = examinationTarget.getDescription();
+                descriptionBoxLines = descriptionBox.split("\n").length;
+            }
         }
 
         return -1;

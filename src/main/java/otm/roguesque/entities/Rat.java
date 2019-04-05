@@ -1,26 +1,13 @@
 package otm.roguesque.entities;
 
 import java.util.Random;
-import javafx.scene.image.Image;
 
 public class Rat extends Entity implements AI {
 
     private static Random rand = new Random(123);
 
-    private Image ratImage;
-
     public Rat() {
-        maxHealth = 5;
-        health = 5;
-        attack = 2;
-        defense = 0;
-        friendlyGroup = "Small Animals";
-        ratImage = new Image(getClass().getResourceAsStream("/sprites/rat.png"), 32, 32, true, false);
-    }
-
-    @Override
-    public Image getImage() {
-        return ratImage;
+        super(5, 2, 0, "Rat", "*squeek*", "Small Animals", "/sprites/rat.png");
     }
 
     @Override
