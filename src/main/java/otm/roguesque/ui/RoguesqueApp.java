@@ -2,14 +2,19 @@ package otm.roguesque.ui;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class RoguesqueApp extends Application {
+
+    public static final Font FONT_LOGO = Font.font("serif", 50.0);
+    public static final Font FONT_UI = Font.font("monospace", 20.0);
 
     private static final KeyCode[] CONTROL_TOGGLE_PERF_STATS = new KeyCode[]{
         KeyCode.F3
@@ -28,12 +33,6 @@ public class RoguesqueApp extends Application {
     private int deltaSecondsHistoryCounter = 0;
 
     // Game state stuff
-    private static final int STATE_COUNT = 4;
-    private static final int STATE_INTRO = 0;
-    private static final int STATE_MAINMENU = 1;
-    private static final int STATE_INGAME = 2;
-    private static final int STATE_GAMEOVER = 3;
-
     private GameState[] gameStates;
     private int currentGameStateIndex;
 
@@ -42,10 +41,12 @@ public class RoguesqueApp extends Application {
         mainScene = new Scene(mainPanel, 640.0, 480.0);
         input = new Input();
 
-        gameStates = new GameState[STATE_COUNT];
-        gameStates[STATE_INGAME] = new InGameState();
+        gameStates = new GameState[GameState.STATE_COUNT];
+        gameStates[GameState.STATE_INTRO] = new IntroState();
+        gameStates[GameState.STATE_MAINMENU] = new MainMenuState();
+        gameStates[GameState.STATE_INGAME] = new InGameState();
 
-        currentGameStateIndex = STATE_INGAME;
+        currentGameStateIndex = GameState.STATE_INTRO;
     }
 
     private void drawGame(float deltaSeconds) {
@@ -79,7 +80,12 @@ public class RoguesqueApp extends Application {
             showPerformanceDetails = !showPerformanceDetails;
         }
 
-        gameStates[currentGameStateIndex].update(input, deltaSeconds);
+        int newState = gameStates[currentGameStateIndex].update(input, deltaSeconds);
+        if (newState == GameState.STATE_QUIT) {
+            Platform.exit();
+        } else if (newState >= 0 && newState < GameState.STATE_COUNT) {
+            currentGameStateIndex = newState;
+        }
     }
     private final AnimationTimer mainLoop = new AnimationTimer() {
         long lastTime = 0;

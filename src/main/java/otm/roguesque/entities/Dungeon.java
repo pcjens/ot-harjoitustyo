@@ -35,6 +35,7 @@ public class Dungeon {
                 }
             }
         }
+        tiles[(width - 2) + (height - 2) * width] = TileType.Stairs;
 
         this.solid = new boolean[]{
             false, true, true, false, false, false

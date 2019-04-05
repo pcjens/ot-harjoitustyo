@@ -1,5 +1,6 @@
 package otm.roguesque.ui;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -52,6 +53,10 @@ public class DungeonRenderer {
     }
 
     public void draw(GraphicsContext ctx) {
+        Canvas canvas = ctx.getCanvas();
+        ctx.setFill(Color.BLACK);
+        ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
+
         if (this.dungeon == null) {
             return;
         }
@@ -78,14 +83,12 @@ public class DungeonRenderer {
         int maxHp = entity.getMaxHealth();
         int hp = entity.getHealth();
         if (hp < maxHp) {
-            ctx.setFill(Color.BLACK);
+            ctx.setFill(Color.WHITE);
             ctx.fillRect(x * 32 + 2, y * 32 - 5, 26, 6);
             ctx.setFill(Color.RED);
             ctx.fillRect(x * 32 + 3, y * 32 - 4, 24, 4);
             ctx.setFill(Color.GREEN);
             ctx.fillRect(x * 32 + 3, y * 32 - 4, 24.0 * hp / maxHp, 4);
-            // Set back to default, just in case
-            ctx.setFill(Color.BLACK);
         }
     }
 }

@@ -38,13 +38,15 @@ public class InGameState implements GameState {
     }
 
     @Override
-    public void update(Input input, float deltaSeconds) {
+    public int update(Input input, float deltaSeconds) {
         boolean progressRound = movePlayer(input);
 
         if (progressRound) {
             dungeon.processRound();
             dungeon.cleanupDeadEntities();
         }
+
+        return -1;
     }
 
     private boolean movePlayer(Input input) {
