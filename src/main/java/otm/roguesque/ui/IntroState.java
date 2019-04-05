@@ -32,6 +32,10 @@ public class IntroState implements GameState {
         if (progress >= revealDuration + postRevealWait) {
             return GameState.STATE_MAINMENU;
         }
+
+        if (input.isPressed(Input.CONTROL_SKIP_INTRO)) {
+            return GameState.STATE_INGAME;
+        }
         return -1;
     }
 }

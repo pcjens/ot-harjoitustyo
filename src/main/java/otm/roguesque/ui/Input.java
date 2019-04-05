@@ -11,6 +11,9 @@ public class Input {
 
     public static final KeyCode[] CONTROL_PLAY = new KeyCode[]{KeyCode.P};
     public static final KeyCode[] CONTROL_QUIT = new KeyCode[]{KeyCode.Q};
+    public static final KeyCode[] CONTROL_SKIP_INTRO = new KeyCode[]{
+        KeyCode.ESCAPE, KeyCode.SPACE
+    };
 
     public static final KeyCode[] CONTROL_MOVE_UP = new KeyCode[]{
         KeyCode.W, KeyCode.UP, KeyCode.K
