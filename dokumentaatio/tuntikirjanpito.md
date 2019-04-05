@@ -9,3 +9,4 @@
 | 30.3. | 2        | Luolarenderöinnin kirjoittamista |
 | 30.3. | 1        | Taistelumekaniikkojen kirjoittamista |
 | 30.3. | 1        | Testien kirjoittamista |
+| 5.4.  | 1        | Checkstylen ja buildskriptin kirjoittamista, refaktorointia |
