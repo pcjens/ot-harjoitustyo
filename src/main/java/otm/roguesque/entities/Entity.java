@@ -95,6 +95,7 @@ public abstract class Entity {
         Entity hitEntity = dungeon.getEntityAt(newX, newY);
         if (hitEntity != null) {
             lastEntityInteractedWith = hitEntity;
+            hitEntity.reactToAttack(this);
             if (hitEntity.friendlyGroup.equals(this.friendlyGroup)) {
                 return true;
             }
@@ -119,5 +120,8 @@ public abstract class Entity {
 
     public Image getImage() {
         return image;
+    }
+
+    protected void reactToAttack(Entity attackingEntity) {
     }
 }

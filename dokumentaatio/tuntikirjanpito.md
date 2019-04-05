@@ -13,3 +13,4 @@
 | 5.4.  |  1 | UI laajentamista ja uusien menujen kirjottelua |
 | 5.4.  |  1 | Fontin etsintää ja lisätietolaatikon kirjoittamista |
 | 5.4.  |  1 | Refaktorointia ja lisätietolaatikon jatkoa |
+| 5.4.  |  1 | Refaktorointia, testien ja tavaroiden kirjoittamista |

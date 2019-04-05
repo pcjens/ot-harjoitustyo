@@ -32,6 +32,9 @@ public class Dungeon {
                     if (rand.nextFloat() < 0.02) {
                         spawnEntity(new Rat(), x, y);
                     }
+                    if (rand.nextFloat() < 0.02) {
+                        spawnEntity(new Item(1), x, y);
+                    }
                 }
             }
         }
@@ -73,7 +76,7 @@ public class Dungeon {
 
     public Entity getEntityAt(int x, int y) {
         for (Entity e : entities) {
-            if (e.getX() == x && e.getY() == y) {
+            if (e.getX() == x && e.getY() == y && !e.isDead()) {
                 return e;
             }
         }
