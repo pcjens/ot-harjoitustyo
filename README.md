@@ -22,6 +22,11 @@ mvn package
 ```
 Jar-arkisto luodaan polkuun [`target/Roguesque-0.1-SNAPSHOT.jar`](target/Roguesque-0.1-SNAPSHOT.jar). Luodun jar-arkiston voi suorittaa komennolla `java -jar target/Roguesque-0.1-SNAPSHOT.jar`.
 
+Skripti `build.sh` sisältää jar-arkiston luomisen lisäksi testaamisen, kattavuusraportin luomisen, sekä checkstylen suorittamisen. Tämä varmistaa, että luotu ohjelma läpäisee testit.
+```sh
+sh build.sh
+```
+
 ### Pelin testien suorittaminen
 ```sh
 mvn test
@@ -32,3 +37,9 @@ mvn test
 mvn test jacoco:report
 ```
 Tulos löytyy tiedostosta [`target/site/jacoco/index.html`](target/site/jacoco/index.html).
+
+#### Checkstyle
+Koodin laatutarkastukset voi suorittaa seuraavalla komennolla:
+```sh
+mvn jxr:jxr checkstyle:checkstyle
+```
