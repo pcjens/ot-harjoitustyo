@@ -4,7 +4,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import otm.roguesque.entities.Dungeon;
-import otm.roguesque.entities.Entity;
 import otm.roguesque.entities.Player;
 
 public class InGameState implements GameState {
@@ -19,6 +18,9 @@ public class InGameState implements GameState {
     private float descriptionBoxFadeAway;
     private final float descriptionBoxFadeAwayDuration = 0.15f;
 
+    private int selectionX = -1;
+    private int selectionY = -1;
+
     public InGameState() {
         dungeonRenderer = new DungeonRenderer();
         dungeon = new Dungeon(10, 10);
@@ -31,7 +33,7 @@ public class InGameState implements GameState {
 
     @Override
     public void draw(GraphicsContext ctx, float deltaSeconds) {
-        dungeonRenderer.draw(ctx);
+        dungeonRenderer.draw(ctx, selectionX, selectionY);
 
         Canvas canvas = ctx.getCanvas();
         double width = canvas.getWidth();
@@ -43,20 +45,24 @@ public class InGameState implements GameState {
         ctx.setFont(RoguesqueApp.FONT_UI);
         ctx.fillText(statusLine, 40.0, height - 42.5);
 
-        if (descriptionBox != null) {
-            double boxHeight = descriptionBoxLines * 30.5;
-            if (descriptionBoxFadeAway == -1) {
-                drawBox(ctx, width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
-                ctx.fillText(descriptionBox, width - 190.0, height - (70.0 + boxHeight));
-            } else if (descriptionBoxFadeAway > 0) {
-                descriptionBoxFadeAway -= deltaSeconds;
-                float fadeOut = descriptionBoxFadeAway / descriptionBoxFadeAwayDuration;
-                float fadeIn = 1.0f - fadeOut;
-                drawBox(ctx, width - 200.0 + 100.0 * fadeIn,
-                        height - (100.0 + boxHeight) + boxHeight / 2.0 * fadeIn,
-                        180.0 * fadeOut,
-                        boxHeight * fadeOut);
-            }
+        if (descriptionBox != null || descriptionBoxFadeAway > 0) {
+            drawDescriptionBox(ctx, deltaSeconds, width, height);
+        }
+    }
+
+    private void drawDescriptionBox(GraphicsContext ctx, float deltaSeconds, double width, double height) {
+        double boxHeight = descriptionBoxLines * 30.5;
+        if (descriptionBoxFadeAway == -1) {
+            drawBox(ctx, width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
+            ctx.fillText(descriptionBox, width - 190.0, height - (70.0 + boxHeight));
+        } else if (descriptionBoxFadeAway > 0) {
+            descriptionBoxFadeAway -= deltaSeconds;
+            float fadeOut = descriptionBoxFadeAway / descriptionBoxFadeAwayDuration;
+            float fadeIn = 1.0f - fadeOut;
+            drawBox(ctx, width - 200.0 + 100.0 * fadeIn,
+                    height - (100.0 + boxHeight) + boxHeight / 2.0 * fadeIn,
+                    180.0 * fadeOut,
+                    boxHeight * fadeOut);
         }
     }
 
@@ -81,17 +87,12 @@ public class InGameState implements GameState {
         }
 
         statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense());
-        Entity examinationTarget = player.getLastEntityInteractedWith();
-        if (examinationTarget != null) {
-            if (examinationTarget.isDead()) {
-                if (descriptionBoxFadeAway == -1) {
-                    descriptionBoxFadeAway = descriptionBoxFadeAwayDuration;
-                }
-            } else {
-                descriptionBoxFadeAway = -1.0f;
-                descriptionBox = examinationTarget.getDescription();
-                descriptionBoxLines = descriptionBox.split("\n").length;
-            }
+        descriptionBox = player.getExaminationText();
+        if (descriptionBox != null) {
+            descriptionBoxFadeAway = -1.0f;
+            descriptionBoxLines = descriptionBox.split("\n").length;
+        } else if (descriptionBoxFadeAway == -1) {
+            descriptionBoxFadeAway = descriptionBoxFadeAwayDuration;
         }
 
         return -1;

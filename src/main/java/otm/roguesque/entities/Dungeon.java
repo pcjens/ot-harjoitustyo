@@ -89,6 +89,12 @@ public class Dungeon {
     }
 
     public void cleanupDeadEntities() {
+        entities.forEach((entity) -> {
+            if (entity.lastEntityInteractedWith != null
+                    && entity.lastEntityInteractedWith.isDead()) {
+                entity.lastEntityInteractedWith = null;
+            }
+        });
         entities.removeIf((entity) -> entity.isDead());
     }
 }

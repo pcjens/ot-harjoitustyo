@@ -13,6 +13,7 @@ public class DungeonRenderer {
     // Sprites
     private final String[] tileTypeNames;
     private final Image[] tileTypes;
+    private final Image selectionImage;
 
     // Dungeon
     private Dungeon dungeon;
@@ -37,6 +38,7 @@ public class DungeonRenderer {
             tileTypes[i] = new Image(getClass().getResourceAsStream(tileTypeNames[i]),
                     32, 32, true, false);
         }
+        selectionImage = new Image(getClass().getResourceAsStream("/sprites/selection.png"), 32, 32, true, false);
     }
 
     public void loadDungeon(Dungeon dungeon) {
@@ -52,7 +54,7 @@ public class DungeonRenderer {
         }
     }
 
-    public void draw(GraphicsContext ctx) {
+    public void draw(GraphicsContext ctx, int selectionX, int selectionY) {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
@@ -71,6 +73,17 @@ public class DungeonRenderer {
                 }
             }
         }
+
+        drawSelection(ctx, selectionX, selectionY);
+    }
+
+    private void drawSelection(GraphicsContext ctx, int selectionX, int selectionY) {
+        Entity selectedEntity = dungeon.getPlayer().getLastEntityInteractedWith();
+        if (selectedEntity != null) {
+            ctx.drawImage(selectionImage, selectedEntity.getX() * 32, selectedEntity.getY() * 32);
+        } else if (selectionX >= 0 && selectionY >= 0) {
+            ctx.drawImage(selectionImage, selectionX * 32, selectionY * 32);
+        }
     }
 
     public String getTileImageName(TileType tileType) {
@@ -85,9 +98,9 @@ public class DungeonRenderer {
         if (hp < maxHp) {
             double hpBarWidth = 24.0 * hp / maxHp;
             ctx.setFill(Color.WHITE);
-            ctx.fillRect(x * 32 + 2, y * 32 - 6, 26, 6);
+            ctx.fillRect(x * 32 + 2, y * 32 - 7, 26, 6);
             ctx.setFill(Color.BLACK);
-            ctx.fillRect(x * 32 + 3 + hpBarWidth, y * 32 - 5, 24 - hpBarWidth, 4);
+            ctx.fillRect(x * 32 + 3 + hpBarWidth, y * 32 - 6, 24 - hpBarWidth, 4);
         }
     }
 }
