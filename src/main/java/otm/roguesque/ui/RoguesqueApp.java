@@ -104,7 +104,7 @@ public class RoguesqueApp extends Application {
 
             update(deltaSeconds);
             drawGame(deltaSeconds);
-            input.clearPressedKeys();
+            input.clearInputs();
         }
     };
 
@@ -122,14 +122,23 @@ public class RoguesqueApp extends Application {
             drawGame(0.0001f);
         });
 
-        mainScene.setOnKeyPressed((event) -> {
-            input.addPressedKey(event.getCode());
-        });
+        setupEvents(mainScene);
 
         mainLoop.start();
-
         stage.setScene(mainScene);
         stage.setTitle("Roguesque");
         stage.show();
+    }
+
+    private void setupEvents(Scene scene) {
+        mainScene.setOnKeyPressed((event) -> {
+            input.addPressedKey(event.getCode());
+        });
+        mainScene.setOnMouseMoved((event) -> {
+            input.setMousePosition(event.getSceneX(), event.getSceneY());
+        });
+        mainScene.setOnMouseClicked((event) -> {
+            input.fireClick(event.getButton());
+        });
     }
 }

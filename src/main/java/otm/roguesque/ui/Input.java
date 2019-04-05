@@ -2,6 +2,7 @@ package otm.roguesque.ui;
 
 import java.util.ArrayList;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 public class Input {
 
@@ -29,13 +30,17 @@ public class Input {
     };
 
     private final ArrayList<KeyCode> keysPressed = new ArrayList();
+    private final ArrayList<MouseButton> mouseButtonsPressed = new ArrayList();
+    private double mouseX;
+    private double mouseY;
 
     public void addPressedKey(KeyCode kc) {
         keysPressed.add(kc);
     }
 
-    public void clearPressedKeys() {
+    public void clearInputs() {
         keysPressed.clear();
+        mouseButtonsPressed.clear();
     }
 
     public boolean isPressed(KeyCode[] codes) {
@@ -45,5 +50,30 @@ public class Input {
             }
         }
         return false;
+    }
+
+    public void setMousePosition(double x, double y) {
+        this.mouseX = x;
+        this.mouseY = y;
+    }
+
+    public void fireClick(MouseButton button) {
+        mouseButtonsPressed.add(button);
+    }
+
+    public boolean clicked(MouseButton button) {
+        return mouseButtonsPressed.contains(button);
+    }
+
+    public double getMouseX() {
+        return mouseX;
+    }
+
+    public double getMouseY() {
+        return mouseY;
+    }
+
+    public boolean containsMouse(double x, double y, double width, double height) {
+        return !(mouseX < x || mouseX >= x + width || mouseY < y || mouseY >= y + height);
     }
 }

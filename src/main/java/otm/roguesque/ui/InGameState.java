@@ -2,9 +2,12 @@ package otm.roguesque.ui;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import otm.roguesque.entities.Dungeon;
+import otm.roguesque.entities.Entity;
 import otm.roguesque.entities.Player;
+import otm.roguesque.entities.TileType;
 
 public class InGameState implements GameState {
 
@@ -51,7 +54,7 @@ public class InGameState implements GameState {
     }
 
     private void drawDescriptionBox(GraphicsContext ctx, float deltaSeconds, double width, double height) {
-        double boxHeight = descriptionBoxLines * 30.5;
+        double boxHeight = descriptionBoxLines * 28.0 + 14.0;
         if (descriptionBoxFadeAway == -1) {
             drawBox(ctx, width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
             ctx.fillText(descriptionBox, width - 190.0, height - (70.0 + boxHeight));
@@ -86,15 +89,8 @@ public class InGameState implements GameState {
             dungeon.cleanupDeadEntities();
         }
 
-        statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense());
-        descriptionBox = player.getExaminationText();
-        if (descriptionBox != null) {
-            descriptionBoxFadeAway = -1.0f;
-            descriptionBoxLines = descriptionBox.split("\n").length;
-        } else if (descriptionBoxFadeAway == -1) {
-            descriptionBoxFadeAway = descriptionBoxFadeAwayDuration;
-        }
-
+        selectTile(input);
+        updateTexts();
         return -1;
     }
 
@@ -113,4 +109,44 @@ public class InGameState implements GameState {
         return true;
     }
 
+    private void selectTile(Input input) {
+        if (player.getLastEntityInteractedWith() != null) {
+            selectionX = -1;
+            selectionY = -1;
+        }
+
+        if (input.clicked(MouseButton.SECONDARY)) {
+            player.resetLastEntityInteractedWith();
+            selectionX = -1;
+            selectionY = -1;
+        }
+
+        if (input.clicked(MouseButton.PRIMARY)) {
+            player.resetLastEntityInteractedWith();
+            selectionX = (int) input.getMouseX() / 32;
+            selectionY = (int) input.getMouseY() / 32;
+        }
+    }
+
+    private void updateTexts() {
+        statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense());
+        descriptionBox = player.getExaminationText();
+        if (descriptionBox == null && selectionX >= 0 && selectionY >= 0) {
+            Entity e = dungeon.getEntityAt(selectionX, selectionY);
+            if (e != null) {
+                descriptionBox = e.getDescription();
+            } else {
+                TileType tile = dungeon.getTileAt(selectionX, selectionY);
+                if (tile != null) {
+                    descriptionBox = tile.getDescription();
+                }
+            }
+        }
+        if (descriptionBox != null) {
+            descriptionBoxFadeAway = -1.0f;
+            descriptionBoxLines = descriptionBox.split("\n").length;
+        } else if (descriptionBoxFadeAway == -1) {
+            descriptionBoxFadeAway = descriptionBoxFadeAwayDuration;
+        }
+    }
 }

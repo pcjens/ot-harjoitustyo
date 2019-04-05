@@ -65,7 +65,7 @@ public abstract class Entity {
     }
 
     public String getDescription() {
-        return String.format("%s\n\n%s\n\nHP: %d\nATK: %d\nDEF: %d", name, description, health, attack, defense);
+        return String.format("%s\n\n%s\n\nHP: %d/%d\nATK: %d\nDEF: %d", name, description, health, maxHealth, attack, defense);
     }
 
     public void takeDamage(int attack) {
