@@ -6,7 +6,6 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -14,11 +13,8 @@ import javafx.stage.Stage;
 public class RoguesqueApp extends Application {
 
     public static final Font FONT_LOGO = Font.font("serif", 50.0);
+    public static final Font FONT_LOGO_SMALL = Font.font("serif", 40.0);
     public static final Font FONT_UI = Font.font("monospace", 20.0);
-
-    private static final KeyCode[] CONTROL_TOGGLE_PERF_STATS = new KeyCode[]{
-        KeyCode.F3
-    };
 
     // UI
     private final BorderPane mainPanel;
@@ -45,6 +41,7 @@ public class RoguesqueApp extends Application {
         gameStates[GameState.STATE_INTRO] = new IntroState();
         gameStates[GameState.STATE_MAINMENU] = new MainMenuState();
         gameStates[GameState.STATE_INGAME] = new InGameState();
+        gameStates[GameState.STATE_GAMEOVER] = new GameOverState();
 
         currentGameStateIndex = GameState.STATE_INTRO;
     }
@@ -76,7 +73,7 @@ public class RoguesqueApp extends Application {
     /* This is separated from drawGame just in case we want to switch to a
      * fixed timestemp sometime in the future */
     private void update(float deltaSeconds) {
-        if (input.isPressed(CONTROL_TOGGLE_PERF_STATS)) {
+        if (input.isPressed(Input.CONTROL_TOGGLE_PERF_STATS)) {
             showPerformanceDetails = !showPerformanceDetails;
         }
 
