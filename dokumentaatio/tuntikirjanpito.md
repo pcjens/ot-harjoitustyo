@@ -12,3 +12,4 @@
 | 5.4.  |  1 | Checkstylen ja buildskriptin kirjoittamista, refaktorointia |
 | 5.4.  |  1 | UI laajentamista ja uusien menujen kirjottelua |
 | 5.4.  |  1 | Fontin etsintää ja lisätietolaatikon kirjoittamista |
+| 5.4.  |  1 | Refaktorointia ja lisätietolaatikon jatkoa |
