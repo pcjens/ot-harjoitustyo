@@ -14,3 +14,4 @@
 | 5.4.  |  1 | Fontin etsintää ja lisätietolaatikon kirjoittamista |
 | 5.4.  |  1 | Refaktorointia ja lisätietolaatikon jatkoa |
 | 5.4.  |  1 | Refaktorointia, testien ja tavaroiden kirjoittamista |
+| 6.4.  |  1 | Refaktorointia, korjailua ja testien kirjoittamista |
