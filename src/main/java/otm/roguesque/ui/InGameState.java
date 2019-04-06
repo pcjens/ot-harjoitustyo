@@ -30,10 +30,6 @@ public class InGameState implements GameState {
 
     @Override
     public void initialize() {
-        initializeDungeon();
-    }
-
-    private void initializeDungeon() {
         dungeon = new Dungeon(10, 10, 12);
         dungeonRenderer.loadDungeon(dungeon);
         player = new Player();

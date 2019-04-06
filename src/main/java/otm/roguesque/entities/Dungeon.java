@@ -30,7 +30,7 @@ public class Dungeon {
                     tiles[x + y * width] = TileType.Floor;
 
                     if (rand.nextFloat() < 0.02) {
-                        spawnEntity(new Rat(), x, y);
+                        spawnEntity(new Rat(rand.nextInt()), x, y);
                     }
                     if (rand.nextFloat() < 0.02) {
                         spawnEntity(new Item(1, rand.nextInt()), x, y);
@@ -68,6 +68,10 @@ public class Dungeon {
 
     public TileType[] getTiles() {
         return tiles;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
     }
 
     public boolean solid(int x, int y) {

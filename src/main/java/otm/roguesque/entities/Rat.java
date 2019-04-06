@@ -4,10 +4,11 @@ import java.util.Random;
 
 public class Rat extends Entity implements AI {
 
-    private static Random rand = new Random(123);
+    private final Random rand;
 
-    public Rat() {
+    public Rat(int seed) {
         super(5, 2, 0, "Rat", "*squeek*", "Small Animals", "/sprites/rat.png");
+        rand = new Random(seed);
     }
 
     @Override
