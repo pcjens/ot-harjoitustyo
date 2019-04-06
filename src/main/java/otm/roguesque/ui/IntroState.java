@@ -8,7 +8,12 @@ public class IntroState implements GameState {
 
     private final float revealDuration = 1.25f;
     private final float postRevealWait = 0.25f;
-    private float progress = 0.0f;
+    private float progress;
+
+    @Override
+    public void initialize() {
+        progress = 0.0f;
+    }
 
     @Override
     public void draw(GraphicsContext ctx, float deltaSeconds) {

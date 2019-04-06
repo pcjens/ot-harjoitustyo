@@ -33,7 +33,7 @@ public class Dungeon {
                         spawnEntity(new Rat(), x, y);
                     }
                     if (rand.nextFloat() < 0.02) {
-                        spawnEntity(new Item(1), x, y);
+                        spawnEntity(new Item(1, rand.nextInt()), x, y);
                     }
                 }
             }

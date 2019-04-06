@@ -7,6 +7,10 @@ import javafx.scene.paint.Color;
 public class GameOverState implements GameState {
 
     @Override
+    public void initialize() {
+    }
+
+    @Override
     public void draw(GraphicsContext ctx, float deltaSeconds) {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);
@@ -31,5 +35,4 @@ public class GameOverState implements GameState {
         }
         return -1;
     }
-
 }

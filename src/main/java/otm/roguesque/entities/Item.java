@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class Item extends Entity {
 
-    private static final Random RAND = new Random(321);
     private static final String[] GENERAL_PREFIXES = new String[]{
         "Shabby", "Decent", "Nice", "Pristine", "Exquisite", "Legendary"
     };
@@ -25,25 +24,28 @@ public class Item extends Entity {
     private int attackBoost = 0;
     private int defenseBoost = 0;
 
-    public Item(int level) {
+    public Item(int level, int seed) {
         super(1, 0, 1000000, "", "", "Items", "/sprites/item.png");
-        if (RAND.nextBoolean()) {
-            attackBoost = RAND.nextInt(1 + level) + 1;
+
+        Random rand = new Random(seed);
+
+        if (rand.nextBoolean()) {
+            attackBoost = rand.nextInt(1 + level) + 1;
             String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length, attackBoost - 1)];
-            String baseName = OFFENSIVE_BASE_NAMES[RAND.nextInt(OFFENSIVE_BASE_NAMES.length)];
-            String feature = OFFENSIVE_SUFFIXES[RAND.nextInt(OFFENSIVE_SUFFIXES.length)];
+            String baseName = OFFENSIVE_BASE_NAMES[rand.nextInt(OFFENSIVE_BASE_NAMES.length)];
+            String feature = OFFENSIVE_SUFFIXES[rand.nextInt(OFFENSIVE_SUFFIXES.length)];
             name = quality + " " + baseName;
-            if (RAND.nextInt(Math.max(3, 10 - level)) == 0) {
+            if (rand.nextInt(Math.max(3, 10 - level)) == 0) {
                 name += " of\n" + feature;
                 description = "\n" + baseName + "\nimbued with\n" + feature.toLowerCase() + ".\n";
             }
         } else {
-            defenseBoost = RAND.nextInt(1 + level) + 1;
+            defenseBoost = rand.nextInt(1 + level) + 1;
             String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length, defenseBoost - 1)];
-            String baseName = DEFENSIVE_BASE_NAMES[RAND.nextInt(DEFENSIVE_BASE_NAMES.length)];
-            String feature = DEFENSIVE_SUFFIXES[RAND.nextInt(DEFENSIVE_SUFFIXES.length)];
+            String baseName = DEFENSIVE_BASE_NAMES[rand.nextInt(DEFENSIVE_BASE_NAMES.length)];
+            String feature = DEFENSIVE_SUFFIXES[rand.nextInt(DEFENSIVE_SUFFIXES.length)];
             name = quality + " " + baseName + " of " + feature;
-            if (RAND.nextInt(Math.max(3, 10 - level)) == 0) {
+            if (rand.nextInt(Math.max(3, 10 - level)) == 0) {
                 name += " of\n" + feature;
                 description = "\n" + baseName + "\nimbued with\n" + feature.toLowerCase() + ".\n";
             }

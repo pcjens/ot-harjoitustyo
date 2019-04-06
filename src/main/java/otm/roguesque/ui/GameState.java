@@ -15,4 +15,6 @@ public interface GameState {
     void draw(GraphicsContext ctx, float deltaSeconds);
 
     int update(Input input, float deltaSeconds);
+
+    void initialize();
 }

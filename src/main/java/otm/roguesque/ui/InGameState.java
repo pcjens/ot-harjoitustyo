@@ -12,8 +12,8 @@ import otm.roguesque.entities.TileType;
 public class InGameState implements GameState {
 
     private final DungeonRenderer dungeonRenderer;
-    private final Dungeon dungeon;
-    private final Player player;
+    private Dungeon dungeon;
+    private Player player;
 
     private String statusLine;
     private String descriptionText;
@@ -26,6 +26,14 @@ public class InGameState implements GameState {
 
     public InGameState() {
         dungeonRenderer = new DungeonRenderer();
+    }
+
+    @Override
+    public void initialize() {
+        initializeDungeon();
+    }
+
+    private void initializeDungeon() {
         dungeon = new Dungeon(10, 10, 12);
         dungeonRenderer.loadDungeon(dungeon);
         player = new Player();

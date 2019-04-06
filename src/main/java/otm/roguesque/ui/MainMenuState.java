@@ -20,6 +20,10 @@ public class MainMenuState implements GameState {
     private boolean hoveringQuit = false;
 
     @Override
+    public void initialize() {
+    }
+
+    @Override
     public void draw(GraphicsContext ctx, float deltaSeconds) {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);

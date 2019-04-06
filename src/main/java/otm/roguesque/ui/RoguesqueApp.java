@@ -44,6 +44,7 @@ public class RoguesqueApp extends Application {
         gameStates[GameState.STATE_GAMEOVER] = new GameOverState();
 
         currentGameStateIndex = GameState.STATE_INTRO;
+        gameStates[currentGameStateIndex].initialize();
     }
 
     private void drawGame(float deltaSeconds) {
@@ -82,6 +83,7 @@ public class RoguesqueApp extends Application {
             Platform.exit();
         } else if (newState >= 0 && newState < GameState.STATE_COUNT) {
             currentGameStateIndex = newState;
+            gameStates[currentGameStateIndex].initialize();
         }
     }
     private final AnimationTimer mainLoop = new AnimationTimer() {
