@@ -16,7 +16,6 @@ public class DungeonRenderer {
     private final Image selectionImage;
 
     // Dungeon
-    private Dungeon dungeon;
     private int width;
     private int height;
     private Image[] tileImages;
@@ -42,11 +41,10 @@ public class DungeonRenderer {
     }
 
     public void loadDungeon(Dungeon dungeon) {
-        this.dungeon = dungeon;
-        this.width = this.dungeon.getWidth();
-        this.height = this.dungeon.getHeight();
+        this.width = dungeon.getWidth();
+        this.height = dungeon.getHeight();
         this.tileImages = new Image[width * height];
-        TileType[] tiles = this.dungeon.getTiles();
+        TileType[] tiles = dungeon.getTiles();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 this.tileImages[x + y * width] = tileTypes[tiles[x + y * width].ordinal()];
@@ -54,12 +52,12 @@ public class DungeonRenderer {
         }
     }
 
-    public void draw(GraphicsContext ctx, int selectionX, int selectionY) {
+    public void draw(GraphicsContext ctx, Dungeon dungeon, int selectionX, int selectionY) {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
 
-        if (this.dungeon == null) {
+        if (dungeon == null) {
             return;
         }
 
@@ -74,10 +72,10 @@ public class DungeonRenderer {
             }
         }
 
-        drawSelection(ctx, selectionX, selectionY);
+        drawSelection(ctx, dungeon, selectionX, selectionY);
     }
 
-    private void drawSelection(GraphicsContext ctx, int selectionX, int selectionY) {
+    private void drawSelection(GraphicsContext ctx, Dungeon dungeon, int selectionX, int selectionY) {
         Entity selectedEntity = dungeon.getPlayer().getLastEntityInteractedWith();
         if (selectedEntity != null) {
             ctx.drawImage(selectionImage, selectedEntity.getX() * 32, selectedEntity.getY() * 32);

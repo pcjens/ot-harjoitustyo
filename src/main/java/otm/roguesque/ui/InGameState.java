@@ -44,7 +44,7 @@ public class InGameState implements GameState {
 
     @Override
     public void draw(GraphicsContext ctx, float deltaSeconds) {
-        dungeonRenderer.draw(ctx, selectionX, selectionY);
+        dungeonRenderer.draw(ctx, dungeon, selectionX, selectionY);
 
         Canvas canvas = ctx.getCanvas();
         double width = canvas.getWidth();
