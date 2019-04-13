@@ -13,17 +13,14 @@ public class DungeonTest {
     @Before
     public void init() {
         player = new Player();
-        dungeon = new Dungeon(10, 10, 12);
-        dungeon.spawnEntity(player, 2, 2);
+        dungeon = new Dungeon(1, 12);
+        dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
     }
 
     @Test
     public void playerDiesCorrectly() {
-        for (int i = 0; i < 19; i++) {
-            Assert.assertFalse(player.isDead());
-            player.move(-1, 0);
-            dungeon.processRound();
-        }
+        Assert.assertFalse(player.isDead());
+        movePlayerToDeath();
         Assert.assertTrue(player.isDead());
     }
 
@@ -31,23 +28,33 @@ public class DungeonTest {
     public void cleanupDeadEntitiesWorks() {
         dungeon.cleanupDeadEntities();
         Assert.assertTrue(dungeon.getEntities().contains(player));
-        for (int i = 0; i < 19; i++) {
-            player.move(-1, 0);
-            dungeon.processRound();
-        }
+        movePlayerToDeath();
         Assert.assertTrue(dungeon.getEntities().contains(player));
         dungeon.cleanupDeadEntities();
         Assert.assertFalse(dungeon.getEntities().contains(player));
     }
 
+    private void movePlayerToDeath() {
+        dungeon.movePlayerNTimes(-8, 0);
+        dungeon.movePlayerNTimes(0, -4);
+        dungeon.movePlayerNTimes(-3, 0);
+        dungeon.movePlayerNTimes(0, 1);
+        dungeon.movePlayerNTimes(-4, 0);
+        dungeon.movePlayerNTimes(0, -14);
+    }
+
     @Test
     public void playerGetsStatsFromItem() {
-        for (int i = 0; i < 5; i++) {
-            player.move(1, 0);
-            dungeon.processRound();
-            Assert.assertTrue(player.getAttack() == 2);
-        }
-        player.move(0, 1);
-        Assert.assertTrue(player.getAttack() == 3);
+        Assert.assertTrue(player.getDefense() == 1);
+        movePlayerToItem();
+        Assert.assertTrue(player.getDefense() == 3);
+    }
+
+    private void movePlayerToItem() {
+        dungeon.movePlayerNTimes(0, -2);
+        dungeon.movePlayerNTimes(3, 0);
+        dungeon.movePlayerNTimes(0, 1);
+        dungeon.movePlayerNTimes(4, 0);
+        dungeon.movePlayerNTimes(0, -1);
     }
 }

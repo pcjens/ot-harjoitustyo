@@ -113,6 +113,18 @@ public class Dungeon {
         entities.removeIf((entity) -> entity.isDead());
     }
 
+    // This is just a testing utility
+    public void movePlayerNTimes(int x, int y) {
+        for (int i = 0; i < Math.abs(x); i++) {
+            player.move((int) Math.signum(x), 0);
+            processRound();
+        }
+        for (int i = 0; i < Math.abs(y); i++) {
+            player.move(0, (int) Math.signum(y));
+            processRound();
+        }
+    }
+
     // Dungeon generation functionality
     // Sorry about the fragmentation of the functions; CheckStyle doesn't like long functions.
     private void generateDungeon(int seed) {
