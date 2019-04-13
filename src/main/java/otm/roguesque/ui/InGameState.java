@@ -23,6 +23,7 @@ public class InGameState implements GameState {
 
     private int selectionX = -1;
     private int selectionY = -1;
+    private double tileSize = 32.0;
 
     public InGameState() {
         dungeonRenderer = new DungeonRenderer();
@@ -30,17 +31,17 @@ public class InGameState implements GameState {
 
     @Override
     public void initialize() {
-        dungeon = new Dungeon(10, 10, 12);
-        dungeonRenderer.loadDungeon(dungeon);
         player = new Player();
-        dungeon.spawnEntity(player, 2, 2);
+        dungeon = new Dungeon(1, 12);
+        dungeonRenderer.loadDungeon(dungeon);
+        dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
         statusLine = "Loading...";
         descriptionText = null;
     }
 
     @Override
     public void draw(GraphicsContext ctx, float deltaSeconds) {
-        dungeonRenderer.draw(ctx, dungeon, selectionX, selectionY);
+        dungeonRenderer.draw(ctx, dungeon, tileSize, selectionX, selectionY);
 
         Canvas canvas = ctx.getCanvas();
         double width = canvas.getWidth();
@@ -127,8 +128,8 @@ public class InGameState implements GameState {
 
         if (input.clicked(MouseButton.PRIMARY)) {
             player.resetLastEntityInteractedWith();
-            selectionX = (int) input.getMouseX() / 32;
-            selectionY = (int) input.getMouseY() / 32;
+            selectionX = (int) (input.getMouseX() / tileSize) + dungeonRenderer.getOffsetX();
+            selectionY = (int) (input.getMouseY() / tileSize) + dungeonRenderer.getOffsetY();
         }
     }
 
