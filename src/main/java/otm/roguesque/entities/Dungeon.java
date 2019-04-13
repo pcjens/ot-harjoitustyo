@@ -130,20 +130,16 @@ public class Dungeon {
         for (int roomY = 0; roomY < roomCountY; roomY++) {
             for (int roomX = 0; roomX < roomCountX; roomX++) {
                 RoomType type = rooms[roomX + roomY * roomCountX];
-                if (type == null) {
-                    continue;
+                if (type != null) {
+                    int roomWidth = rand.nextInt(MAX_ROOM_WIDTH - (MIN_ROOM_WIDTH + MIN_ROOM_MARGIN)) + MIN_ROOM_WIDTH;
+                    int roomHeight = rand.nextInt(MAX_ROOM_HEIGHT - (MIN_ROOM_HEIGHT + MIN_ROOM_MARGIN)) + MIN_ROOM_HEIGHT;
+                    int x = roomX * MAX_ROOM_WIDTH + rand.nextInt(MAX_ROOM_WIDTH - roomWidth - 2) + 2;
+                    int y = roomY * MAX_ROOM_HEIGHT + rand.nextInt(MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
+                    generateRoom(rand, type, x, y, roomWidth, roomHeight);
+                    generateCorridors(rand, rooms, roomX, roomY, roomCountX, roomCountY,
+                            x, y, roomWidth, roomHeight, roomX * MAX_ROOM_WIDTH, roomY * MAX_ROOM_HEIGHT,
+                            (roomX + 1) * MAX_ROOM_WIDTH, (roomY + 1) * MAX_ROOM_HEIGHT);
                 }
-                int roomWidth = rand.nextInt(MAX_ROOM_WIDTH - (MIN_ROOM_WIDTH + MIN_ROOM_MARGIN)) + MIN_ROOM_WIDTH;
-                int roomHeight = rand.nextInt(MAX_ROOM_HEIGHT - (MIN_ROOM_HEIGHT + MIN_ROOM_MARGIN)) + MIN_ROOM_HEIGHT;
-                int x = roomX * MAX_ROOM_WIDTH + rand.nextInt(MAX_ROOM_WIDTH - roomWidth - 2) + 2;
-                int y = roomY * MAX_ROOM_HEIGHT + rand.nextInt(MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
-                int startX = roomX * MAX_ROOM_WIDTH;
-                int startY = roomY * MAX_ROOM_HEIGHT;
-                int endX = (roomX + 1) * MAX_ROOM_WIDTH;
-                int endY = (roomY + 1) * MAX_ROOM_HEIGHT;
-                generateRoom(rand, type, x, y, roomWidth, roomHeight);
-                generateCorridors(rand, rooms, roomX, roomY, roomCountX, roomCountY,
-                        x, y, roomWidth, roomHeight, startX, startY, endX, endY);
             }
         }
     }
@@ -152,48 +148,60 @@ public class Dungeon {
             int roomCountX, int roomCountY, int roomX, int roomY, int roomWidth, int roomHeight,
             int startX, int startY, int endX, int endY) {
         if (roomIndexX > 0 && rooms[(roomIndexX - 1) + roomIndexY * roomCountX] != null) {
-            int otherY = -1;
-            for (int y = startY; y <= endY; y++) {
-                if (tiles[startX + y * width] == TileType.Corridor) {
-                    otherY = y;
-                    break;
-                }
-            }
+            int otherY = findCorridorY(startX, startY, endY);
             int y = roomY + 1 + rand.nextInt(roomHeight - 2);
-            generateCorridor(startX, y, roomX, y);
-            if (otherY >= 0) {
-                generateCorridor(startX, y, startX, otherY);
-            }
+            generateHorizontalCorridor(y, startX, roomX);
+            generateVerticalCorridor(startX, y, otherY); // the corridor connecting the corridors
         }
         if (roomIndexY > 0 && rooms[roomIndexX + (roomIndexY - 1) * roomCountX] != null) {
-            int otherX = -1;
-            for (int x = startX; x <= endX; x++) {
-                if (tiles[x + startY * width] == TileType.Corridor) {
-                    otherX = x;
-                    break;
-                }
-            }
+            int otherX = findCorridorX(startY, startX, endX);
             int x = roomX + 1 + rand.nextInt(roomWidth - 2);
-            generateCorridor(x, startY, x, roomY);
-            if (otherX >= 0) {
-                generateCorridor(x, startY, otherX, startY);
-            }
+            generateVerticalCorridor(x, startY, roomY);
+            generateHorizontalCorridor(startY, x, otherX); // the corridor connecting the corridors
         }
         if (roomIndexX < roomCountX - 1 && rooms[(roomIndexX + 1) + roomIndexY * roomCountX] != null) {
-            int y = roomY + 1 + rand.nextInt(roomHeight - 2);
-            generateCorridor(roomX + roomWidth - 1, y, endX, y);
+            generateHorizontalCorridor(roomY + 1 + rand.nextInt(roomHeight - 2), roomX + roomWidth - 1, endX);
         }
         if (roomIndexY < roomCountY - 1 && rooms[roomIndexX + (roomIndexY + 1) * roomCountX] != null) {
-            int x = roomX + 1 + rand.nextInt(roomWidth - 2);
-            generateCorridor(x, roomY + roomHeight - 1, x, endY);
+            generateVerticalCorridor(roomX + 1 + rand.nextInt(roomWidth - 2), roomY + roomHeight - 1, endY);
         }
     }
 
-    private void generateCorridor(int startX, int startY, int endX, int endY) {
+    private int findCorridorY(int x, int startY, int endY) {
+        for (int y = startY; y <= endY; y++) {
+            if (tiles[x + y * width] == TileType.Corridor) {
+                return y;
+            }
+        }
+        return -1;
+    }
+
+    private int findCorridorX(int y, int startX, int endX) {
+        for (int x = startX; x <= endX; x++) {
+            if (tiles[x + y * width] == TileType.Corridor) {
+                return x;
+            }
+        }
+        return -1;
+    }
+
+    private void generateHorizontalCorridor(int y, int startX, int endX) {
+        if (startX < 0 || endX < 0) {
+            return;
+        }
         if (startX > endX) {
             int temp = startX;
             startX = endX;
             endX = temp;
+        }
+        for (int x = startX; x <= endX; x++) {
+            tiles[x + y * width] = TileType.Corridor;
+        }
+    }
+
+    private void generateVerticalCorridor(int x, int startY, int endY) {
+        if (startY < 0 || endY < 0) {
+            return;
         }
         if (startY > endY) {
             int temp = startY;
@@ -201,9 +209,7 @@ public class Dungeon {
             endY = temp;
         }
         for (int y = startY; y <= endY; y++) {
-            for (int x = startX; x <= endX; x++) {
-                tiles[x + y * width] = TileType.Corridor;
-            }
+            tiles[x + y * width] = TileType.Corridor;
         }
     }
 

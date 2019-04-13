@@ -69,19 +69,30 @@ public class DungeonRenderer {
 
     public void draw(GraphicsContext ctx, Dungeon dungeon, double tileSize, int selectionX, int selectionY) {
         Canvas canvas = ctx.getCanvas();
-        ctx.setFill(Color.BLACK);
-        ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
-
+        clearScreen(ctx, canvas);
         if (dungeon == null) {
             return;
         }
 
-        Player player = dungeon.getPlayer();
         int tilesX = (int) (canvas.getWidth() / tileSize);
         int tilesY = (int) (canvas.getHeight() / tileSize);
+        updateOffsets(dungeon, tilesX, tilesY);
+        drawMap(ctx, dungeon, tileSize, tilesX, tilesY);
+        drawSelection(ctx, dungeon, tileSize, selectionX - offsetX, selectionY - offsetY);
+    }
+
+    private void clearScreen(GraphicsContext ctx, Canvas canvas) {
+        ctx.setFill(Color.BLACK);
+        ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
+    }
+
+    private void updateOffsets(Dungeon dungeon, int tilesX, int tilesY) {
+        Player player = dungeon.getPlayer();
         offsetX = Math.max(0, Math.min(width - tilesX, player.getX() - tilesX / 2));
         offsetY = Math.max(0, Math.min(height - tilesY, player.getY() - tilesY / 2));
+    }
 
+    private void drawMap(GraphicsContext ctx, Dungeon dungeon, double tileSize, int tilesX, int tilesY) {
         for (int y = offsetY; y < Math.min(offsetY + tilesY, height); y++) {
             for (int x = offsetX; x < Math.min(offsetX + tilesX, width); x++) {
                 Entity entity = dungeon.getEntityAt(x, y);
@@ -94,8 +105,6 @@ public class DungeonRenderer {
                 }
             }
         }
-
-        drawSelection(ctx, dungeon, tileSize, selectionX - offsetX, selectionY - offsetY);
     }
 
     private void drawSelection(GraphicsContext ctx, Dungeon dungeon, double tileSize, int selectionX, int selectionY) {
