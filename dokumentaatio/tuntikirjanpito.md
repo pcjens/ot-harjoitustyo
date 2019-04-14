@@ -15,3 +15,6 @@
 | 5.4.  |  1 | Refaktorointia ja lisätietolaatikon jatkoa |
 | 5.4.  |  1 | Refaktorointia, testien ja tavaroiden kirjoittamista |
 | 6.4.  |  1 | Refaktorointia, korjailua ja testien kirjoittamista |
+| 13.4. |  4 | Luolageneraation kirjoittamista |
+| 13.4. |  1 | Testien ja checkstylen korjaamista |
+| Yht.  | 26 | |
