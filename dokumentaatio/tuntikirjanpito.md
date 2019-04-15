@@ -18,4 +18,5 @@
 | 13.4. |  4 | Luolageneraation kirjoittamista |
 | 13.4. |  1 | Testien ja checkstylen korjaamista |
 | 15.4. |  1 | Tasoissa etenemisen kirjoittamista |
-| Yht.  | 27 | |
+| 15.4. |  1 | Grafiikkojen piirtämistä |
+| Yht.  | 28 | |
