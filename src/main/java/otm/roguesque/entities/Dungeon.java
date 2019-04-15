@@ -71,7 +71,7 @@ public class Dungeon {
     public ArrayList<Entity> getEntities() {
         return entities;
     }
-    
+
     public int getLevel() {
         return level;
     }
@@ -79,7 +79,7 @@ public class Dungeon {
     public boolean canFinish() {
         return getTileAt(player.getX(), player.getY()) == TileType.Stairs;
     }
-    
+
     public boolean solid(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height || tiles[x + y * width] == null) {
             return true;
@@ -309,10 +309,10 @@ public class Dungeon {
         for (int y = 0; y < roomHeight; y++) {
             for (int x = 0; x < roomWidth; x++) {
                 TileType tile;
-                if (y == 0 || y == roomHeight - 1) {
-                    tile = TileType.HorizontalWall;
-                } else if (x == 0 || x == roomWidth - 1) {
+                if (x == 0 || x == roomWidth - 1) {
                     tile = TileType.VerticalWall;
+                } else if (y == 0 || y == roomHeight - 1) {
+                    tile = TileType.HorizontalWall;
                 } else {
                     tile = TileType.Floor;
                 }

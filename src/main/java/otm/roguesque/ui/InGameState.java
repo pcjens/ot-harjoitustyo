@@ -28,7 +28,7 @@ public class InGameState implements GameState {
     private double tileSize = 32.0;
 
     private final Button nextLevelButton;
-    
+
     public InGameState() {
         rand = new Random();
         dungeonRenderer = new DungeonRenderer();
@@ -40,7 +40,7 @@ public class InGameState implements GameState {
         player = new Player();
         regenerateDungeon(1);
     }
-    
+
     private void regenerateDungeon(int level) {
         dungeon = new Dungeon(level, rand.nextInt());
         dungeonRenderer.loadDungeon(dungeon);
@@ -66,16 +66,16 @@ public class InGameState implements GameState {
         if (descriptionText != null || descriptionBoxFadeAway > 0) {
             drawDescriptionBox(ctx, deltaSeconds, width, height);
         }
-        
+
         if (dungeon.canFinish()) {
             nextLevelButton.x = (int) (width - nextLevelButton.width) / 2;
             nextLevelButton.y = (int) (height - nextLevelButton.height) / 2;
-            drawBox(ctx, nextLevelButton.x, nextLevelButton.y, 
+            drawBox(ctx, nextLevelButton.x, nextLevelButton.y,
                     nextLevelButton.width, nextLevelButton.height, nextLevelButton.hovered);
             ctx.setFill(Color.WHITE);
             ctx.setFont(RoguesqueApp.FONT_UI);
             ctx.fillText("Move to the next floor?", nextLevelButton.x + 15, nextLevelButton.y + 30);
-            
+
         }
     }
 
@@ -118,7 +118,7 @@ public class InGameState implements GameState {
             }
             dungeon.cleanupDeadEntities();
         }
-        
+
         if (dungeon.canFinish()) {
             nextLevelButton.update(input);
             if (nextLevelButton.clicked) {

@@ -95,12 +95,11 @@ public class DungeonRenderer {
     private void drawMap(GraphicsContext ctx, Dungeon dungeon, double tileSize, int tilesX, int tilesY) {
         for (int y = offsetY; y < Math.min(offsetY + tilesY, height); y++) {
             for (int x = offsetX; x < Math.min(offsetX + tilesX, width); x++) {
+                if (tileImages[x + y * width] != null) {
+                    ctx.drawImage(tileImages[x + y * width], (x - offsetX) * tileSize, (y - offsetY) * tileSize, tileSize, tileSize);
+                }
                 Entity entity = dungeon.getEntityAt(x, y);
-                if (entity == null) {
-                    if (tileImages[x + y * width] != null) {
-                        ctx.drawImage(tileImages[x + y * width], (x - offsetX) * tileSize, (y - offsetY) * tileSize, tileSize, tileSize);
-                    }
-                } else {
+                if (entity != null) {
                     drawEntity(ctx, tileSize, entity, (x - offsetX), (y - offsetY));
                 }
             }
