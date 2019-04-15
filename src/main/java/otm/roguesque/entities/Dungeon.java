@@ -71,7 +71,15 @@ public class Dungeon {
     public ArrayList<Entity> getEntities() {
         return entities;
     }
+    
+    public int getLevel() {
+        return level;
+    }
 
+    public boolean canFinish() {
+        return getTileAt(player.getX(), player.getY()) == TileType.Stairs;
+    }
+    
     public boolean solid(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height || tiles[x + y * width] == null) {
             return true;

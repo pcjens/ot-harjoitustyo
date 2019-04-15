@@ -17,4 +17,5 @@
 | 6.4.  |  1 | Refaktorointia, korjailua ja testien kirjoittamista |
 | 13.4. |  4 | Luolageneraation kirjoittamista |
 | 13.4. |  1 | Testien ja checkstylen korjaamista |
-| Yht.  | 26 | |
+| 15.4. |  1 | Tasoissa etenemisen kirjoittamista |
+| Yht.  | 27 | |

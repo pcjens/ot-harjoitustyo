@@ -1,5 +1,6 @@
 package otm.roguesque.ui;
 
+import java.util.Random;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
@@ -11,6 +12,7 @@ import otm.roguesque.entities.TileType;
 
 public class InGameState implements GameState {
 
+    private final Random rand;
     private final DungeonRenderer dungeonRenderer;
     private Dungeon dungeon;
     private Player player;
@@ -25,14 +27,22 @@ public class InGameState implements GameState {
     private int selectionY = -1;
     private double tileSize = 32.0;
 
+    private final Button nextLevelButton;
+    
     public InGameState() {
+        rand = new Random();
         dungeonRenderer = new DungeonRenderer();
+        nextLevelButton = new Button(0, 0, 290, 45);
     }
 
     @Override
     public void initialize() {
         player = new Player();
-        dungeon = new Dungeon(1, 12);
+        regenerateDungeon(1);
+    }
+    
+    private void regenerateDungeon(int level) {
+        dungeon = new Dungeon(level, rand.nextInt());
         dungeonRenderer.loadDungeon(dungeon);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
         statusLine = "Loading...";
@@ -47,7 +57,7 @@ public class InGameState implements GameState {
         double width = canvas.getWidth();
         double height = canvas.getHeight();
 
-        drawBox(ctx, 20.0, height - 80.0, width - 40.0, 60.0);
+        drawBox(ctx, 20.0, height - 80.0, width - 40.0, 60.0, false);
 
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_UI);
@@ -56,12 +66,23 @@ public class InGameState implements GameState {
         if (descriptionText != null || descriptionBoxFadeAway > 0) {
             drawDescriptionBox(ctx, deltaSeconds, width, height);
         }
+        
+        if (dungeon.canFinish()) {
+            nextLevelButton.x = (int) (width - nextLevelButton.width) / 2;
+            nextLevelButton.y = (int) (height - nextLevelButton.height) / 2;
+            drawBox(ctx, nextLevelButton.x, nextLevelButton.y, 
+                    nextLevelButton.width, nextLevelButton.height, nextLevelButton.hovered);
+            ctx.setFill(Color.WHITE);
+            ctx.setFont(RoguesqueApp.FONT_UI);
+            ctx.fillText("Move to the next floor?", nextLevelButton.x + 15, nextLevelButton.y + 30);
+            
+        }
     }
 
     private void drawDescriptionBox(GraphicsContext ctx, float deltaSeconds, double width, double height) {
         double boxHeight = descriptionBoxLines * 28.0 + 14.0;
         if (descriptionBoxFadeAway == -1) {
-            drawBox(ctx, width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight);
+            drawBox(ctx, width - 200.0, height - (100.0 + boxHeight), 180.0, boxHeight, false);
             ctx.fillText(descriptionText, width - 190.0, height - (70.0 + boxHeight));
         } else if (descriptionBoxFadeAway > 0) {
             descriptionBoxFadeAway -= deltaSeconds;
@@ -70,14 +91,18 @@ public class InGameState implements GameState {
             drawBox(ctx, width - 200.0 + 100.0 * fadeIn,
                     height - (100.0 + boxHeight) + boxHeight / 2.0 * fadeIn,
                     180.0 * fadeOut,
-                    boxHeight * fadeOut);
+                    boxHeight * fadeOut, false);
         }
     }
 
-    private void drawBox(GraphicsContext ctx, double x, double y, double w, double h) {
+    private void drawBox(GraphicsContext ctx, double x, double y, double w, double h, boolean highlight) {
         ctx.setFill(Color.WHITE);
         ctx.fillRect(x, y, w, h);
-        ctx.setFill(Color.BLACK);
+        if (highlight) {
+            ctx.setFill(Color.gray(0.3));
+        } else {
+            ctx.setFill(Color.BLACK);
+        }
         ctx.fillRect(x + 4.0, y + 4.0, w - 8.0, h - 8.0);
         ctx.setFill(Color.WHITE);
     }
@@ -92,6 +117,13 @@ public class InGameState implements GameState {
                 return GameState.STATE_GAMEOVER;
             }
             dungeon.cleanupDeadEntities();
+        }
+        
+        if (dungeon.canFinish()) {
+            nextLevelButton.update(input);
+            if (nextLevelButton.clicked) {
+                regenerateDungeon(dungeon.getLevel() + 1);
+            }
         }
 
         selectTile(input);
