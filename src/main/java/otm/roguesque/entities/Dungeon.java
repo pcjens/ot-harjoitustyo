@@ -325,10 +325,10 @@ public class Dungeon {
     private void generateDoors(int xOffset, int yOffset, int roomWidth, int roomHeight) {
         for (int y = 0; y < roomHeight; y++) {
             for (int x = 0; x < roomWidth; x++) {
-                int x_ = (x + xOffset);
-                int y_ = (y + yOffset);
-                if (tiles[x_ + y_ * width] == TileType.Corridor) {
-                    spawnEntity(new Door(), x_, y_);
+                int globalX = (x + xOffset);
+                int globalY = (y + yOffset);
+                if (tiles[globalX + globalY * width] == TileType.Corridor) {
+                    spawnEntity(new Door(), globalX, globalY);
                 }
             }
         }

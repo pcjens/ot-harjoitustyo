@@ -31,6 +31,22 @@ public class PlayerTest {
         Assert.assertNotNull(player.getExaminationText());
     }
 
+    @Test
+    public void levelCanBeFinished() {
+        dungeon.movePlayerNTimes(-6, 0);
+        dungeon.movePlayerNTimes(0, 3);
+        dungeon.movePlayerNTimes(-1, 0);
+        dungeon.movePlayerNTimes(0, 6);
+        dungeon.movePlayerNTimes(-4, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        dungeon.movePlayerNTimes(-12, 0);
+        dungeon.movePlayerNTimes(0, 7);
+        dungeon.movePlayerNTimes(1, 0);
+        dungeon.movePlayerNTimes(0, 6);
+        dungeon.movePlayerNTimes(-2, 0);
+        Assert.assertTrue(dungeon.canFinish());
+    }
+
     private void moveToExamine() {
         dungeon.movePlayerNTimes(-8, 0);
         dungeon.movePlayerNTimes(0, -4);

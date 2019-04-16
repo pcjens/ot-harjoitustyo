@@ -19,4 +19,5 @@
 | 13.4. |  1 | Testien ja checkstylen korjaamista |
 | 15.4. |  1 | Tasoissa etenemisen kirjoittamista |
 | 15.4. |  1 | Grafiikkojen piirtämistä |
-| Yht.  | 28 | |
+| 16.4. |  1 | Ovien (uudelleen) lisäämistä, testien kirjoittamista |
+| Yht.  | 29 | |

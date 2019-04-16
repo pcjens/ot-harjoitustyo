@@ -68,15 +68,18 @@ public class InGameState implements GameState {
         }
 
         if (dungeon.canFinish()) {
-            nextLevelButton.x = (int) (width - nextLevelButton.width) / 2;
-            nextLevelButton.y = (int) (height - nextLevelButton.height) / 2;
-            drawBox(ctx, nextLevelButton.x, nextLevelButton.y,
-                    nextLevelButton.width, nextLevelButton.height, nextLevelButton.hovered);
-            ctx.setFill(Color.WHITE);
-            ctx.setFont(RoguesqueApp.FONT_UI);
-            ctx.fillText("Move to the next floor?", nextLevelButton.x + 15, nextLevelButton.y + 30);
-
+            drawFinishButton(ctx, (int) width, (int) height);
         }
+    }
+
+    private void drawFinishButton(GraphicsContext ctx, int width, int height) {
+        nextLevelButton.x = (width - nextLevelButton.width) / 2;
+        nextLevelButton.y = (height - nextLevelButton.height) / 2;
+        drawBox(ctx, nextLevelButton.x, nextLevelButton.y,
+                nextLevelButton.width, nextLevelButton.height, nextLevelButton.hovered);
+        ctx.setFill(Color.WHITE);
+        ctx.setFont(RoguesqueApp.FONT_UI);
+        ctx.fillText("Move to the next floor?", nextLevelButton.x + 15, nextLevelButton.y + 30);
     }
 
     private void drawDescriptionBox(GraphicsContext ctx, float deltaSeconds, double width, double height) {
