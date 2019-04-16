@@ -1,6 +1,7 @@
-package otm.roguesque.ui;
+package otm.roguesque.ui.states;
 
 import javafx.scene.canvas.GraphicsContext;
+import otm.roguesque.ui.Input;
 
 public interface GameState {
 

@@ -1,5 +1,10 @@
 package otm.roguesque.ui;
 
+import otm.roguesque.ui.states.InGameState;
+import otm.roguesque.ui.states.IntroState;
+import otm.roguesque.ui.states.GameOverState;
+import otm.roguesque.ui.states.GameState;
+import otm.roguesque.ui.states.MainMenuState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;

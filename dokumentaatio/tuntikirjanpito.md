@@ -19,5 +19,6 @@
 | 13.4. |  1 | Testien ja checkstylen korjaamista |
 | 15.4. |  1 | Tasoissa etenemisen kirjoittamista |
 | 15.4. |  1 | Grafiikkojen piirtämistä |
-| 16.4. |  1 | Ovien (uudelleen) lisäämistä, testien kirjoittamista, releasen tekoa |
-| Yht.  | 29 | |
+| 16.4. |  1 | Ovien (uudelleen) lisäämistä, testien kirjoittamista |
+| 16.4. |  1 | Releasen tekoa, pakettihierarkian refaktorointia |
+| Yht.  | 30 | |

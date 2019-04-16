@@ -1,5 +1,6 @@
-package otm.roguesque.entities;
+package otm.roguesque.game.entities;
 
+import otm.roguesque.game.dungeon.Dungeon;
 import javafx.scene.image.Image;
 
 public abstract class Entity {
@@ -27,12 +28,12 @@ public abstract class Entity {
         this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
     }
 
-    protected void setPosition(int x, int y) {
+    public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    protected void setDungeon(Dungeon dungeon) {
+    public void setDungeon(Dungeon dungeon) {
         this.dungeon = dungeon;
     }
 
@@ -74,6 +75,10 @@ public abstract class Entity {
 
     public boolean isDead() {
         return this.health <= 0;
+    }
+
+    public void resetLastEntityInteractedWith() {
+        lastEntityInteractedWith = null;
     }
 
     public boolean move(int deltaX, int deltaY) {

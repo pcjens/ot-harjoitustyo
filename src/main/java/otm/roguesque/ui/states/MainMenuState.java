@@ -1,9 +1,11 @@
-package otm.roguesque.ui;
+package otm.roguesque.ui.states;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import otm.roguesque.ui.Input;
+import otm.roguesque.ui.RoguesqueApp;
 
 public class MainMenuState implements GameState {
 

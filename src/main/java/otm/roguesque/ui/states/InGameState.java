@@ -1,14 +1,18 @@
-package otm.roguesque.ui;
+package otm.roguesque.ui.states;
 
 import java.util.Random;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
-import otm.roguesque.entities.Dungeon;
-import otm.roguesque.entities.Entity;
-import otm.roguesque.entities.Player;
-import otm.roguesque.entities.TileType;
+import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.entities.Entity;
+import otm.roguesque.game.entities.Player;
+import otm.roguesque.game.dungeon.TileType;
+import otm.roguesque.ui.Button;
+import otm.roguesque.ui.DungeonRenderer;
+import otm.roguesque.ui.Input;
+import otm.roguesque.ui.RoguesqueApp;
 
 public class InGameState implements GameState {
 

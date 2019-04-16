@@ -1,5 +1,6 @@
-package otm.roguesque.entities;
+package otm.roguesque.game.entities;
 
+import otm.roguesque.game.dungeon.Dungeon;
 import java.util.Random;
 
 public class Rat extends Entity implements AI {

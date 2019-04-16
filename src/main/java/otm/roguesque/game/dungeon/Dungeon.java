@@ -1,7 +1,13 @@
-package otm.roguesque.entities;
+package otm.roguesque.game.dungeon;
 
 import java.util.ArrayList;
 import java.util.Random;
+import otm.roguesque.game.entities.AI;
+import otm.roguesque.game.entities.Door;
+import otm.roguesque.game.entities.Entity;
+import otm.roguesque.game.entities.Item;
+import otm.roguesque.game.entities.Player;
+import otm.roguesque.game.entities.Rat;
 
 public class Dungeon {
 
@@ -113,9 +119,9 @@ public class Dungeon {
 
     public void cleanupDeadEntities() {
         entities.forEach((entity) -> {
-            if (entity.lastEntityInteractedWith != null
-                    && entity.lastEntityInteractedWith.isDead()) {
-                entity.lastEntityInteractedWith = null;
+            Entity lastEntityInteractedWith = entity.getLastEntityInteractedWith();
+            if (lastEntityInteractedWith != null && lastEntityInteractedWith.isDead()) {
+                entity.resetLastEntityInteractedWith();
             }
         });
         entities.removeIf((entity) -> entity.isDead());

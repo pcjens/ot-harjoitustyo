@@ -1,4 +1,4 @@
-package otm.roguesque.entities;
+package otm.roguesque.game.entities;
 
 import java.util.Random;
 

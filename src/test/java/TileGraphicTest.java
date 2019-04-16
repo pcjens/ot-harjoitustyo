@@ -2,7 +2,7 @@
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import otm.roguesque.entities.TileType;
+import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.ui.DungeonRenderer;
 
 // These tests should make sure that the loading path for each tile sprite is

@@ -1,4 +1,4 @@
-package otm.roguesque.entities;
+package otm.roguesque.game.dungeon;
 
 public enum TileType {
     Floor("Floor"), HorizontalWall("Wall"), VerticalWall("Wall"), Corridor("Corridor"), Stairs("Stairs\n\nTo freedom!");

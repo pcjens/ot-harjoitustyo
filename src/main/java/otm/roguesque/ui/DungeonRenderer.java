@@ -4,10 +4,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import otm.roguesque.entities.Dungeon;
-import otm.roguesque.entities.Entity;
-import otm.roguesque.entities.Player;
-import otm.roguesque.entities.TileType;
+import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.entities.Entity;
+import otm.roguesque.game.entities.Player;
+import otm.roguesque.game.dungeon.TileType;
 
 public class DungeonRenderer {
 

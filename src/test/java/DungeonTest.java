@@ -2,8 +2,8 @@
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import otm.roguesque.entities.Dungeon;
-import otm.roguesque.entities.Player;
+import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.entities.Player;
 
 public class DungeonTest {
 

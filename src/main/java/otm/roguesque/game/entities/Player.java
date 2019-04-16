@@ -1,13 +1,9 @@
-package otm.roguesque.entities;
+package otm.roguesque.game.entities;
 
 public class Player extends Entity {
 
     public Player() {
         super(10, 2, 1, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/player.png");
-    }
-
-    public void resetLastEntityInteractedWith() {
-        lastEntityInteractedWith = null;
     }
 
     public String getExaminationText() {
