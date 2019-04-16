@@ -159,6 +159,7 @@ public class Dungeon {
                     generateCorridors(rand, rooms, roomX, roomY, roomCountX, roomCountY,
                             x, y, roomWidth, roomHeight, roomX * MAX_ROOM_WIDTH, roomY * MAX_ROOM_HEIGHT,
                             (roomX + 1) * MAX_ROOM_WIDTH, (roomY + 1) * MAX_ROOM_HEIGHT);
+                    generateDoors(x, y, roomWidth, roomHeight);
                 }
             }
         }
@@ -317,6 +318,18 @@ public class Dungeon {
                     tile = TileType.Floor;
                 }
                 tiles[(x + xOffset) + (y + yOffset) * width] = tile;
+            }
+        }
+    }
+
+    private void generateDoors(int xOffset, int yOffset, int roomWidth, int roomHeight) {
+        for (int y = 0; y < roomHeight; y++) {
+            for (int x = 0; x < roomWidth; x++) {
+                int x_ = (x + xOffset);
+                int y_ = (y + yOffset);
+                if (tiles[x_ + y_ * width] == TileType.Corridor) {
+                    spawnEntity(new Door(), x_, y_);
+                }
             }
         }
     }

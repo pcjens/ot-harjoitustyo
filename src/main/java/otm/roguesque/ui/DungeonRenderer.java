@@ -31,7 +31,6 @@ public class DungeonRenderer {
             "/sprites/floor.png",
             "/sprites/wallHorizontal.png",
             "/sprites/wallVertical.png",
-            "/sprites/door.png",
             "/sprites/corridor.png",
             "/sprites/stairs.png"
         };

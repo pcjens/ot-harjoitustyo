@@ -34,11 +34,6 @@ public class TileGraphicTest {
     }
 
     @Test
-    public void doorImageIsCorrect() {
-        Assert.assertEquals("/sprites/door.png", renderer.getTileImageName(TileType.Door));
-    }
-
-    @Test
     public void corridorImageIsCorrect() {
         Assert.assertEquals("/sprites/corridor.png", renderer.getTileImageName(TileType.Corridor));
     }
@@ -62,11 +57,6 @@ public class TileGraphicTest {
     @Test
     public void wallVerticalImageExists() {
         Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.VerticalWall)));
-    }
-
-    @Test
-    public void doorImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Door)));
     }
 
     @Test

@@ -1,7 +1,7 @@
 package otm.roguesque.entities;
 
 public enum TileType {
-    Floor("Floor"), HorizontalWall("Wall"), VerticalWall("Wall"), Door("Door"), Corridor("Corridor"), Stairs("Stairs\n\nTo freedom!");
+    Floor("Floor"), HorizontalWall("Wall"), VerticalWall("Wall"), Corridor("Corridor"), Stairs("Stairs\n\nTo freedom!");
 
     private String description;
 
