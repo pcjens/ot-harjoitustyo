@@ -10,6 +10,9 @@ Ohjelmistotekniikan kurssille.
 - [Manuaali](dokumentaatio/manual.md)
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
 
+## Releaset
+- [Viikko 5 (v0.1)](https://github.com/pcjens/otm-roguesque/releases/tag/v0.1)
+
 ## Komennot
 ### Pelin käynnistäminen
 ```sh
