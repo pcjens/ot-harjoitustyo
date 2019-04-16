@@ -24,7 +24,7 @@ Tai alternatiivisesti, jar-tiedoston käynnistämällä, kuten selitetty alla.
 ```sh
 mvn package
 ```
-Jar-arkisto luodaan polkuun [`target/Roguesque-0.1-SNAPSHOT.jar`](target/Roguesque-0.1-SNAPSHOT.jar). Luodun jar-arkiston voi suorittaa komennolla `java -jar target/Roguesque-0.1-SNAPSHOT.jar`.
+Jar-arkisto luodaan polkuun [`target/Roguesque-0.2-SNAPSHOT.jar`](target/Roguesque-0.2-SNAPSHOT.jar). Luodun jar-arkiston voi suorittaa komennolla `java -jar target/Roguesque-0.2-SNAPSHOT.jar`.
 
 Skripti `build.sh` sisältää jar-arkiston luomisen lisäksi testaamisen, kattavuusraportin luomisen, sekä checkstylen suorittamisen. Tämä varmistaa, että luotu ohjelma läpäisee testit.
 ```sh
