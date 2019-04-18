@@ -35,10 +35,21 @@ public class Dungeon {
         this.level = level;
         this.entities = new ArrayList();
         this.tiles = new TileType[width * height];
-        this.solid = new boolean[]{
-            false, true, true, false, false, false
-        };
+        this.solid = new boolean[width * height];
         generateDungeon(seed);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (tiles[x + y * width] == TileType.Wall) {
+                    this.solid[x + y * width] = true;
+                }
+            }
+        }
+        for (Entity e : entities) {
+            if (e instanceof Door) {
+                this.solid[e.getX() + e.getY() * width] = true;
+            }
+        }
     }
 
     public final void spawnEntity(Entity e, int x, int y) {
@@ -90,7 +101,7 @@ public class Dungeon {
         if (x < 0 || x >= width || y < 0 || y >= height || tiles[x + y * width] == null) {
             return true;
         }
-        return solid[tiles[x + y * width].ordinal()];
+        return solid[x + y * width];
     }
 
     public Entity getEntityAt(int x, int y) {
@@ -124,7 +135,13 @@ public class Dungeon {
                 entity.resetLastEntityInteractedWith();
             }
         });
-        entities.removeIf((entity) -> entity.isDead());
+        entities.removeIf((entity) -> {
+            boolean dead = entity.isDead();
+            if (dead && entity instanceof Door) {
+                solid[entity.getX() + entity.getY() * width] = false;
+            }
+            return dead;
+        });
     }
 
     // This is just a testing utility
@@ -316,10 +333,8 @@ public class Dungeon {
         for (int y = 0; y < roomHeight; y++) {
             for (int x = 0; x < roomWidth; x++) {
                 TileType tile;
-                if (x == 0 || x == roomWidth - 1) {
-                    tile = TileType.VerticalWall;
-                } else if (y == 0 || y == roomHeight - 1) {
-                    tile = TileType.HorizontalWall;
+                if (x == 0 || x == roomWidth - 1 || y == 0 || y == roomHeight - 1) {
+                    tile = TileType.Wall;
                 } else {
                     tile = TileType.Floor;
                 }

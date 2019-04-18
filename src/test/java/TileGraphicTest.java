@@ -24,13 +24,8 @@ public class TileGraphicTest {
     }
 
     @Test
-    public void wallHorizontalImageIsCorrect() {
-        Assert.assertEquals("/sprites/wallHorizontal.png", renderer.getTileImageName(TileType.HorizontalWall));
-    }
-
-    @Test
-    public void wallVerticalImageIsCorrect() {
-        Assert.assertEquals("/sprites/wallVertical.png", renderer.getTileImageName(TileType.VerticalWall));
+    public void wallImageIsCorrect() {
+        Assert.assertEquals("/sprites/wall.png", renderer.getTileImageName(TileType.Wall));
     }
 
     @Test
@@ -50,13 +45,8 @@ public class TileGraphicTest {
     }
 
     @Test
-    public void wallHorizontalImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.HorizontalWall)));
-    }
-
-    @Test
-    public void wallVerticalImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.VerticalWall)));
+    public void wallImageExists() {
+        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Wall)));
     }
 
     @Test

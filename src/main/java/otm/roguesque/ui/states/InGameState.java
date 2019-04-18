@@ -6,9 +6,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
-import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.ui.Button;
 import otm.roguesque.ui.DungeonRenderer;
 import otm.roguesque.ui.Input;
@@ -49,6 +49,7 @@ public class InGameState implements GameState {
         dungeon = new Dungeon(level, rand.nextInt());
         dungeonRenderer.loadDungeon(dungeon);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
+        player.recalculateLineOfSight();
         statusLine = "Loading...";
         descriptionText = null;
     }
@@ -120,10 +121,11 @@ public class InGameState implements GameState {
 
         if (progressRound) {
             dungeon.processRound();
-            if (dungeon.getPlayer().isDead()) {
+            if (player.isDead()) {
                 return GameState.STATE_GAMEOVER;
             }
             dungeon.cleanupDeadEntities();
+            player.recalculateLineOfSight();
         }
 
         if (dungeon.canFinish()) {

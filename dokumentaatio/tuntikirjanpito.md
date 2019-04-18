@@ -21,4 +21,5 @@
 | 15.4. |  1 | Grafiikkojen piirtämistä |
 | 16.4. |  1 | Ovien (uudelleen) lisäämistä, testien kirjoittamista |
 | 16.4. |  1 | Releasen tekoa, pakettihierarkian refaktorointia |
-| Yht.  | 30 | |
+| 19.4. |  4 | FoV-algoritmin kirjoittamista |
+| Yht.  | 34 | |

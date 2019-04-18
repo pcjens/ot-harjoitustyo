@@ -5,9 +5,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.dungeon.TileType;
+import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
-import otm.roguesque.game.dungeon.TileType;
 
 public class DungeonRenderer {
 
@@ -29,8 +30,7 @@ public class DungeonRenderer {
         // (This is also tested in TileGraphicTest.java)
         tileTypeNames = new String[]{
             "/sprites/floor.png",
-            "/sprites/wallHorizontal.png",
-            "/sprites/wallVertical.png",
+            "/sprites/wall.png",
             "/sprites/corridor.png",
             "/sprites/stairs.png"
         };
@@ -92,14 +92,24 @@ public class DungeonRenderer {
     }
 
     private void drawMap(GraphicsContext ctx, Dungeon dungeon, double tileSize, int tilesX, int tilesY) {
+        Player player = dungeon.getPlayer();
         for (int y = offsetY; y < Math.min(offsetY + tilesY, height); y++) {
             for (int x = offsetX; x < Math.min(offsetX + tilesX, width); x++) {
+                if (!player.hasBeenInLineOfSight(x, y)) {
+                    continue;
+                }
+                double drawX = (x - offsetX) * tileSize;
+                double drawY = (y - offsetY) * tileSize;
                 if (tileImages[x + y * width] != null) {
-                    ctx.drawImage(tileImages[x + y * width], (x - offsetX) * tileSize, (y - offsetY) * tileSize, tileSize, tileSize);
+                    ctx.drawImage(tileImages[x + y * width], drawX, drawY, tileSize, tileSize);
                 }
                 Entity entity = dungeon.getEntityAt(x, y);
-                if (entity != null) {
-                    drawEntity(ctx, tileSize, entity, (x - offsetX), (y - offsetY));
+                if (entity != null && (player.inLineOfSight(x, y) || entity instanceof Door)) {
+                    drawEntity(ctx, tileSize, entity, drawX, drawY);
+                }
+                if (!player.inLineOfSight(x, y)) {
+                    ctx.setFill(new Color(0.0, 0.0, 0.0, 0.5));
+                    ctx.fillRect(drawX, drawY, tileSize, tileSize);
                 }
             }
         }
@@ -122,17 +132,17 @@ public class DungeonRenderer {
         return tileTypeNames[tileType.ordinal()];
     }
 
-    private void drawEntity(GraphicsContext ctx, double tileSize, Entity entity, int x, int y) {
-        ctx.drawImage(entity.getImage(), x * tileSize, y * tileSize, tileSize, tileSize);
+    private void drawEntity(GraphicsContext ctx, double tileSize, Entity entity, double x, double y) {
+        ctx.drawImage(entity.getImage(), x, y, tileSize, tileSize);
 
         int maxHp = entity.getMaxHealth();
         int hp = entity.getHealth();
         if (hp < maxHp) {
             double hpBarWidth = 24.0 * hp / maxHp;
             ctx.setFill(Color.WHITE);
-            ctx.fillRect(x * tileSize + 2, y * tileSize - 7, 26, 6);
+            ctx.fillRect(x + 2, y - 7, 26, 6);
             ctx.setFill(Color.BLACK);
-            ctx.fillRect(x * tileSize + 3 + hpBarWidth, y * tileSize - 6, 24 - hpBarWidth, 4);
+            ctx.fillRect(x + 3 + hpBarWidth, y - 6, 24 - hpBarWidth, 4);
         }
     }
 }

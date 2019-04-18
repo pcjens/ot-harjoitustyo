@@ -1,7 +1,7 @@
 package otm.roguesque.game.dungeon;
 
 public enum TileType {
-    Floor("Floor"), HorizontalWall("Wall"), VerticalWall("Wall"), Corridor("Corridor"), Stairs("Stairs\n\nTo freedom!");
+    Floor("Floor"), Wall("Wall"), Corridor("Corridor"), Stairs("Stairs\n\nTo freedom!");
 
     private String description;
 
