@@ -24,22 +24,12 @@ public class DungeonTest {
         Assert.assertTrue(player.isDead());
     }
 
-    @Test
-    public void cleanupDeadEntitiesWorks() {
-        dungeon.cleanupDeadEntities();
-        Assert.assertTrue(dungeon.getEntities().contains(player));
-        movePlayerToDeath();
-        Assert.assertTrue(dungeon.getEntities().contains(player));
-        dungeon.cleanupDeadEntities();
-        Assert.assertFalse(dungeon.getEntities().contains(player));
-    }
-
     private void movePlayerToDeath() {
         dungeon.movePlayerNTimes(-8, 0);
         dungeon.movePlayerNTimes(0, -4);
-        dungeon.movePlayerNTimes(-3, 0);
-        dungeon.movePlayerNTimes(0, 1);
         dungeon.movePlayerNTimes(-4, 0);
+        dungeon.movePlayerNTimes(0, 1);
+        dungeon.movePlayerNTimes(-5, 0);
         dungeon.movePlayerNTimes(0, -14);
     }
 
@@ -52,9 +42,9 @@ public class DungeonTest {
 
     private void movePlayerToItem() {
         dungeon.movePlayerNTimes(0, -2);
-        dungeon.movePlayerNTimes(3, 0);
-        dungeon.movePlayerNTimes(0, 1);
         dungeon.movePlayerNTimes(4, 0);
+        dungeon.movePlayerNTimes(0, 1);
+        dungeon.movePlayerNTimes(5, 0);
         dungeon.movePlayerNTimes(0, -1);
     }
 }

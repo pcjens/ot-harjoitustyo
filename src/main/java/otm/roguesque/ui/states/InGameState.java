@@ -27,8 +27,8 @@ public class InGameState implements GameState {
     private float descriptionBoxFadeAway;
     private final float descriptionBoxFadeAwayDuration = 0.15f;
 
-    private int selectionX = -1;
-    private int selectionY = -1;
+    private int selectionX;
+    private int selectionY;
     private double tileSize = 32.0;
 
     private final Button nextLevelButton;
@@ -52,6 +52,8 @@ public class InGameState implements GameState {
         player.recalculateLineOfSight();
         statusLine = "Loading...";
         descriptionText = null;
+        selectionX = -1;
+        selectionY = -1;
     }
 
     @Override

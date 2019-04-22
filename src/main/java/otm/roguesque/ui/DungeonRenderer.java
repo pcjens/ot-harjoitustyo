@@ -75,7 +75,7 @@ public class DungeonRenderer {
 
         int tilesX = (int) (canvas.getWidth() / tileSize);
         int tilesY = (int) (canvas.getHeight() / tileSize);
-        updateOffsets(dungeon, tilesX, tilesY);
+        updateOffsets(dungeon, tilesX, tilesY, tilesX - (int) (220 / tileSize), tilesY - (int) (100 / tileSize));
         drawMap(ctx, dungeon, tileSize, tilesX, tilesY);
         drawSelection(ctx, dungeon, tileSize, selectionX - offsetX, selectionY - offsetY);
     }
@@ -85,10 +85,10 @@ public class DungeonRenderer {
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
     }
 
-    private void updateOffsets(Dungeon dungeon, int tilesX, int tilesY) {
+    private void updateOffsets(Dungeon dungeon, int tilesX, int tilesY, int maxTilesX, int maxTilesY) {
         Player player = dungeon.getPlayer();
-        offsetX = Math.max(0, Math.min(width - tilesX, player.getX() - tilesX / 2));
-        offsetY = Math.max(0, Math.min(height - tilesY, player.getY() - tilesY / 2));
+        offsetX = Math.max(0, Math.min(width - maxTilesX, player.getX() - tilesX / 2));
+        offsetY = Math.max(0, Math.min(height - maxTilesY, player.getY() - tilesY / 2));
     }
 
     private void drawMap(GraphicsContext ctx, Dungeon dungeon, double tileSize, int tilesX, int tilesY) {

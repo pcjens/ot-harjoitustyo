@@ -149,10 +149,12 @@ public class Dungeon {
         for (int i = 0; i < Math.abs(x); i++) {
             player.move((int) Math.signum(x), 0);
             processRound();
+            cleanupDeadEntities();
         }
         for (int i = 0; i < Math.abs(y); i++) {
             player.move(0, (int) Math.signum(y));
             processRound();
+            cleanupDeadEntities();
         }
     }
 

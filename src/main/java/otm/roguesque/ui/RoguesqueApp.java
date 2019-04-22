@@ -1,10 +1,5 @@
 package otm.roguesque.ui;
 
-import otm.roguesque.ui.states.InGameState;
-import otm.roguesque.ui.states.IntroState;
-import otm.roguesque.ui.states.GameOverState;
-import otm.roguesque.ui.states.GameState;
-import otm.roguesque.ui.states.MainMenuState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,6 +9,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import otm.roguesque.ui.states.GameOverState;
+import otm.roguesque.ui.states.GameState;
+import otm.roguesque.ui.states.InGameState;
+import otm.roguesque.ui.states.IntroState;
+import otm.roguesque.ui.states.MainMenuState;
 
 public class RoguesqueApp extends Application {
 
@@ -55,12 +55,12 @@ public class RoguesqueApp extends Application {
     private void drawGame(float deltaSeconds) {
         ctx.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
+        gameStates[currentGameStateIndex].draw(ctx, deltaSeconds);
+
         float averageDeltaSeconds = updatePerformanceStats(deltaSeconds);
         if (showPerformanceDetails) {
             ctx.fillText("Average frame time: " + (int) (averageDeltaSeconds * 1000.0) + " ms", 10.0, 20.0);
         }
-
-        gameStates[currentGameStateIndex].draw(ctx, deltaSeconds);
     }
 
     private float updatePerformanceStats(float deltaSeconds) {
