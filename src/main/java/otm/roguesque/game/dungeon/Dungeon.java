@@ -156,11 +156,13 @@ public class Dungeon {
             player.move((int) Math.signum(x), 0);
             processRound();
             cleanupDeadEntities();
+            player.recalculateLineOfSight(false);
         }
         for (int i = 0; i < Math.abs(y); i++) {
             player.move(0, (int) Math.signum(y));
             processRound();
             cleanupDeadEntities();
+            player.recalculateLineOfSight(false);
         }
     }
 

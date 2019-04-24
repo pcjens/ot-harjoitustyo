@@ -15,6 +15,7 @@ public class DungeonTest {
         player = new Player();
         dungeon = new Dungeon(1, 12);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
+        player.recalculateLineOfSight(true);
     }
 
     @Test

@@ -32,9 +32,10 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.0</version>
                 <configuration>
-                    <includes>
-                        <include>otm/roguesque/entities/*</include>
-                    </includes>
+                    <excludes>
+                        <exclude>otm/roguesque/ui/**/*</exclude>
+                        <exclude>otm/roguesque/resources/*</exclude>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>

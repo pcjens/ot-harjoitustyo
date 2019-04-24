@@ -8,7 +8,7 @@ public class Door extends Entity {
 
     @Override
     public String getDescription() {
-        return "Door\n\nIt's a door.\nWhere does it lead?";
+        return "Door\n\nIt's a door.\nWhere does\nit lead?";
     }
 
     @Override

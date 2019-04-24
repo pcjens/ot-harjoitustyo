@@ -15,6 +15,37 @@ public class PlayerTest {
         player = new Player();
         dungeon = new Dungeon(1, 12);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
+        player.recalculateLineOfSight(true);
+    }
+
+    @Test
+    public void playerSeesWhatTheyShould() {
+        dungeon.movePlayerNTimes(0, -2);
+        dungeon.movePlayerNTimes(1, 0);
+        Assert.assertTrue(player.inLineOfSight(30, 8));
+    }
+
+    @Test
+    public void playerDoesNotSeeWhatTheyShouldNot() {
+        dungeon.movePlayerNTimes(0, -2);
+        dungeon.movePlayerNTimes(1, 0);
+        Assert.assertFalse(player.inLineOfSight(31, 8));
+    }
+
+    @Test
+    public void playerSeesWhatTheyShouldWhenIgnoringDistance() {
+        dungeon.movePlayerNTimes(0, -2);
+        dungeon.movePlayerNTimes(1, 0);
+        player.recalculateLineOfSight(true);
+        Assert.assertTrue(player.inLineOfSight(31, 8));
+    }
+
+    @Test
+    public void playerDoesNotSeeWhatTheyShouldNotWhenIgnoringDistance() {
+        dungeon.movePlayerNTimes(0, -2);
+        dungeon.movePlayerNTimes(1, 0);
+        player.recalculateLineOfSight(true);
+        Assert.assertFalse(player.inLineOfSight(32, 8));
     }
 
     // These should work, as the UI relies on that to display stats.
