@@ -6,6 +6,12 @@ import javafx.scene.paint.Color;
 import otm.roguesque.ui.Input;
 import otm.roguesque.ui.RoguesqueApp;
 
+/**
+ * Intro-tila. Ruudulle tulee näkyviin Roguesque-otsikko, se siirtyy ylös, ja
+ * siirrytään päävalikkoon.
+ *
+ * @author Jens Pitkänen
+ */
 public class IntroState implements GameState {
 
     private final float revealDuration = 1.25f;

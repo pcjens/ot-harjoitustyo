@@ -25,4 +25,5 @@
 | 24.4. |  2 | Refaktorointia, bugien korjailua, ohjeiden kirjoittamista |
 | 24.4. |  1 | Refaktorointia, kehitystyökalujen ja ohjeiden kirjoittamista |
 | 24.4. |  2 | Uusien grafiikkojen piirtämistä |
-| Yht.  | 39 | |
+| 24.4. |  2 | JavaDoc-dokumentaation kirjoittamista |
+| Yht.  | 41 | |

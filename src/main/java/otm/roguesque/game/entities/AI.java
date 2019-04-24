@@ -1,8 +1,14 @@
 package otm.roguesque.game.entities;
 
-import otm.roguesque.game.dungeon.Dungeon;
-
+/**
+ * Tekoälyjä kuvaava rajapinta.
+ *
+ * @author Jens Pitkänen
+ */
 public interface AI {
 
-    void processRound(Dungeon dungeon);
+    /**
+     * Pyörittää tekoälyä yhden vuoron verran ja toteuttaa sen päätökset.
+     */
+    void processRound();
 }

@@ -9,14 +9,37 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import otm.roguesque.ui.RoguesqueApp;
 
+/**
+ * Peli käynnistyy tästä luokasta. Toimii lähinnä RoguesqueAppin käynnistäjänä,
+ * mutta lukee myös hieman metadataa (version) ohjelman pom.properties
+ * tiedostosta.
+ *
+ * @see otm.roguesque.ui.RoguesqueApp
+ *
+ * @author Jens Pitkänen
+ */
 public class Main {
 
     private static String version = "unknown";
 
+    /**
+     * Palauttaa ohjelman version perustuen pom.propertiesiin. Huom.
+     * Netbeansista käynnistetyssä versiossa tämä palauttaa "unknown", sillä
+     * pom.properties ei löydy sen käynnistämästä .jarista jostain syystä.
+     * Mavenin package-komennolla luodut .jarit kuitenkin toimivat oikein.
+     *
+     * @return Versio. (Yleensä numero, mahdollisesti päättyy "-SNAPSHOT".)
+     */
     public static String getVersion() {
         return version;
     }
 
+    /**
+     * Lataa metadataa, ja sitten käynnistää Roguesquen.
+     *
+     * @param args Komentoriviargumentit, joita ei oteta huomioon tällä hetkellä
+     * mitenkään.
+     */
     public static void main(String[] args) {
         try {
             loadProperties();

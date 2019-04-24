@@ -10,6 +10,11 @@ import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
 
+/**
+ * Kenttärendereri. Piirtää kentän.
+ *
+ * @author Jens Pitkänen
+ */
 public class DungeonRenderer {
 
     // Sprites
@@ -21,10 +26,14 @@ public class DungeonRenderer {
     private int width;
     private int height;
     private Image[] tileImages;
+    private Dungeon dungeon;
 
     private int offsetX;
     private int offsetY;
 
+    /**
+     * Luo uuden kenttärendererin.
+     */
     public DungeonRenderer() {
         // Check the tiles in TileType.java, these should be in the same order
         // (This is also tested in TileGraphicTest.java)
@@ -43,18 +52,36 @@ public class DungeonRenderer {
         selectionImage = new Image(getClass().getResourceAsStream("/sprites/Selection.png"), 32, 32, true, false);
     }
 
+    /**
+     * Palauttaa "kameran x-koordinaatin," eli kuinka paljon näkyvä tilanne on
+     * siirtynyt suhteessa kentän origoon vaakatasossa.
+     *
+     * @return Kameran x-siirtymä.
+     */
     public int getOffsetX() {
         return offsetX;
     }
 
+    /**
+     * Palauttaa "kameran y-koordinaatin," eli kuinka paljon näkyvä tilanne on
+     * siirtynyt suhteessa kentän origoon pystysuunnassa.
+     *
+     * @return Kameran y-siirtymä.
+     */
     public int getOffsetY() {
         return offsetY;
     }
 
+    /**
+     * Lataa uuden kentän renderöijään.
+     *
+     * @param dungeon Uusi kenttä.
+     */
     public void loadDungeon(Dungeon dungeon) {
         this.width = dungeon.getWidth();
         this.height = dungeon.getHeight();
         this.tileImages = new Image[width * height];
+        this.dungeon = dungeon;
         TileType[] tiles = dungeon.getTiles();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -66,7 +93,18 @@ public class DungeonRenderer {
         }
     }
 
-    public void draw(GraphicsContext ctx, Dungeon dungeon, double tileSize, int selectionX, int selectionY) {
+    /**
+     * Piirtää kentän.
+     *
+     * @param ctx Käyttöliittymän piirtokonteksti.
+     * @param tileSize Yhden ruudun leveys ja korkeus. Käytännössä aina 32,
+     * mutta kaiken varalta tässä parametrina.
+     * @param selectionX Valitun ruudun x-koordinaatti, tai -1 jos valintaa ei
+     * ole.
+     * @param selectionY Valitun ruudun y-koordinaatti, tai -1 jos valintaa ei
+     * ole.
+     */
+    public void draw(GraphicsContext ctx, double tileSize, int selectionX, int selectionY) {
         Canvas canvas = ctx.getCanvas();
         clearScreen(ctx, canvas);
         if (dungeon == null) {
@@ -75,9 +113,9 @@ public class DungeonRenderer {
 
         int tilesX = (int) (canvas.getWidth() / tileSize);
         int tilesY = (int) (canvas.getHeight() / tileSize);
-        updateOffsets(dungeon, tilesX, tilesY, tilesX - (int) (220 / tileSize), tilesY - (int) (100 / tileSize));
-        drawMap(ctx, dungeon, tileSize, tilesX, tilesY);
-        drawSelection(ctx, dungeon, tileSize, selectionX - offsetX, selectionY - offsetY);
+        updateOffsets(tilesX, tilesY, tilesX - (int) (220 / tileSize), tilesY - (int) (100 / tileSize));
+        drawMap(ctx, tileSize, tilesX, tilesY);
+        drawSelection(ctx, tileSize, selectionX - offsetX, selectionY - offsetY);
     }
 
     private void clearScreen(GraphicsContext ctx, Canvas canvas) {
@@ -85,13 +123,13 @@ public class DungeonRenderer {
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
     }
 
-    private void updateOffsets(Dungeon dungeon, int tilesX, int tilesY, int maxTilesX, int maxTilesY) {
+    private void updateOffsets(int tilesX, int tilesY, int maxTilesX, int maxTilesY) {
         Player player = dungeon.getPlayer();
         offsetX = Math.max(0, Math.min(width - maxTilesX, player.getX() - tilesX / 2));
         offsetY = Math.max(0, Math.min(height - maxTilesY, player.getY() - tilesY / 2));
     }
 
-    private void drawMap(GraphicsContext ctx, Dungeon dungeon, double tileSize, int tilesX, int tilesY) {
+    private void drawMap(GraphicsContext ctx, double tileSize, int tilesX, int tilesY) {
         Player player = dungeon.getPlayer();
         for (int y = offsetY; y < Math.min(offsetY + tilesY, height); y++) {
             for (int x = offsetX; x < Math.min(offsetX + tilesX, width); x++) {
@@ -124,7 +162,7 @@ public class DungeonRenderer {
         ctx.fillRect(drawX, drawY, tileSize, tileSize);
     }
 
-    private void drawSelection(GraphicsContext ctx, Dungeon dungeon, double tileSize, int selectionX, int selectionY) {
+    private void drawSelection(GraphicsContext ctx, double tileSize, int selectionX, int selectionY) {
         Entity selectedEntity = dungeon.getPlayer().getLastEntityInteractedWith();
         if (selectedEntity != null) {
             ctx.drawImage(selectionImage,

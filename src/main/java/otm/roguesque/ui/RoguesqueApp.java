@@ -16,10 +16,24 @@ import otm.roguesque.ui.states.InGameState;
 import otm.roguesque.ui.states.IntroState;
 import otm.roguesque.ui.states.MainMenuState;
 
+/**
+ * Roguesque-pelin käyttöliittymä sekä ydin.
+ *
+ * @author Jens Pitkänen
+ */
 public class RoguesqueApp extends Application {
 
+    /**
+     * Logo-fontti.
+     */
     public static final Font FONT_LOGO = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 70.0);
+    /**
+     * Pienempi logo-fontti.
+     */
     public static final Font FONT_LOGO_SMALL = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 50.0);
+    /**
+     * Normaalitekstin fontti.
+     */
     public static final Font FONT_UI = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 28.0);
 
     // UI
@@ -38,6 +52,9 @@ public class RoguesqueApp extends Application {
     private GameState[] gameStates;
     private int currentGameStateIndex;
 
+    /**
+     * Luo uuden käyttöliittymäinstanssin.
+     */
     public RoguesqueApp() {
         mainPanel = new BorderPane();
         mainScene = new Scene(mainPanel, 640.0, 480.0);

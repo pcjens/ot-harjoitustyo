@@ -1,7 +1,12 @@
 package otm.roguesque.game.entities;
 
-import otm.roguesque.game.DiceRoller;
+import otm.roguesque.game.GlobalRandom;
 
+/**
+ * Tavara-olio.
+ *
+ * @author Jens Pitkänen
+ */
 public class Item extends Entity {
 
     // TODO: Move the ItemData to a config file
@@ -29,10 +34,15 @@ public class Item extends Entity {
     private int attackBoost = 0;
     private int defenseBoost = 0;
 
+    /**
+     * Luo uuden tavaran.
+     *
+     * @param level Kentän vaikeustaso mistä tämä tavara löytyy.
+     */
     public Item(int level) {
         super(1, 0, 1000000, "", "", "Items", "");
 
-        ItemData data = ITEMS[DiceRoller.getRandom().nextInt(ITEMS.length)];
+        ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
         loadImage("/sprites/Item" + data.identifier + ".png");
         this.name = data.displayName;
         this.attackBoost = data.attackBoost;

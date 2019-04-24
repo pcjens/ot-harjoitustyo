@@ -2,7 +2,7 @@
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import otm.roguesque.game.DiceRoller;
+import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.game.entities.Player;
 
@@ -13,7 +13,7 @@ public class PlayerTest {
 
     @Before
     public void init() {
-        DiceRoller.resetRandom(12);
+        GlobalRandom.reset(12);
         player = new Player();
         dungeon = new Dungeon(1);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());

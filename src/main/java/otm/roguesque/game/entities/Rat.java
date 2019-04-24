@@ -1,21 +1,28 @@
 package otm.roguesque.game.entities;
 
-import otm.roguesque.game.DiceRoller;
-import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.GlobalRandom;
 
+/**
+ * Rotta-olio.
+ *
+ * @author Jens Pitkänen
+ */
 public class Rat extends Entity implements AI {
 
+    /**
+     * Luo uuden rotan.
+     */
     public Rat() {
         super(5, 2, 0, "Rat", "*squeek*", "Small Animals", "/sprites/Rat.png");
     }
 
     @Override
-    public void processRound(Dungeon dungeon) {
+    public void processRound() {
         Player player = dungeon.getPlayer();
         int dx = player.getX() - x;
         int dy = player.getY() - y;
-        if (dx > 6 || dy > 6 || DiceRoller.getRandom().nextBoolean()) {
-            int r = DiceRoller.getRandom().nextInt(4);
+        if (dx > 6 || dy > 6 || GlobalRandom.get().nextBoolean()) {
+            int r = GlobalRandom.get().nextInt(4);
             int x = (int) Math.cos(r * Math.PI / 2.0);
             int y = (int) Math.sin(r * Math.PI / 2.0);
             move(x, y);

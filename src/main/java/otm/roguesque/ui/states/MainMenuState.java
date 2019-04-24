@@ -7,6 +7,12 @@ import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
 import otm.roguesque.ui.RoguesqueApp;
 
+/**
+ * Päävalikko-tila. Ruudulla lukee pelin otsikko, ja pelaaja voi joko aloittaa
+ * tai sulkea pelin kahdesta napista.
+ *
+ * @author Jens Pitkänen
+ */
 public class MainMenuState implements GameState {
 
     private final Button playButton = new Button("Play", 180, 280, 80, 45, 0);

@@ -1,15 +1,29 @@
 package otm.roguesque.game.entities;
 
+/**
+ * Pelaaja-olio.
+ *
+ * @author Jens Pitkänen
+ */
 public class Player extends Entity {
 
     private boolean[] tilesInLOS;
     private boolean[] uncoveredTiles;
     private int sightDistance = 5;
 
+    /**
+     * Luo uuden pelaaja-olion.
+     */
     public Player() {
         super(10, 2, 1, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/Player.png");
     }
 
+    /**
+     * Palauttaa olion kuvaustekstin johon pelaaja on viimeksi törmännyt.
+     * Käytetään vihollisen tilan esittämisessä.
+     *
+     * @return Törmätyn olion kuvausteksti.
+     */
     public String getExaminationText() {
         if (lastEntityInteractedWith != null) {
             return lastEntityInteractedWith.getDescription();
@@ -17,6 +31,13 @@ public class Player extends Entity {
         return null;
     }
 
+    /**
+     * Palauttaa, onko annetut koordinaatit pelaajan näkökentässä.
+     *
+     * @param x Tutkittava x-koordinaatti.
+     * @param y Tutkittava y-koordinaatti.
+     * @return Onko koordinaatti pelaajan näkökentässä?
+     */
     public boolean inLineOfSight(int x, int y) {
         if (tilesInLOS != null) {
             return tilesInLOS[x + y * dungeon.getWidth()];
@@ -25,6 +46,13 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Palauttaa, onko annetut koordinaatit olleet joskus pelaajan näkökentässä.
+     *
+     * @param x Tutkittava x-koordinaatti.
+     * @param y Tutkittava y-koordinaatti.
+     * @return Onko koordinaatti joskus ollut pelaajan näkökentässä?
+     */
     public boolean isUncovered(int x, int y) {
         if (uncoveredTiles != null) {
             return uncoveredTiles[x + y * dungeon.getWidth()];
@@ -33,6 +61,9 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Nollaa tiedon siitä, mitkä koordinaatit on nähty aikaisemmin.
+     */
     public void resetUncovered() {
         if (uncoveredTiles == null) {
             return;
@@ -42,6 +73,13 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Laskee uudelleen koordinaattien näkyvyyden pelaajalle. Tätä kutsutaan
+     * joka kerta, kun pelaaja liikkuu.
+     *
+     * @param ignoreDistance Jätetäänkö pelaajan näköetäisyys huomiotta?
+     * (Tarkoittaa käytännössä ääretöntä näköetäisyyttä.)
+     */
     public void recalculateLineOfSight(boolean ignoreDistance) {
         if (dungeon != null) {
             int width = dungeon.getWidth();

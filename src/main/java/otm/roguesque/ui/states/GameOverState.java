@@ -7,6 +7,12 @@ import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
 import otm.roguesque.ui.RoguesqueApp;
 
+/**
+ * Peli loppui (kuolemaan) -pelitila. Ruudulla lukee "you are dead," ja
+ * pelaajalle annetaan mahdollisuus pelata uudestaan tai sulkea peli.
+ *
+ * @author Jens Pitkänen
+ */
 public class GameOverState implements GameState {
 
     private Button replayButton = new Button("Replay", 180, 280, 100, 45, 20);

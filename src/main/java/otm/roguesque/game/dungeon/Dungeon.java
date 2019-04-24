@@ -1,7 +1,7 @@
 package otm.roguesque.game.dungeon;
 
 import java.util.ArrayList;
-import otm.roguesque.game.DiceRoller;
+import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.entities.AI;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
@@ -9,7 +9,22 @@ import otm.roguesque.game.entities.Item;
 import otm.roguesque.game.entities.Player;
 import otm.roguesque.game.entities.Rat;
 
+/**
+ * Tämä luokka sisältää kaiken, mistä yksi kenttä pelissä koostuu. Käytännössä
+ * tämä viittaa huoneisiin ja vihollisiin / tavaroihin joita niissä huoneissa
+ * on.
+ *
+ * Tämä luokka sisältää myös kenttägeneraation, sillä sen siirtäminen toiseen
+ * luokkaan loisi kovin paljon "peilattua" koodia (samoja muuttujia kahdessa
+ * paikassa, jotka pitää synkronoida).
+ *
+ * @author Jens Pitkänen
+ */
 public class Dungeon {
+
+    private enum RoomType {
+        StartRoom, EndRoom, MonsterRoom, ItemRoom
+    }
 
     private static final int MAX_ROOM_WIDTH = 14;
     private static final int MAX_ROOM_HEIGHT = 12;
@@ -29,6 +44,13 @@ public class Dungeon {
     private int playerSpawnX;
     private int playerSpawnY;
 
+    /**
+     * Luo uuden pelikentän.
+     *
+     * @param level Kuinka mones taso kyseessä. Pienimmillään 1, tämä kuvaa
+     * kentän vaikeustasoa. Peräkkäisten kenttien levelin kuuluisi nousta 1:llä
+     * joka tasossa.
+     */
     public Dungeon(int level) {
         this.width = (int) (MAX_ROOM_WIDTH * (Math.sqrt(MAX_ROOMS) + 1));
         this.height = (int) (MAX_ROOM_HEIGHT * (Math.sqrt(MAX_ROOMS) + 1));
@@ -52,51 +74,126 @@ public class Dungeon {
         }
     }
 
-    public final void spawnEntity(Entity e, int x, int y) {
-        this.entities.add(e);
-        e.setDungeon(this);
-        e.setPosition(x, y);
-        if (e instanceof Player) {
-            this.player = (Player) e;
+    /**
+     * Lisää uuden olion kenttään.
+     *
+     * @param entity Olio joka halutaan lisätä.
+     * @param x Olion uuden paikan x-koordinaatti.
+     * @param y Olion uuden paikan y-koordinaatti.
+     */
+    public final void spawnEntity(Entity entity, int x, int y) {
+        this.entities.add(entity);
+        entity.setDungeon(this);
+        entity.setPosition(x, y);
+        if (entity instanceof Player) {
+            this.player = (Player) entity;
         }
     }
 
+    /**
+     * Palauttaa x-koordinaatin kohdasta, johon pelaaja pitäisi spawnata.
+     *
+     * @see
+     * otm.roguesque.game.dungeon.Dungeon#spawnEntity(otm.roguesque.game.entities.Entity,
+     * int, int)
+     *
+     * @return Pelaajan alkukohdan x-koordinaatti.
+     */
     public int getPlayerSpawnX() {
         return playerSpawnX;
     }
 
+    /**
+     * Palauttaa y-koordinaatin kohdasta, johon pelaaja pitäisi spawnata.
+     *
+     * @see
+     * otm.roguesque.game.dungeon.Dungeon#spawnEntity(otm.roguesque.game.entities.Entity,
+     * int, int)
+     *
+     * @return Pelaajan alkukohdan y-koordinaatti.
+     */
     public int getPlayerSpawnY() {
         return playerSpawnY;
     }
 
+    /**
+     * Palauttaa pelaajan.
+     *
+     * @return Kenttään lisätty pelaaja, jolla tällä hetkellä pelataan.
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Palauttaa koko kentän leveyden. Käytännössä mikään olio ei koskaan
+     * saavuta kentän rajoja, sillä huoneet ovat rajojen sisällä.
+     *
+     * @return Kentän leveys.
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Palauttaa koko kentän korkeus. Käytännössä mikään olio ei koskaan saavuta
+     * kentän rajoja, sillä huoneet ovat rajojen sisällä.
+     *
+     * @return Kentän korkeus (pituus y-akselilla).
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Palauttaa taulukon kaikista kentän laatoista. Huom. tämä palauttaa raa'an
+     * taulukon jota luola käyttää, eli älä muokkaa tätä taulukkoa ellet halua
+     * pysyviä muutoksia.
+     *
+     * @return Taulukko kaikista laatoista.
+     */
     public TileType[] getTiles() {
         return tiles;
     }
 
+    /**
+     * Palauttaa listan kaikista kentällä olevista olioista.
+     *
+     * @return Kentällä olevat oliot.
+     */
     public ArrayList<Entity> getEntities() {
         return entities;
     }
 
+    /**
+     * Palauttaa kentän vaikeustason.
+     *
+     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(int)
+     *
+     * @return Kentän vaikeustaso.
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Palauttaa true silloin kun pelaaja voisi siirtyä seuraavaan kenttään, eli
+     * ruudulla pitäisi olla näkyvissä "Seuraava taso"-nappi.
+     *
+     * @return Voiko pelaaja siirtyä seuraavaan kenttään tästä ruudussa?
+     */
     public boolean canFinish() {
         return getTileAt(player.getX(), player.getY()) == TileType.Ladder;
     }
 
+    /**
+     * Palauttaa true mikäli annetuissa koordinaateissa on seinä, tai jokin muu
+     * asia jonka läpi ei voi kävellä.
+     *
+     * @param x Tutkitun ruudun x-koordinaatti.
+     * @param y Tutkitun ruudun y-koordinaatti.
+     * @return Onko tutkittu ruutu kiinteä? (Jos on, sen läpi ei voi kävellä.)
+     */
     public boolean solid(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height || tiles[x + y * width] == null) {
             return true;
@@ -104,6 +201,13 @@ public class Dungeon {
         return solid[x + y * width];
     }
 
+    /**
+     * Palauttaa olion annetuissa koordinaateissa.
+     *
+     * @param x Tutkitun ruudun x-koordinaatti.
+     * @param y Tutkitun ruudun y-koordinaatti.
+     * @return Olio annetussa ruudussa, voi olla null.
+     */
     public Entity getEntityAt(int x, int y) {
         for (Entity e : entities) {
             if (e.getX() == x && e.getY() == y && !e.isDead()) {
@@ -113,6 +217,13 @@ public class Dungeon {
         return null;
     }
 
+    /**
+     * Palauttaa laatan annetuissa koordinaateissa.
+     *
+     * @param x Tutkitun ruudun x-koordinaatti.
+     * @param y Tutkitun ruudun y-koordinaatti.
+     * @return Laatan tyyppi annetussa ruudussa, voi olla null.
+     */
     public TileType getTileAt(int x, int y) {
         if (x < 0 || y < 0 || x >= width || y >= height) {
             return null;
@@ -120,14 +231,22 @@ public class Dungeon {
         return tiles[x + y * width];
     }
 
+    /**
+     * Pyörittää olioita (joilla on tekoäly) yhden vuoron eteenpäin.
+     *
+     * @see otm.roguesque.game.entities.AI
+     */
     public void processRound() {
         for (Entity e : entities) {
             if (e instanceof AI) {
-                ((AI) e).processRound(this);
+                ((AI) e).processRound();
             }
         }
     }
 
+    /**
+     * Siivoaa kuolleet oliot kentältä (eli poistaa kokonaan oliolistalta).
+     */
     public void cleanupDeadEntities() {
         entities.forEach((entity) -> {
             Entity lastEntityInteractedWith = entity.getLastEntityInteractedWith();
@@ -144,7 +263,15 @@ public class Dungeon {
         });
     }
 
-    // This is just a testing utility
+    /**
+     * Vain testauksessa käytetty funktio, joka liikuttaa pelaajaa tietyn määrän
+     * vasemmalle/oikealle, ja sen jälkeen ylös/alas.
+     *
+     * @param x Kuinka monta ruutua pelaaja liikkuu oikealle? (-x liikuu x
+     * kertaa vasemmalle)
+     * @param y Kuinka monta ruutua pelaaja liikkuu alas? (-y liikuu y kertaa
+     * ylös)
+     */
     public void movePlayerNTimes(int x, int y) {
         for (int i = 0; i < Math.abs(x); i++) {
             player.move((int) Math.signum(x), 0);
@@ -166,7 +293,7 @@ public class Dungeon {
         int roomCountX = width / MAX_ROOM_WIDTH;
         int roomCountY = height / MAX_ROOM_HEIGHT;
         int minimumRooms = (int) Math.ceil(MAX_ROOMS / 3.0);
-        int roomCount = DiceRoller.getRandom().nextInt(MAX_ROOMS - minimumRooms + 1) + minimumRooms;
+        int roomCount = GlobalRandom.get().nextInt(MAX_ROOMS - minimumRooms + 1) + minimumRooms;
         RoomType[] rooms = generateRoomTypes(roomCount, roomCountX, roomCountY);
         generateRooms(rooms, roomCountX, roomCountY);
     }
@@ -176,10 +303,10 @@ public class Dungeon {
             for (int roomX = 0; roomX < roomCountX; roomX++) {
                 RoomType type = rooms[roomX + roomY * roomCountX];
                 if (type != null) {
-                    int roomWidth = DiceRoller.getRandom().nextInt(MAX_ROOM_WIDTH - (MIN_ROOM_WIDTH + MIN_ROOM_MARGIN)) + MIN_ROOM_WIDTH;
-                    int roomHeight = DiceRoller.getRandom().nextInt(MAX_ROOM_HEIGHT - (MIN_ROOM_HEIGHT + MIN_ROOM_MARGIN)) + MIN_ROOM_HEIGHT;
-                    int x = roomX * MAX_ROOM_WIDTH + DiceRoller.getRandom().nextInt(MAX_ROOM_WIDTH - roomWidth - 2) + 2;
-                    int y = roomY * MAX_ROOM_HEIGHT + DiceRoller.getRandom().nextInt(MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
+                    int roomWidth = GlobalRandom.get().nextInt(MAX_ROOM_WIDTH - (MIN_ROOM_WIDTH + MIN_ROOM_MARGIN)) + MIN_ROOM_WIDTH;
+                    int roomHeight = GlobalRandom.get().nextInt(MAX_ROOM_HEIGHT - (MIN_ROOM_HEIGHT + MIN_ROOM_MARGIN)) + MIN_ROOM_HEIGHT;
+                    int x = roomX * MAX_ROOM_WIDTH + GlobalRandom.get().nextInt(MAX_ROOM_WIDTH - roomWidth - 2) + 2;
+                    int y = roomY * MAX_ROOM_HEIGHT + GlobalRandom.get().nextInt(MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
                     generateRoom(type, x, y, roomWidth, roomHeight);
                     generateCorridors(rooms, roomX, roomY, roomCountX, roomCountY,
                             x, y, roomWidth, roomHeight, roomX * MAX_ROOM_WIDTH, roomY * MAX_ROOM_HEIGHT,
@@ -195,21 +322,21 @@ public class Dungeon {
             int startX, int startY, int endX, int endY) {
         if (roomIndexX > 0 && rooms[(roomIndexX - 1) + roomIndexY * roomCountX] != null) {
             int otherY = findCorridorY(startX, startY, endY);
-            int y = roomY + 1 + DiceRoller.getRandom().nextInt(roomHeight - 2);
+            int y = roomY + 1 + GlobalRandom.get().nextInt(roomHeight - 2);
             generateHorizontalCorridor(y, startX, roomX);
             generateVerticalCorridor(startX, y, otherY); // the corridor connecting the corridors
         }
         if (roomIndexY > 0 && rooms[roomIndexX + (roomIndexY - 1) * roomCountX] != null) {
             int otherX = findCorridorX(startY, startX, endX);
-            int x = roomX + 1 + DiceRoller.getRandom().nextInt(roomWidth - 2);
+            int x = roomX + 1 + GlobalRandom.get().nextInt(roomWidth - 2);
             generateVerticalCorridor(x, startY, roomY);
             generateHorizontalCorridor(startY, x, otherX); // the corridor connecting the corridors
         }
         if (roomIndexX < roomCountX - 1 && rooms[(roomIndexX + 1) + roomIndexY * roomCountX] != null) {
-            generateHorizontalCorridor(roomY + 1 + DiceRoller.getRandom().nextInt(roomHeight - 2), roomX + roomWidth - 1, endX);
+            generateHorizontalCorridor(roomY + 1 + GlobalRandom.get().nextInt(roomHeight - 2), roomX + roomWidth - 1, endX);
         }
         if (roomIndexY < roomCountY - 1 && rooms[roomIndexX + (roomIndexY + 1) * roomCountX] != null) {
-            generateVerticalCorridor(roomX + 1 + DiceRoller.getRandom().nextInt(roomWidth - 2), roomY + roomHeight - 1, endY);
+            generateVerticalCorridor(roomX + 1 + GlobalRandom.get().nextInt(roomWidth - 2), roomY + roomHeight - 1, endY);
         }
     }
 
@@ -261,9 +388,9 @@ public class Dungeon {
 
     private RoomType[] generateRoomTypes(int roomCount, int roomCountX, int roomCountY) {
         RoomType[] rooms = new RoomType[roomCountX * roomCountY];
-        int itemRoomCount = 1 + DiceRoller.getRandom().nextInt(2);
-        int roomX = DiceRoller.getRandom().nextInt(roomCountX);
-        int roomY = DiceRoller.getRandom().nextInt(roomCountY);
+        int itemRoomCount = 1 + GlobalRandom.get().nextInt(2);
+        int roomX = GlobalRandom.get().nextInt(roomCountX);
+        int roomY = GlobalRandom.get().nextInt(roomCountY);
         RoomType room = RoomType.StartRoom;
         ArrayList<Integer> visitedRooms = new ArrayList();
         ArrayList<Integer> possibleRooms = new ArrayList();
@@ -272,7 +399,7 @@ public class Dungeon {
             addNeighborRooms(possibleRooms, visitedRooms, roomX, roomY, roomCountX, roomCountY);
             roomCount--;
 
-            int roomIdx = possibleRooms.remove(DiceRoller.getRandom().nextInt(possibleRooms.size()));
+            int roomIdx = possibleRooms.remove(GlobalRandom.get().nextInt(possibleRooms.size()));
             roomX = roomIdx % roomCountX;
             roomY = roomIdx / roomCountX;
             room = rollRoom(roomCount, itemRoomCount);
@@ -285,7 +412,7 @@ public class Dungeon {
         if (roomCount == 1) {
             return RoomType.EndRoom;
         } else {
-            int r = DiceRoller.getRandom().nextInt(roomCount + 1);
+            int r = GlobalRandom.get().nextInt(roomCount + 1);
             if (r < itemRoomCount + 1) {
                 return RoomType.ItemRoom;
             } else {
@@ -314,17 +441,17 @@ public class Dungeon {
         generateRoomFrame(xOffset, yOffset, roomWidth, roomHeight);
         switch (type) {
             case MonsterRoom:
-                generateRoomEnemies(DiceRoller.getRandom().nextInt(3) + 2, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
+                generateRoomEnemies(GlobalRandom.get().nextInt(3) + 2, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case ItemRoom:
-                generateRoomItems(DiceRoller.getRandom().nextInt(2) + 1, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
+                generateRoomItems(GlobalRandom.get().nextInt(2) + 1, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case StartRoom:
-                playerSpawnX = xOffset + 1 + DiceRoller.getRandom().nextInt(roomWidth - 2);
-                playerSpawnY = yOffset + 1 + DiceRoller.getRandom().nextInt(roomHeight - 2);
+                playerSpawnX = xOffset + 1 + GlobalRandom.get().nextInt(roomWidth - 2);
+                playerSpawnY = yOffset + 1 + GlobalRandom.get().nextInt(roomHeight - 2);
                 break;
             case EndRoom:
-                tiles[(xOffset + DiceRoller.getRandom().nextInt(roomWidth - 2) + 1) + (yOffset + DiceRoller.getRandom().nextInt(roomHeight - 2) + 1) * width] = TileType.Ladder;
+                tiles[(xOffset + GlobalRandom.get().nextInt(roomWidth - 2) + 1) + (yOffset + GlobalRandom.get().nextInt(roomHeight - 2) + 1) * width] = TileType.Ladder;
                 break;
             default:
                 break;
@@ -359,9 +486,9 @@ public class Dungeon {
 
     private void generateRoomEnemies(int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
         for (int i = 0; i < count; i++) {
-            int x = xOffset + DiceRoller.getRandom().nextInt(roomWidth);
-            int y = yOffset + DiceRoller.getRandom().nextInt(roomHeight);
-            int enemyType = DiceRoller.getRandom().nextInt(1);
+            int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
+            int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
+            int enemyType = GlobalRandom.get().nextInt(1);
             if (enemyType == 0) {
                 spawnEntity(new Rat(), x, y);
             }
@@ -371,8 +498,8 @@ public class Dungeon {
 
     private void generateRoomItems(int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
         for (int i = 0; i < count; i++) {
-            int x = xOffset + DiceRoller.getRandom().nextInt(roomWidth);
-            int y = yOffset + DiceRoller.getRandom().nextInt(roomHeight);
+            int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
+            int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
             spawnEntity(new Item(level), x, y);
         }
     }
