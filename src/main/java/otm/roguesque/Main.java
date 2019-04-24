@@ -11,10 +11,10 @@ import otm.roguesque.ui.RoguesqueApp;
 
 public class Main {
 
-    private static String VERSION = "unknown";
+    private static String version = "unknown";
 
     public static String getVersion() {
-        return VERSION;
+        return version;
     }
 
     public static void main(String[] args) {
@@ -36,15 +36,8 @@ public class Main {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split("=");
-            if (parts.length != 2) {
-                continue;
-            }
-            switch (parts[0]) {
-                case "version":
-                    VERSION = parts[1];
-                    break;
-                default:
-                    break;
+            if (parts.length == 2 && parts[0].equals("version")) {
+                version = parts[1];
             }
         }
     }

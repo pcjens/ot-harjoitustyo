@@ -100,19 +100,28 @@ public class DungeonRenderer {
                 }
                 double drawX = (x - offsetX) * tileSize;
                 double drawY = (y - offsetY) * tileSize;
-                if (tileImages[x + y * width] != null) {
-                    ctx.drawImage(tileImages[x + y * width], drawX, drawY, tileSize, tileSize);
-                }
+                drawTile(ctx, x, y, drawX, drawY, tileSize);
                 Entity entity = dungeon.getEntityAt(x, y);
                 if (entity != null && (player.inLineOfSight(x, y) || entity instanceof Door)) {
                     drawEntity(ctx, tileSize, entity, drawX, drawY);
                 }
-                if (!player.inLineOfSight(x, y)) {
-                    ctx.setFill(new Color(0.0, 0.0, 0.0, 0.5));
-                    ctx.fillRect(drawX, drawY, tileSize, tileSize);
-                }
+                drawFog(ctx, !player.inLineOfSight(x, y), drawX, drawY, tileSize);
             }
         }
+    }
+
+    private void drawTile(GraphicsContext ctx, int x, int y, double drawX, double drawY, double tileSize) {
+        if (tileImages[x + y * width] != null) {
+            ctx.drawImage(tileImages[x + y * width], drawX, drawY, tileSize, tileSize);
+        }
+    }
+
+    private void drawFog(GraphicsContext ctx, boolean inFog, double drawX, double drawY, double tileSize) {
+        if (!inFog) {
+            return;
+        }
+        ctx.setFill(new Color(0.0, 0.0, 0.0, 0.5));
+        ctx.fillRect(drawX, drawY, tileSize, tileSize);
     }
 
     private void drawSelection(GraphicsContext ctx, Dungeon dungeon, double tileSize, int selectionX, int selectionY) {

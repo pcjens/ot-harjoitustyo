@@ -43,26 +43,29 @@ public class Player extends Entity {
     }
 
     public void recalculateLineOfSight(boolean ignoreDistance) {
-        if (dungeon == null) {
-            return;
+        if (dungeon != null) {
+            int width = dungeon.getWidth();
+            int height = dungeon.getHeight();
+            boolean[] newLOS = new boolean[width * height];
+            initializeLOSIfNeeded(width, height);
+            for (int scanY = 0; scanY < height; scanY++) {
+                for (int scanX = 0; scanX < width; scanX++) {
+                    updateLOS(newLOS, ignoreDistance ? Integer.MAX_VALUE : sightDistance, scanX, scanY, width, height);
+                    tilesInLOS[scanX + scanY * width] = false;
+                }
+            }
+            for (int scanY = 0; scanY < height; scanY++) {
+                for (int scanX = 0; scanX < width; scanX++) {
+                    applyLOS(newLOS, scanX, scanY, width, height);
+                }
+            }
         }
-        int width = dungeon.getWidth();
-        int height = dungeon.getHeight();
-        boolean[] newLOS = new boolean[width * height];
+    }
+
+    private void initializeLOSIfNeeded(int width, int height) {
         if (tilesInLOS == null || tilesInLOS.length != width * height) {
             tilesInLOS = new boolean[width * height];
             uncoveredTiles = new boolean[width * height];
-        }
-        for (int scanY = 0; scanY < height; scanY++) {
-            for (int scanX = 0; scanX < width; scanX++) {
-                updateLOS(newLOS, ignoreDistance ? Integer.MAX_VALUE : sightDistance, scanX, scanY, width, height);
-                tilesInLOS[scanX + scanY * width] = false;
-            }
-        }
-        for (int scanY = 0; scanY < height; scanY++) {
-            for (int scanX = 0; scanX < width; scanX++) {
-                applyLOS(newLOS, scanX, scanY, width, height);
-            }
         }
     }
 
@@ -114,17 +117,12 @@ public class Player extends Entity {
             yStep = -1;
             dy = -dy;
         }
-        int d = 2 * dy - dx;
-        int scanY = y0;
+        int[] vals = new int[]{2 * dy - dx, y0};
         for (int scanX = x0; scanX <= x1; scanX++) {
-            if (dungeon.solid(scanX, scanY)) {
+            if (dungeon.solid(scanX, vals[1])) {
                 return true;
             }
-            if (d > 0) {
-                scanY += yStep;
-                d -= 2 * dx;
-            }
-            d += 2 * dy;
+            step(yStep, dx, dy, vals);
         }
         return false;
     }
@@ -137,18 +135,21 @@ public class Player extends Entity {
             xStep = -1;
             dx = -dx;
         }
-        int d = 2 * dx - dy;
-        int scanX = x0;
+        int[] vals = new int[]{2 * dx - dy, x0};
         for (int scanY = y0; scanY <= y1; scanY++) {
-            if (dungeon.solid(scanX, scanY)) {
+            if (dungeon.solid(vals[1], scanY)) {
                 return true;
             }
-            if (d > 0) {
-                scanX += xStep;
-                d -= 2 * dy;
-            }
-            d += 2 * dx;
+            step(xStep, dy, dx, vals);
         }
         return false;
+    }
+
+    private void step(int step, int dx, int dy, int[] vals) {
+        if (vals[0] > 0) {
+            vals[1] += step;
+            vals[0] -= 2 * dx;
+        }
+        vals[0] += 2 * dy;
     }
 }
