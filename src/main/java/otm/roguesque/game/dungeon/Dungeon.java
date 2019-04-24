@@ -100,7 +100,7 @@ public class Dungeon {
     }
 
     public boolean canFinish() {
-        return getTileAt(player.getX(), player.getY()) == TileType.Stairs;
+        return getTileAt(player.getX(), player.getY()) == TileType.Ladder;
     }
 
     public boolean solid(int x, int y) {
@@ -332,7 +332,7 @@ public class Dungeon {
                 playerSpawnY = yOffset + 1 + rand.nextInt(roomHeight - 2);
                 break;
             case EndRoom:
-                tiles[(xOffset + rand.nextInt(roomWidth - 2) + 1) + (yOffset + rand.nextInt(roomHeight - 2) + 1) * width] = TileType.Stairs;
+                tiles[(xOffset + rand.nextInt(roomWidth - 2) + 1) + (yOffset + rand.nextInt(roomHeight - 2) + 1) * width] = TileType.Ladder;
                 break;
             default:
                 break;

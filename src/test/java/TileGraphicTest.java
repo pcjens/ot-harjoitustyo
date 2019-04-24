@@ -35,7 +35,7 @@ public class TileGraphicTest {
 
     @Test
     public void stairsImageIsCorrect() {
-        Assert.assertEquals("/sprites/stairs.png", renderer.getTileImageName(TileType.Stairs));
+        Assert.assertEquals("/sprites/stairs.png", renderer.getTileImageName(TileType.Ladder));
     }
 
     // File existence tests
@@ -56,6 +56,6 @@ public class TileGraphicTest {
 
     @Test
     public void stairsImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Stairs)));
+        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Ladder)));
     }
 }
