@@ -12,6 +12,7 @@ public class Button {
     private int width;
     private int height;
     private int hotkeyUnderlineOffset;
+    private int padding;
     private boolean hovered;
     private boolean clicked;
 
@@ -22,6 +23,17 @@ public class Button {
         this.width = width;
         this.height = height;
         this.hotkeyUnderlineOffset = hotkeyUnderlineOffset;
+        this.padding = 15;
+    }
+
+    public Button(String text, int x, int y, int width, int height, int hotkeyUnderlineOffset, int padding) {
+        this.text = text;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.hotkeyUnderlineOffset = hotkeyUnderlineOffset;
+        this.padding = padding;
     }
 
     public void update(Input input) {
@@ -33,8 +45,8 @@ public class Button {
         RenderingUtil.drawBox(ctx, x, y, width, height, hovered);
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_UI);
-        ctx.fillText(text, x + 15, y + 30);
-        ctx.fillRect(x + 15 + hotkeyUnderlineOffset, y + 34, 10, 2);
+        ctx.fillText(text, x + padding, y + 15 + padding);
+        ctx.fillRect(x + padding + hotkeyUnderlineOffset, y + 19 + padding, 10, 2);
     }
 
     public void setX(int x) {

@@ -6,7 +6,7 @@ import javafx.scene.input.MouseButton;
 
 public class Input {
 
-    public static final KeyCode[] CONTROL_TOGGLE_PERF_STATS = new KeyCode[]{
+    public static final KeyCode[] CONTROL_TOGGLE_DEBUG_INFO = new KeyCode[]{
         KeyCode.F3
     };
 

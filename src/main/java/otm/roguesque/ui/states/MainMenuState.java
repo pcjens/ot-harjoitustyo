@@ -17,7 +17,7 @@ public class MainMenuState implements GameState {
     }
 
     @Override
-    public void draw(GraphicsContext ctx, float deltaSeconds) {
+    public void draw(GraphicsContext ctx, float deltaSeconds, boolean showDebugInfo) {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
@@ -30,7 +30,7 @@ public class MainMenuState implements GameState {
     }
 
     @Override
-    public int update(Input input, float deltaSeconds) {
+    public int update(Input input, float deltaSeconds, boolean showDebugInfo) {
         playButton.update(input);
         quitButton.update(input);
 

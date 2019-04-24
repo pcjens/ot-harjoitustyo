@@ -23,4 +23,5 @@
 | 16.4. |  1 | Releasen tekoa, pakettihierarkian refaktorointia |
 | 19.4. |  4 | FoV-algoritmin kirjoittamista |
 | 24.4. |  2 | Refaktorointia, bugien korjailua, ohjeiden kirjoittamista |
-| Yht.  | 36 | |
+| 24.4. |  1 | Refaktorointia, kehitystyökalujen ja ohjeiden kirjoittamista |
+| Yht.  | 37 | |

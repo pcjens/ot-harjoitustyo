@@ -1,10 +1,13 @@
 package otm.roguesque.ui.states;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.util.Random;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javax.swing.JOptionPane;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.game.entities.Entity;
@@ -33,6 +36,8 @@ public class InGameState implements GameState {
     private double tileSize = 32.0;
 
     private final Button nextLevelButton = new Button("Move to the next floor?", 0, 0, 290, 45, 0);
+    private final Button seedCopyButton = new Button("Copy seed", 220, 60, 120, 35, 0, 9);
+    private final Button dungeonRegenerateButton = new Button("Regenerate level", 360, 60, 195, 35, 0, 9);
 
     public InGameState() {
         rand = new Random();
@@ -42,11 +47,11 @@ public class InGameState implements GameState {
     @Override
     public void initialize() {
         player = new Player();
-        regenerateDungeon(1);
+        regenerateDungeon(1, rand.nextInt());
     }
 
-    private void regenerateDungeon(int level) {
-        dungeon = new Dungeon(level, rand.nextInt());
+    private void regenerateDungeon(int level, int seed) {
+        dungeon = new Dungeon(level, seed);
         dungeonRenderer.loadDungeon(dungeon);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
         player.resetUncovered();
@@ -58,7 +63,7 @@ public class InGameState implements GameState {
     }
 
     @Override
-    public void draw(GraphicsContext ctx, float deltaSeconds) {
+    public void draw(GraphicsContext ctx, float deltaSeconds, boolean showDebugInfo) {
         dungeonRenderer.draw(ctx, dungeon, tileSize, selectionX, selectionY);
 
         Canvas canvas = ctx.getCanvas();
@@ -67,23 +72,22 @@ public class InGameState implements GameState {
 
         RenderingUtil.drawBox(ctx, 20.0, height - 80.0, width - 40.0, 60.0, false);
 
-        ctx.setFill(Color.WHITE);
-        ctx.setFont(RoguesqueApp.FONT_UI);
-        ctx.fillText(statusLine, 40.0, height - 42.5);
-
+        drawStatusLine(ctx, height);
         if (descriptionText != null || descriptionBoxFadeAway > 0) {
             drawDescriptionBox(ctx, deltaSeconds, width, height);
         }
-
         if (dungeon.canFinish()) {
             drawFinishButton(ctx, (int) width, (int) height);
         }
+        if (showDebugInfo) {
+            drawDebugInformation(ctx);
+        }
     }
 
-    private void drawFinishButton(GraphicsContext ctx, int width, int height) {
-        nextLevelButton.setX((width - nextLevelButton.getWidth()) / 2);
-        nextLevelButton.setY((height - nextLevelButton.getHeight()) / 2);
-        nextLevelButton.draw(ctx);
+    private void drawStatusLine(GraphicsContext ctx, double height) {
+        ctx.setFill(Color.WHITE);
+        ctx.setFont(RoguesqueApp.FONT_UI);
+        ctx.fillText(statusLine, 40.0, height - 42.5);
     }
 
     private void drawDescriptionBox(GraphicsContext ctx, float deltaSeconds, double width, double height) {
@@ -102,28 +106,45 @@ public class InGameState implements GameState {
         }
     }
 
-    @Override
-    public int update(Input input, float deltaSeconds) {
-        boolean progressRound = movePlayer(input);
+    private void drawFinishButton(GraphicsContext ctx, int width, int height) {
+        nextLevelButton.setX((width - nextLevelButton.getWidth()) / 2);
+        nextLevelButton.setY((height - nextLevelButton.getHeight()) / 2);
+        nextLevelButton.draw(ctx);
+    }
 
-        if (progressRound) {
-            dungeon.processRound();
-            if (player.isDead()) {
-                return GameState.STATE_GAMEOVER;
-            }
-            dungeon.cleanupDeadEntities();
-            player.recalculateLineOfSight(false);
+    private void drawDebugInformation(GraphicsContext ctx) {
+        ctx.setFill(Color.WHITE);
+        ctx.setFont(RoguesqueApp.FONT_UI);
+        int y = 80;
+        seedCopyButton.draw(ctx);
+        dungeonRegenerateButton.draw(ctx);
+        ctx.fillText("Seed: " + dungeon.getSeed(), 10, y += 20);
+        ctx.fillText("Player coordinates: " + player.getX() + ", " + player.getY(), 10, y += 20);
+        ctx.fillText("Room dimensions: " + dungeon.getWidth() + ", " + dungeon.getHeight(), 10, y += 20);
+        ctx.fillText("Entities: " + dungeon.getEntities().size(), 10, y += 20);
+    }
+
+    @Override
+    public int update(Input input, float deltaSeconds, boolean showDebugInfo) {
+        boolean shouldProcessRound = movePlayer(input);
+
+        if (shouldProcessRound && processRound()) {
+            return GameState.STATE_GAMEOVER;
         }
 
         if (dungeon.canFinish()) {
             nextLevelButton.update(input);
             if (nextLevelButton.isClicked() || input.isPressed(Input.CONTROL_NEXT_LEVEL)) {
-                regenerateDungeon(dungeon.getLevel() + 1);
+                regenerateDungeon(dungeon.getLevel() + 1, rand.nextInt());
             }
         }
 
         selectTile(input);
         updateTexts();
+
+        if (showDebugInfo) {
+            updateDebugButtons(input);
+        }
         return -1;
     }
 
@@ -140,6 +161,16 @@ public class InGameState implements GameState {
             return false;
         }
         return true;
+    }
+
+    private boolean processRound() {
+        dungeon.processRound();
+        if (player.isDead()) {
+            return true;
+        }
+        dungeon.cleanupDeadEntities();
+        player.recalculateLineOfSight(false);
+        return false;
     }
 
     private void selectTile(Input input) {
@@ -186,5 +217,26 @@ public class InGameState implements GameState {
             }
         }
         return null;
+    }
+
+    private void updateDebugButtons(Input input) {
+        seedCopyButton.update(input);
+        dungeonRegenerateButton.update(input);
+
+        String currentSeed = Integer.toString(dungeon.getSeed());
+        if (seedCopyButton.isClicked()) {
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(currentSeed), null);
+        }
+        if (dungeonRegenerateButton.isClicked()) {
+            // TODO: Replace with something that's not Swing?
+            // Not a high priority though, this is a debugging feature
+            String result = JOptionPane.showInputDialog(null, "Please enter a new seed:", currentSeed);
+            try {
+                int seed = Integer.parseInt(result);
+                regenerateDungeon(dungeon.getLevel(), seed);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "The seed was not a number.", "Dungeon not regenerated", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }

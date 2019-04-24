@@ -13,9 +13,9 @@ public interface GameState {
     public static final int STATE_INGAME = 2;
     public static final int STATE_GAMEOVER = 3;
 
-    void draw(GraphicsContext ctx, float deltaSeconds);
+    void draw(GraphicsContext ctx, float deltaSeconds, boolean showDebugInfo);
 
-    int update(Input input, float deltaSeconds);
+    int update(Input input, float deltaSeconds, boolean showDebugInfo);
 
     void initialize();
 }

@@ -6,13 +6,13 @@
 
 ## Pelin kulku
 - Pelissä olevia nappeja voi joko klikata hiirellä, tai painaa
-  alleviivattua kirjainta näppäimistöllä.
+  alleviivattua kirjainta näppäimistöllä.  
   ![Kuva napista](screenshots/buttons.png)
 
 - Pelaajalla on tietty "näkökenttä" jonka sisällä olevat vastustajat
   ja tavarat näkyvät. Hieman tummennettuna näkyy alueet joita on
   aikaisemmin nähnyt, mutta jos siellä liikkuu vastustajia, ne eivät
-  näy pelaajalle.
+  näy pelaajalle.  
   ![Kuva näkyvyydestä](screenshots/fog.png)
 
 - Pelissä suurin osa asioista tapahtuu kävelemällä asioita päin:
@@ -20,8 +20,9 @@
   näitä päin. Poikkeuksena tähän ovat alas menevät tikkaat, joilla
   siirrytään seuraavaan tasoon. Kun pelaaja seisoo tikkaiden päällä,
   pitää joko klikata ilmestyvästä napista, tai painaa M-kirjainta
-  näppäimistöllä edetäkseen.
+  näppäimistöllä edetäkseen.  
   ![Kuva "seuraava kenttä"-napista](screenshots/finish.png)
 
-## Pelin ei niin tärkeät kontrollit
-- Performanssistatistiikat: F3
+## Muut kontrollit
+- Debug-informaatio (ns. "kehittäjämoodi", ei relevantti normaalin
+  pelaamisen aikana): F3

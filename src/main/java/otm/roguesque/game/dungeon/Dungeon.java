@@ -20,6 +20,7 @@ public class Dungeon {
 
     private final boolean[] solid;
     private final TileType[] tiles;
+    private final int seed;
     private final int width;
     private final int height;
     private final int level;
@@ -36,7 +37,8 @@ public class Dungeon {
         this.entities = new ArrayList();
         this.tiles = new TileType[width * height];
         this.solid = new boolean[width * height];
-        generateDungeon(seed);
+        this.seed = seed;
+        generateDungeon();
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -79,6 +81,10 @@ public class Dungeon {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getSeed() {
+        return seed;
     }
 
     public TileType[] getTiles() {
@@ -160,7 +166,7 @@ public class Dungeon {
 
     // Dungeon generation functionality
     // Sorry about the fragmentation of the functions; CheckStyle doesn't like long functions.
-    private void generateDungeon(int seed) {
+    private void generateDungeon() {
         Random rand = new Random(seed);
 
         int roomCountX = width / MAX_ROOM_WIDTH;

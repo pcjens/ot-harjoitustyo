@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import otm.roguesque.Main;
 import otm.roguesque.ui.states.GameOverState;
 import otm.roguesque.ui.states.GameState;
 import otm.roguesque.ui.states.InGameState;
@@ -29,7 +30,7 @@ public class RoguesqueApp extends Application {
     private Canvas canvas;
 
     // Performance statistics
-    private boolean showPerformanceDetails = false;
+    private boolean showDebugInfo = false;
     private final float[] deltaSecondsHistory = new float[100];
     private int deltaSecondsHistoryCounter = 0;
 
@@ -55,11 +56,12 @@ public class RoguesqueApp extends Application {
     private void drawGame(float deltaSeconds) {
         ctx.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        gameStates[currentGameStateIndex].draw(ctx, deltaSeconds);
+        gameStates[currentGameStateIndex].draw(ctx, deltaSeconds, showDebugInfo);
 
         float averageDeltaSeconds = updatePerformanceStats(deltaSeconds);
-        if (showPerformanceDetails) {
-            ctx.fillText("Average frame time: " + (int) (averageDeltaSeconds * 1000.0) + " ms", 10.0, 20.0);
+        if (showDebugInfo) {
+            ctx.fillText("Game version: " + Main.getVersion(), 10, 20);
+            ctx.fillText("Average frame time: " + (int) (averageDeltaSeconds * 1000.0) + " ms", 10.0, 40.0);
         }
     }
 
@@ -79,11 +81,11 @@ public class RoguesqueApp extends Application {
     /* This is separated from drawGame just in case we want to switch to a
      * fixed timestemp sometime in the future */
     private void update(float deltaSeconds) {
-        if (input.isPressed(Input.CONTROL_TOGGLE_PERF_STATS)) {
-            showPerformanceDetails = !showPerformanceDetails;
+        if (input.isPressed(Input.CONTROL_TOGGLE_DEBUG_INFO)) {
+            showDebugInfo = !showDebugInfo;
         }
 
-        int newState = gameStates[currentGameStateIndex].update(input, deltaSeconds);
+        int newState = gameStates[currentGameStateIndex].update(input, deltaSeconds, showDebugInfo);
         if (newState == GameState.STATE_QUIT) {
             Platform.exit();
         } else if (newState >= 0 && newState < GameState.STATE_COUNT) {
