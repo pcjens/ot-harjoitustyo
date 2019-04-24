@@ -24,4 +24,5 @@
 | 19.4. |  4 | FoV-algoritmin kirjoittamista |
 | 24.4. |  2 | Refaktorointia, bugien korjailua, ohjeiden kirjoittamista |
 | 24.4. |  1 | Refaktorointia, kehitystyökalujen ja ohjeiden kirjoittamista |
-| Yht.  | 37 | |
+| 24.4. |  2 | Uusien grafiikkojen piirtämistä |
+| Yht.  | 39 | |

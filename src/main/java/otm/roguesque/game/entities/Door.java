@@ -3,7 +3,7 @@ package otm.roguesque.game.entities;
 public class Door extends Entity {
 
     public Door() {
-        super(1, 0, 1000000, "", "", "Doors", "/sprites/door.png");
+        super(1, 0, 1000000, "", "", "Doors", "/sprites/Door.png");
     }
 
     @Override

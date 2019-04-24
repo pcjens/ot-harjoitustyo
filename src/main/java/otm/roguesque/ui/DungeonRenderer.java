@@ -29,10 +29,10 @@ public class DungeonRenderer {
         // Check the tiles in TileType.java, these should be in the same order
         // (This is also tested in TileGraphicTest.java)
         tileTypeNames = new String[]{
-            "/sprites/floor.png",
-            "/sprites/wall.png",
-            "/sprites/corridor.png",
-            "/sprites/stairs.png"
+            "/sprites/Floor.png",
+            "/sprites/Wall.png",
+            "/sprites/Corridor.png",
+            "/sprites/Ladder.png"
         };
 
         tileTypes = new Image[tileTypeNames.length];
@@ -40,7 +40,7 @@ public class DungeonRenderer {
             tileTypes[i] = new Image(getClass().getResourceAsStream(tileTypeNames[i]),
                     32, 32, true, false);
         }
-        selectionImage = new Image(getClass().getResourceAsStream("/sprites/selection.png"), 32, 32, true, false);
+        selectionImage = new Image(getClass().getResourceAsStream("/sprites/Selection.png"), 32, 32, true, false);
     }
 
     public int getOffsetX() {

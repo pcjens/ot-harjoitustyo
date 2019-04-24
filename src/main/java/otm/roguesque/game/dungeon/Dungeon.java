@@ -1,7 +1,7 @@
 package otm.roguesque.game.dungeon;
 
 import java.util.ArrayList;
-import java.util.Random;
+import otm.roguesque.game.DiceRoller;
 import otm.roguesque.game.entities.AI;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
@@ -20,7 +20,6 @@ public class Dungeon {
 
     private final boolean[] solid;
     private final TileType[] tiles;
-    private final int seed;
     private final int width;
     private final int height;
     private final int level;
@@ -30,14 +29,13 @@ public class Dungeon {
     private int playerSpawnX;
     private int playerSpawnY;
 
-    public Dungeon(int level, int seed) {
+    public Dungeon(int level) {
         this.width = (int) (MAX_ROOM_WIDTH * (Math.sqrt(MAX_ROOMS) + 1));
         this.height = (int) (MAX_ROOM_HEIGHT * (Math.sqrt(MAX_ROOMS) + 1));
         this.level = level;
         this.entities = new ArrayList();
         this.tiles = new TileType[width * height];
         this.solid = new boolean[width * height];
-        this.seed = seed;
         generateDungeon();
 
         for (int y = 0; y < height; y++) {
@@ -81,10 +79,6 @@ public class Dungeon {
 
     public int getHeight() {
         return height;
-    }
-
-    public int getSeed() {
-        return seed;
     }
 
     public TileType[] getTiles() {
@@ -169,27 +163,25 @@ public class Dungeon {
     // Dungeon generation functionality
     // Sorry about the fragmentation of the functions; CheckStyle doesn't like long functions.
     private void generateDungeon() {
-        Random rand = new Random(seed);
-
         int roomCountX = width / MAX_ROOM_WIDTH;
         int roomCountY = height / MAX_ROOM_HEIGHT;
         int minimumRooms = (int) Math.ceil(MAX_ROOMS / 3.0);
-        int roomCount = rand.nextInt(MAX_ROOMS - minimumRooms + 1) + minimumRooms;
-        RoomType[] rooms = generateRoomTypes(rand, roomCount, roomCountX, roomCountY);
-        generateRooms(rand, rooms, roomCountX, roomCountY);
+        int roomCount = DiceRoller.getRandom().nextInt(MAX_ROOMS - minimumRooms + 1) + minimumRooms;
+        RoomType[] rooms = generateRoomTypes(roomCount, roomCountX, roomCountY);
+        generateRooms(rooms, roomCountX, roomCountY);
     }
 
-    private void generateRooms(Random rand, RoomType[] rooms, int roomCountX, int roomCountY) {
+    private void generateRooms(RoomType[] rooms, int roomCountX, int roomCountY) {
         for (int roomY = 0; roomY < roomCountY; roomY++) {
             for (int roomX = 0; roomX < roomCountX; roomX++) {
                 RoomType type = rooms[roomX + roomY * roomCountX];
                 if (type != null) {
-                    int roomWidth = rand.nextInt(MAX_ROOM_WIDTH - (MIN_ROOM_WIDTH + MIN_ROOM_MARGIN)) + MIN_ROOM_WIDTH;
-                    int roomHeight = rand.nextInt(MAX_ROOM_HEIGHT - (MIN_ROOM_HEIGHT + MIN_ROOM_MARGIN)) + MIN_ROOM_HEIGHT;
-                    int x = roomX * MAX_ROOM_WIDTH + rand.nextInt(MAX_ROOM_WIDTH - roomWidth - 2) + 2;
-                    int y = roomY * MAX_ROOM_HEIGHT + rand.nextInt(MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
-                    generateRoom(rand, type, x, y, roomWidth, roomHeight);
-                    generateCorridors(rand, rooms, roomX, roomY, roomCountX, roomCountY,
+                    int roomWidth = DiceRoller.getRandom().nextInt(MAX_ROOM_WIDTH - (MIN_ROOM_WIDTH + MIN_ROOM_MARGIN)) + MIN_ROOM_WIDTH;
+                    int roomHeight = DiceRoller.getRandom().nextInt(MAX_ROOM_HEIGHT - (MIN_ROOM_HEIGHT + MIN_ROOM_MARGIN)) + MIN_ROOM_HEIGHT;
+                    int x = roomX * MAX_ROOM_WIDTH + DiceRoller.getRandom().nextInt(MAX_ROOM_WIDTH - roomWidth - 2) + 2;
+                    int y = roomY * MAX_ROOM_HEIGHT + DiceRoller.getRandom().nextInt(MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
+                    generateRoom(type, x, y, roomWidth, roomHeight);
+                    generateCorridors(rooms, roomX, roomY, roomCountX, roomCountY,
                             x, y, roomWidth, roomHeight, roomX * MAX_ROOM_WIDTH, roomY * MAX_ROOM_HEIGHT,
                             (roomX + 1) * MAX_ROOM_WIDTH, (roomY + 1) * MAX_ROOM_HEIGHT);
                     generateDoors(x, y, roomWidth, roomHeight);
@@ -198,26 +190,26 @@ public class Dungeon {
         }
     }
 
-    private void generateCorridors(Random rand, RoomType[] rooms, int roomIndexX, int roomIndexY,
+    private void generateCorridors(RoomType[] rooms, int roomIndexX, int roomIndexY,
             int roomCountX, int roomCountY, int roomX, int roomY, int roomWidth, int roomHeight,
             int startX, int startY, int endX, int endY) {
         if (roomIndexX > 0 && rooms[(roomIndexX - 1) + roomIndexY * roomCountX] != null) {
             int otherY = findCorridorY(startX, startY, endY);
-            int y = roomY + 1 + rand.nextInt(roomHeight - 2);
+            int y = roomY + 1 + DiceRoller.getRandom().nextInt(roomHeight - 2);
             generateHorizontalCorridor(y, startX, roomX);
             generateVerticalCorridor(startX, y, otherY); // the corridor connecting the corridors
         }
         if (roomIndexY > 0 && rooms[roomIndexX + (roomIndexY - 1) * roomCountX] != null) {
             int otherX = findCorridorX(startY, startX, endX);
-            int x = roomX + 1 + rand.nextInt(roomWidth - 2);
+            int x = roomX + 1 + DiceRoller.getRandom().nextInt(roomWidth - 2);
             generateVerticalCorridor(x, startY, roomY);
             generateHorizontalCorridor(startY, x, otherX); // the corridor connecting the corridors
         }
         if (roomIndexX < roomCountX - 1 && rooms[(roomIndexX + 1) + roomIndexY * roomCountX] != null) {
-            generateHorizontalCorridor(roomY + 1 + rand.nextInt(roomHeight - 2), roomX + roomWidth - 1, endX);
+            generateHorizontalCorridor(roomY + 1 + DiceRoller.getRandom().nextInt(roomHeight - 2), roomX + roomWidth - 1, endX);
         }
         if (roomIndexY < roomCountY - 1 && rooms[roomIndexX + (roomIndexY + 1) * roomCountX] != null) {
-            generateVerticalCorridor(roomX + 1 + rand.nextInt(roomWidth - 2), roomY + roomHeight - 1, endY);
+            generateVerticalCorridor(roomX + 1 + DiceRoller.getRandom().nextInt(roomWidth - 2), roomY + roomHeight - 1, endY);
         }
     }
 
@@ -267,11 +259,11 @@ public class Dungeon {
         }
     }
 
-    private RoomType[] generateRoomTypes(Random rand, int roomCount, int roomCountX, int roomCountY) {
+    private RoomType[] generateRoomTypes(int roomCount, int roomCountX, int roomCountY) {
         RoomType[] rooms = new RoomType[roomCountX * roomCountY];
-        int itemRoomCount = 1 + rand.nextInt(2);
-        int roomX = rand.nextInt(roomCountX);
-        int roomY = rand.nextInt(roomCountY);
+        int itemRoomCount = 1 + DiceRoller.getRandom().nextInt(2);
+        int roomX = DiceRoller.getRandom().nextInt(roomCountX);
+        int roomY = DiceRoller.getRandom().nextInt(roomCountY);
         RoomType room = RoomType.StartRoom;
         ArrayList<Integer> visitedRooms = new ArrayList();
         ArrayList<Integer> possibleRooms = new ArrayList();
@@ -280,20 +272,20 @@ public class Dungeon {
             addNeighborRooms(possibleRooms, visitedRooms, roomX, roomY, roomCountX, roomCountY);
             roomCount--;
 
-            int roomIdx = possibleRooms.remove(rand.nextInt(possibleRooms.size()));
+            int roomIdx = possibleRooms.remove(DiceRoller.getRandom().nextInt(possibleRooms.size()));
             roomX = roomIdx % roomCountX;
             roomY = roomIdx / roomCountX;
-            room = rollRoom(rand, roomCount, itemRoomCount);
+            room = rollRoom(roomCount, itemRoomCount);
             itemRoomCount -= room == RoomType.ItemRoom ? 1 : 0;
         }
         return rooms;
     }
 
-    private RoomType rollRoom(Random rand, int roomCount, int itemRoomCount) {
+    private RoomType rollRoom(int roomCount, int itemRoomCount) {
         if (roomCount == 1) {
             return RoomType.EndRoom;
         } else {
-            int r = rand.nextInt(roomCount + 1);
+            int r = DiceRoller.getRandom().nextInt(roomCount + 1);
             if (r < itemRoomCount + 1) {
                 return RoomType.ItemRoom;
             } else {
@@ -318,21 +310,21 @@ public class Dungeon {
         }
     }
 
-    private void generateRoom(Random rand, RoomType type, int xOffset, int yOffset, int roomWidth, int roomHeight) {
+    private void generateRoom(RoomType type, int xOffset, int yOffset, int roomWidth, int roomHeight) {
         generateRoomFrame(xOffset, yOffset, roomWidth, roomHeight);
         switch (type) {
             case MonsterRoom:
-                generateRoomEnemies(rand, rand.nextInt(3) + 2, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
+                generateRoomEnemies(DiceRoller.getRandom().nextInt(3) + 2, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case ItemRoom:
-                generateRoomItems(rand, rand.nextInt(2) + 1, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
+                generateRoomItems(DiceRoller.getRandom().nextInt(2) + 1, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case StartRoom:
-                playerSpawnX = xOffset + 1 + rand.nextInt(roomWidth - 2);
-                playerSpawnY = yOffset + 1 + rand.nextInt(roomHeight - 2);
+                playerSpawnX = xOffset + 1 + DiceRoller.getRandom().nextInt(roomWidth - 2);
+                playerSpawnY = yOffset + 1 + DiceRoller.getRandom().nextInt(roomHeight - 2);
                 break;
             case EndRoom:
-                tiles[(xOffset + rand.nextInt(roomWidth - 2) + 1) + (yOffset + rand.nextInt(roomHeight - 2) + 1) * width] = TileType.Ladder;
+                tiles[(xOffset + DiceRoller.getRandom().nextInt(roomWidth - 2) + 1) + (yOffset + DiceRoller.getRandom().nextInt(roomHeight - 2) + 1) * width] = TileType.Ladder;
                 break;
             default:
                 break;
@@ -365,23 +357,23 @@ public class Dungeon {
         }
     }
 
-    private void generateRoomEnemies(Random rand, int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
+    private void generateRoomEnemies(int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
         for (int i = 0; i < count; i++) {
-            int x = xOffset + rand.nextInt(roomWidth);
-            int y = yOffset + rand.nextInt(roomHeight);
-            int enemyType = rand.nextInt(1);
+            int x = xOffset + DiceRoller.getRandom().nextInt(roomWidth);
+            int y = yOffset + DiceRoller.getRandom().nextInt(roomHeight);
+            int enemyType = DiceRoller.getRandom().nextInt(1);
             if (enemyType == 0) {
-                spawnEntity(new Rat(rand.nextInt()), x, y);
+                spawnEntity(new Rat(), x, y);
             }
             // TODO: More enemies.
         }
     }
 
-    private void generateRoomItems(Random rand, int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
+    private void generateRoomItems(int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
         for (int i = 0; i < count; i++) {
-            int x = xOffset + rand.nextInt(roomWidth);
-            int y = yOffset + rand.nextInt(roomHeight);
-            spawnEntity(new Item(level, rand.nextInt()), x, y);
+            int x = xOffset + DiceRoller.getRandom().nextInt(roomWidth);
+            int y = yOffset + DiceRoller.getRandom().nextInt(roomHeight);
+            spawnEntity(new Item(level), x, y);
         }
     }
 }

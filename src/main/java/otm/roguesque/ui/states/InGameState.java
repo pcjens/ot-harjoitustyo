@@ -2,12 +2,12 @@ package otm.roguesque.ui.states;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-import java.util.Random;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
+import otm.roguesque.game.DiceRoller;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.game.entities.Entity;
@@ -20,7 +20,6 @@ import otm.roguesque.ui.RoguesqueApp;
 
 public class InGameState implements GameState {
 
-    private final Random rand;
     private final DungeonRenderer dungeonRenderer;
     private Dungeon dungeon;
     private Player player;
@@ -40,18 +39,18 @@ public class InGameState implements GameState {
     private final Button dungeonRegenerateButton = new Button("Regenerate level", 360, 60, 195, 35, 0, 9);
 
     public InGameState() {
-        rand = new Random();
         dungeonRenderer = new DungeonRenderer();
     }
 
     @Override
     public void initialize() {
         player = new Player();
-        regenerateDungeon(1, rand.nextInt());
+        regenerateDungeon(1, DiceRoller.getRandom().nextInt());
     }
 
     private void regenerateDungeon(int level, int seed) {
-        dungeon = new Dungeon(level, seed);
+        DiceRoller.resetRandom(seed);
+        dungeon = new Dungeon(level);
         dungeonRenderer.loadDungeon(dungeon);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
         player.resetUncovered();
@@ -118,7 +117,7 @@ public class InGameState implements GameState {
         int y = 80;
         seedCopyButton.draw(ctx);
         dungeonRegenerateButton.draw(ctx);
-        ctx.fillText("Seed: " + dungeon.getSeed(), 10, y += 20);
+        ctx.fillText("Seed: " + DiceRoller.getSeed(), 10, y += 20);
         ctx.fillText("Player coordinates: " + player.getX() + ", " + player.getY(), 10, y += 20);
         ctx.fillText("Room dimensions: " + dungeon.getWidth() + ", " + dungeon.getHeight(), 10, y += 20);
         ctx.fillText("Entities: " + dungeon.getEntities().size(), 10, y += 20);
@@ -135,7 +134,7 @@ public class InGameState implements GameState {
         if (dungeon.canFinish()) {
             nextLevelButton.update(input);
             if (nextLevelButton.isClicked() || input.isPressed(Input.CONTROL_NEXT_LEVEL)) {
-                regenerateDungeon(dungeon.getLevel() + 1, rand.nextInt());
+                regenerateDungeon(dungeon.getLevel() + 1, DiceRoller.getRandom().nextInt());
             }
         }
 
@@ -223,7 +222,7 @@ public class InGameState implements GameState {
         seedCopyButton.update(input);
         dungeonRegenerateButton.update(input);
 
-        String currentSeed = Integer.toString(dungeon.getSeed());
+        String currentSeed = Integer.toString(DiceRoller.getSeed());
         if (seedCopyButton.isClicked()) {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(currentSeed), null);
         }

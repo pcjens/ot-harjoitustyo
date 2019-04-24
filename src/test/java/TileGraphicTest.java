@@ -20,22 +20,22 @@ public class TileGraphicTest {
     // Enum order / file name equality tests
     @Test
     public void floorImageIsCorrect() {
-        Assert.assertEquals("/sprites/floor.png", renderer.getTileImageName(TileType.Floor));
+        Assert.assertEquals("/sprites/Floor.png", renderer.getTileImageName(TileType.Floor));
     }
 
     @Test
     public void wallImageIsCorrect() {
-        Assert.assertEquals("/sprites/wall.png", renderer.getTileImageName(TileType.Wall));
+        Assert.assertEquals("/sprites/Wall.png", renderer.getTileImageName(TileType.Wall));
     }
 
     @Test
     public void corridorImageIsCorrect() {
-        Assert.assertEquals("/sprites/corridor.png", renderer.getTileImageName(TileType.Corridor));
+        Assert.assertEquals("/sprites/Corridor.png", renderer.getTileImageName(TileType.Corridor));
     }
 
     @Test
-    public void stairsImageIsCorrect() {
-        Assert.assertEquals("/sprites/stairs.png", renderer.getTileImageName(TileType.Ladder));
+    public void ladderImageIsCorrect() {
+        Assert.assertEquals("/sprites/Ladder.png", renderer.getTileImageName(TileType.Ladder));
     }
 
     // File existence tests
@@ -55,7 +55,7 @@ public class TileGraphicTest {
     }
 
     @Test
-    public void stairsImageExists() {
+    public void ladderImageExists() {
         Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Ladder)));
     }
 }

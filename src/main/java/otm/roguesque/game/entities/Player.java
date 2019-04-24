@@ -7,7 +7,7 @@ public class Player extends Entity {
     private int sightDistance = 5;
 
     public Player() {
-        super(10, 2, 1, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/player.png");
+        super(10, 2, 1, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/Player.png");
     }
 
     public String getExaminationText() {

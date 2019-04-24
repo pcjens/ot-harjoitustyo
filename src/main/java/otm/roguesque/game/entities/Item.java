@@ -1,68 +1,64 @@
 package otm.roguesque.game.entities;
 
-import java.util.Random;
+import otm.roguesque.game.DiceRoller;
 
 public class Item extends Entity {
 
-    private static final String[] GENERAL_PREFIXES = new String[]{
-        "Shabby", "Decent", "Nice", "Pristine", "Exquisite", "Legendary"
-    };
-    private static final String[] OFFENSIVE_BASE_NAMES = new String[]{
-        "Longsword", "Shortsword", "Bastard sword", "Pike", "Axe", "Rapier",
-        "Whip", "Dao", "Katana", "Kukri"
-    };
-    private static final String[] OFFENSIVE_SUFFIXES = new String[]{
-        "Death", "Destruction", "Fire", "Thunder"
-    };
-    private static final String[] DEFENSIVE_BASE_NAMES = new String[]{
-        "Shield", "Armor", "Buckler", "Protective Glasses"
-    };
-    private static final String[] DEFENSIVE_SUFFIXES = new String[]{
-        "Life", "Protection"
+    // TODO: Move the ItemData to a config file
+    private static class ItemData {
+
+        public String identifier;
+        public String displayName;
+        public String description;
+        public int attackBoost;
+        public int defenseBoost;
+
+        public ItemData(String identifier, String displayName, String description, int attackBoost, int defenseBoost) {
+            this.identifier = identifier;
+            this.displayName = displayName;
+            this.description = description;
+            this.attackBoost = attackBoost;
+            this.defenseBoost = defenseBoost;
+        }
+    }
+
+    private static final ItemData[] ITEMS = new ItemData[]{
+        new ItemData("FireWhip", "The Fiery Whip\n  of Balgor", "Pretty hot.\n\nSo hot you\nmight get\nburned.", 2, -1)
     };
 
     private int attackBoost = 0;
     private int defenseBoost = 0;
 
-    public Item(int level, int seed) {
-        super(1, 0, 1000000, "", "", "Items", "/sprites/item.png");
+    public Item(int level) {
+        super(1, 0, 1000000, "", "", "Items", "");
 
-        Random rand = new Random(seed);
+        ItemData data = ITEMS[DiceRoller.getRandom().nextInt(ITEMS.length)];
+        loadImage("/sprites/Item" + data.identifier + ".png");
+        this.name = data.displayName;
+        this.attackBoost = data.attackBoost;
+        this.defenseBoost = data.defenseBoost;
+        this.description = data.description;
+    }
 
-        if (rand.nextBoolean()) {
-            attackBoost = rand.nextInt(1 + level) + 1;
-            String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length - 1, attackBoost - 1)];
-            String baseName = OFFENSIVE_BASE_NAMES[rand.nextInt(OFFENSIVE_BASE_NAMES.length)];
-            String feature = OFFENSIVE_SUFFIXES[rand.nextInt(OFFENSIVE_SUFFIXES.length)];
-            name = quality + " " + baseName;
-            if (rand.nextInt(Math.max(3, 10 - level)) == 0) {
-                name += " of\n" + feature;
-                description = "\n" + baseName + "\nimbued with\n" + feature.toLowerCase() + ".\n";
-            }
+    private String getStringFromBonus(int bonus) {
+        if (bonus >= 0) {
+            return "+" + bonus;
         } else {
-            defenseBoost = rand.nextInt(1 + level) + 1;
-            String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length - 1, defenseBoost - 1)];
-            String baseName = DEFENSIVE_BASE_NAMES[rand.nextInt(DEFENSIVE_BASE_NAMES.length)];
-            String feature = DEFENSIVE_SUFFIXES[rand.nextInt(DEFENSIVE_SUFFIXES.length)];
-            name = quality + " " + baseName + " of " + feature;
-            if (rand.nextInt(Math.max(3, 10 - level)) == 0) {
-                name += " of\n" + feature;
-                description = "\n" + baseName + "\nimbued with\n" + feature.toLowerCase() + ".\n";
-            }
+            return "" + bonus;
         }
     }
 
     @Override
     public String getDescription() {
-        return String.format("%s\n%s\nATK: +%d\nDEF: +%d", name, description, attackBoost, defenseBoost);
+        return String.format("%s\n\n%s\n\nATK: %s\nDEF: %s", name, description, getStringFromBonus(attackBoost), getStringFromBonus(defenseBoost));
     }
 
     @Override
     protected void reactToAttack(Entity attackingEntity) {
         if (attackingEntity instanceof Player) {
             Player player = (Player) attackingEntity;
-            player.attack += attackBoost;
-            player.defense += defenseBoost;
+            player.attack = Math.max(1, player.attack + attackBoost);
+            player.defense = Math.max(0, player.defense + defenseBoost);
             health = 0;
         }
     }

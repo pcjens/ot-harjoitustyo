@@ -1,7 +1,7 @@
 package otm.roguesque.game.entities;
 
-import otm.roguesque.game.dungeon.Dungeon;
 import javafx.scene.image.Image;
+import otm.roguesque.game.dungeon.Dungeon;
 
 public abstract class Entity {
 
@@ -25,6 +25,12 @@ public abstract class Entity {
         this.name = name;
         this.description = description;
         this.friendlyGroup = friendlyGroup;
+        if (!spritePath.isEmpty()) {
+            this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
+        }
+    }
+
+    protected final void loadImage(String spritePath) {
         this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
     }
 
