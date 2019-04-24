@@ -28,6 +28,7 @@ public class Input {
     public static final KeyCode[] CONTROL_MOVE_RIGHT = new KeyCode[]{
         KeyCode.D, KeyCode.RIGHT, KeyCode.L
     };
+    public static final KeyCode[] CONTROL_NEXT_LEVEL = new KeyCode[]{KeyCode.M};
 
     private final ArrayList<KeyCode> keysPressed = new ArrayList();
     private final ArrayList<MouseButton> mouseButtonsPressed = new ArrayList();

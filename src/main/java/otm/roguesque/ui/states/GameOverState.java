@@ -3,10 +3,14 @@ package otm.roguesque.ui.states;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
 import otm.roguesque.ui.RoguesqueApp;
 
 public class GameOverState implements GameState {
+
+    private Button replayButton = new Button("Replay", 180, 280, 100, 45, 20);
+    private Button quitButton = new Button("Quit", 300, 280, 80, 45, 0);
 
     @Override
     public void initialize() {
@@ -22,17 +26,19 @@ public class GameOverState implements GameState {
         ctx.setFont(RoguesqueApp.FONT_LOGO_SMALL);
         ctx.fillText("You are dead.", 180.0, 220.0);
 
-        ctx.setFont(RoguesqueApp.FONT_UI);
-        ctx.fillText("Re[p]lay", 180.0, 300.0);
-        ctx.fillText("[Q]uit", 300.0, 300.0);
+        replayButton.draw(ctx);
+        quitButton.draw(ctx);
     }
 
     @Override
     public int update(Input input, float deltaSeconds) {
-        if (input.isPressed(Input.CONTROL_PLAY)) {
+        replayButton.update(input);
+        quitButton.update(input);
+
+        if (input.isPressed(Input.CONTROL_PLAY) || replayButton.isClicked()) {
             return GameState.STATE_INGAME;
         }
-        if (input.isPressed(Input.CONTROL_QUIT)) {
+        if (input.isPressed(Input.CONTROL_QUIT) || quitButton.isClicked()) {
             return GameState.STATE_QUIT;
         }
         return -1;

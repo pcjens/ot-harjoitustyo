@@ -95,7 +95,7 @@ public class DungeonRenderer {
         Player player = dungeon.getPlayer();
         for (int y = offsetY; y < Math.min(offsetY + tilesY, height); y++) {
             for (int x = offsetX; x < Math.min(offsetX + tilesX, width); x++) {
-                if (!player.hasBeenInLineOfSight(x, y)) {
+                if (!player.isUncovered(x, y)) {
                     continue;
                 }
                 double drawX = (x - offsetX) * tileSize;

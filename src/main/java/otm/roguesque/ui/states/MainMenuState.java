@@ -2,24 +2,15 @@ package otm.roguesque.ui.states;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
 import otm.roguesque.ui.RoguesqueApp;
 
 public class MainMenuState implements GameState {
 
-    private static final double PLAY_X = 180.0;
-    private static final double PLAY_Y = 280.0;
-    private static final double PLAY_WIDTH = 75.0;
-    private static final double PLAY_HEIGHT = 30.0;
-    private static final double QUIT_X = 280.0;
-    private static final double QUIT_Y = 280.0;
-    private static final double QUIT_WIDTH = 75.0;
-    private static final double QUIT_HEIGHT = 30.0;
-
-    private boolean hoveringPlay = false;
-    private boolean hoveringQuit = false;
+    private final Button playButton = new Button("Play", 180, 280, 80, 45, 0);
+    private final Button quitButton = new Button("Quit", 280, 280, 80, 45, 0);
 
     @Override
     public void initialize() {
@@ -34,30 +25,19 @@ public class MainMenuState implements GameState {
         ctx.setFont(RoguesqueApp.FONT_LOGO);
         ctx.fillText("Roguesque", 180.0, 200.0);
 
-        ctx.setFont(RoguesqueApp.FONT_UI);
-        highlightIf(ctx, hoveringPlay);
-        ctx.fillText("[P]lay", PLAY_X, PLAY_Y + 20.0);
-        highlightIf(ctx, hoveringQuit);
-        ctx.fillText("[Q]uit", QUIT_X, QUIT_Y + 20.0);
-    }
-
-    private void highlightIf(GraphicsContext ctx, boolean b) {
-        if (b) {
-            ctx.setFill(Color.YELLOW);
-        } else {
-            ctx.setFill(Color.WHITE);
-        }
+        playButton.draw(ctx);
+        quitButton.draw(ctx);
     }
 
     @Override
     public int update(Input input, float deltaSeconds) {
-        hoveringPlay = input.containsMouse(PLAY_X, PLAY_Y, PLAY_WIDTH, PLAY_HEIGHT);
-        hoveringQuit = input.containsMouse(QUIT_X, QUIT_Y, QUIT_WIDTH, QUIT_HEIGHT);
+        playButton.update(input);
+        quitButton.update(input);
 
-        if (input.isPressed(Input.CONTROL_PLAY) || (hoveringPlay && input.clicked(MouseButton.PRIMARY))) {
+        if (input.isPressed(Input.CONTROL_PLAY) || playButton.isClicked()) {
             return GameState.STATE_INGAME;
         }
-        if (input.isPressed(Input.CONTROL_QUIT) || (hoveringQuit && input.clicked(MouseButton.PRIMARY))) {
+        if (input.isPressed(Input.CONTROL_QUIT) || quitButton.isClicked()) {
             return GameState.STATE_QUIT;
         }
 

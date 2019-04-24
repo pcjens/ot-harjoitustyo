@@ -3,7 +3,7 @@ package otm.roguesque.game.entities;
 public class Player extends Entity {
 
     private boolean[] tilesInLOS;
-    private boolean[] tilesPreviouslyInLOS;
+    private boolean[] uncoveredTiles;
     private int sightDistance = 5;
 
     public Player() {
@@ -25,15 +25,24 @@ public class Player extends Entity {
         }
     }
 
-    public boolean hasBeenInLineOfSight(int x, int y) {
-        if (tilesPreviouslyInLOS != null) {
-            return tilesPreviouslyInLOS[x + y * dungeon.getWidth()];
+    public boolean isUncovered(int x, int y) {
+        if (uncoveredTiles != null) {
+            return uncoveredTiles[x + y * dungeon.getWidth()];
         } else {
             return false;
         }
     }
 
-    public void recalculateLineOfSight() {
+    public void resetUncovered() {
+        if (uncoveredTiles == null) {
+            return;
+        }
+        for (int i = 0; i < uncoveredTiles.length; i++) {
+            uncoveredTiles[i] = false;
+        }
+    }
+
+    public void recalculateLineOfSight(boolean ignoreDistance) {
         if (dungeon == null) {
             return;
         }
@@ -42,11 +51,11 @@ public class Player extends Entity {
         boolean[] newLOS = new boolean[width * height];
         if (tilesInLOS == null || tilesInLOS.length != width * height) {
             tilesInLOS = new boolean[width * height];
-            tilesPreviouslyInLOS = new boolean[width * height];
+            uncoveredTiles = new boolean[width * height];
         }
         for (int scanY = 0; scanY < height; scanY++) {
             for (int scanX = 0; scanX < width; scanX++) {
-                updateLOS(newLOS, scanX, scanY, width, height);
+                updateLOS(newLOS, ignoreDistance ? Integer.MAX_VALUE : sightDistance, scanX, scanY, width, height);
                 tilesInLOS[scanX + scanY * width] = false;
             }
         }
@@ -57,12 +66,12 @@ public class Player extends Entity {
         }
     }
 
-    private void updateLOS(boolean[] newLOS, int x, int y, int width, int height) {
+    private void updateLOS(boolean[] newLOS, int maxDist, int x, int y, int width, int height) {
         int index = x + y * width;
         int dx = x - getX();
         int dy = y - getY();
         double dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < sightDistance && !intersecting(getX(), getY(), x, y)) {
+        if (dist < maxDist && !intersecting(getX(), getY(), x, y)) {
             newLOS[index] = true;
         }
     }
@@ -75,7 +84,7 @@ public class Player extends Entity {
                 int yy = y + yOffset;
                 if (xx >= 0 && xx < width && yy >= 0 && yy < height && newLOS[xx + yy * width]) {
                     tilesInLOS[index] = true;
-                    tilesPreviouslyInLOS[index] = true;
+                    uncoveredTiles[index] = true;
                 }
             }
         }

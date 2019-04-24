@@ -31,7 +31,7 @@ public class Item extends Entity {
 
         if (rand.nextBoolean()) {
             attackBoost = rand.nextInt(1 + level) + 1;
-            String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length, attackBoost - 1)];
+            String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length - 1, attackBoost - 1)];
             String baseName = OFFENSIVE_BASE_NAMES[rand.nextInt(OFFENSIVE_BASE_NAMES.length)];
             String feature = OFFENSIVE_SUFFIXES[rand.nextInt(OFFENSIVE_SUFFIXES.length)];
             name = quality + " " + baseName;
@@ -41,7 +41,7 @@ public class Item extends Entity {
             }
         } else {
             defenseBoost = rand.nextInt(1 + level) + 1;
-            String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length, defenseBoost - 1)];
+            String quality = GENERAL_PREFIXES[Math.min(GENERAL_PREFIXES.length - 1, defenseBoost - 1)];
             String baseName = DEFENSIVE_BASE_NAMES[rand.nextInt(DEFENSIVE_BASE_NAMES.length)];
             String feature = DEFENSIVE_SUFFIXES[rand.nextInt(DEFENSIVE_SUFFIXES.length)];
             name = quality + " " + baseName + " of " + feature;
