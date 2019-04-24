@@ -5,10 +5,10 @@ kaikenlaisia vastustajia vastaan. Peli toimii harjoitustyönä
 Ohjelmistotekniikan kurssille.
 
 ## Dokumentaatio
+- [Käyttöohje](dokumentaatio/manual.md)
 - [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
-- [Tuntikirjanpito](dokumentaatio/tuntikirjanpito.md)
-- [Manuaali](dokumentaatio/manual.md)
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
+- [Työaikakirjanpito](dokumentaatio/tuntikirjanpito.md)
 
 ## Releaset
 - [Viikko 5 (v0.1)](https://github.com/pcjens/otm-roguesque/releases/tag/v0.1)
@@ -18,15 +18,21 @@ Ohjelmistotekniikan kurssille.
 ```sh
 mvn compile exec:java -Dexec.mainClass=otm.roguesque.Main
 ```
-Tai alternatiivisesti, jar-tiedoston käynnistämällä, kuten selitetty alla.
+Tai alternatiivisesti, jar-tiedoston käynnistämällä, kuten selitetty
+alla.
 
 ### Suoritettavan jar-arkiston luominen
 ```sh
 mvn package
 ```
-Jar-arkisto luodaan polkuun [`target/Roguesque-0.2-SNAPSHOT.jar`](target/Roguesque-0.2-SNAPSHOT.jar). Luodun jar-arkiston voi suorittaa komennolla `java -jar target/Roguesque-0.2-SNAPSHOT.jar`.
+Jar-arkisto luodaan polkuun
+[`target/Roguesque-0.2-SNAPSHOT.jar`](target/Roguesque-0.2-SNAPSHOT.jar). Luodun
+jar-arkiston voi suorittaa komennolla `java -jar
+target/Roguesque-0.2-SNAPSHOT.jar`.
 
-Skripti `build.sh` sisältää jar-arkiston luomisen lisäksi testaamisen, kattavuusraportin luomisen, sekä checkstylen suorittamisen. Tämä varmistaa, että luotu ohjelma läpäisee testit.
+Skripti `build.sh` sisältää jar-arkiston luomisen lisäksi testaamisen,
+kattavuusraportin luomisen, sekä checkstylen suorittamisen. Tämä
+varmistaa, että luotu ohjelma läpäisee testit.
 ```sh
 sh build.sh
 ```
@@ -40,7 +46,8 @@ mvn test
 ```sh
 mvn test jacoco:report
 ```
-Tulos löytyy tiedostosta [`target/site/jacoco/index.html`](target/site/jacoco/index.html).
+Tulos löytyy tiedostosta
+[`target/site/jacoco/index.html`](target/site/jacoco/index.html).
 
 #### Checkstyle
 Koodin laatutarkastukset voi suorittaa seuraavalla komennolla:
