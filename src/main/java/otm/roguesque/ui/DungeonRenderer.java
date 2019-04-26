@@ -143,7 +143,9 @@ public class DungeonRenderer {
                 if (entity != null && (player.inLineOfSight(x, y) || entity instanceof Door)) {
                     drawEntity(ctx, tileSize, entity, drawX, drawY);
                 }
-                drawFog(ctx, !player.inLineOfSight(x, y), drawX, drawY, tileSize);
+                double distanceFromPlayer = Math.min(player.getSightDistance(), Math.sqrt(Math.pow(player.getX() - x, 2) + Math.pow(player.getY() - y, 2)));
+                double visibility = Math.pow(Math.min(1, 1 - (distanceFromPlayer - 2.4) / (player.getSightDistance() - 2.4)), 2);
+                drawFog(ctx, !player.inLineOfSight(x, y) ? 0 : visibility, drawX, drawY, tileSize);
             }
         }
     }
@@ -154,11 +156,11 @@ public class DungeonRenderer {
         }
     }
 
-    private void drawFog(GraphicsContext ctx, boolean inFog, double drawX, double drawY, double tileSize) {
-        if (!inFog) {
+    private void drawFog(GraphicsContext ctx, double visibility, double drawX, double drawY, double tileSize) {
+        if (visibility == 1) {
             return;
         }
-        ctx.setFill(new Color(0.0, 0.0, 0.0, 0.5));
+        ctx.setFill(new Color(0.0, 0.0, 0.0, Math.max(0, Math.min(0.5, 0.5 - visibility * 0.5))));
         ctx.fillRect(drawX, drawY, tileSize, tileSize);
     }
 

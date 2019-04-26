@@ -9,13 +9,22 @@ public class Player extends Entity {
 
     private boolean[] tilesInLOS;
     private boolean[] uncoveredTiles;
-    private int sightDistance = 5;
+    private int sightDistance = 7;
 
     /**
      * Luo uuden pelaaja-olion.
      */
     public Player() {
         super(10, 2, 1, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/Player.png");
+    }
+
+    /**
+     * Palauttaa etäisyyden, kuinka pitkälle pelaaja näkee vastustajat.
+     *
+     * @return Näköetäisyys.
+     */
+    public int getSightDistance() {
+        return sightDistance;
     }
 
     /**
