@@ -178,6 +178,10 @@ public class InGameState implements GameState {
         }
         dungeon.cleanupDeadEntities();
         player.recalculateLineOfSight(false);
+        // Player moved -> reset selection, this feels more "right"
+        // according to playtesters.
+        selectionX = -1;
+        selectionY = -1;
         return false;
     }
 
