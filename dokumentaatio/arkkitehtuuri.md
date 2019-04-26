@@ -18,7 +18,10 @@ käsittelyn. Eventeistä tieto siirtyy `Input`-luokkaan, joka toimii
 abstraktiona hiirelle ja näppäimistölle. `RoguesqueApp` sisältää myös
 taulukon `GameState`:ja, jotka kuvaavat erilaisia peli-tiloja. Aina on
 jokin aktiivinen peli-tila, ja tälle lähetetään piirto- ja
-päivityskutsut.
+päivityskutsut. Piirtokutsuissa annetaan parametrina
+`GraphicsContext`, jolla voi tehdä piirtokutsuja, ja päivityskutsuissa
+annetaan parametrina `Input`, jolloin peli-tila voi reagoida
+näppäimistön tai hiiren tilaan.
 
 ## Peli-tilat
 `InGameState`, `IntroState`, `MainMenuState` ja `GameOverState` ovat
@@ -28,7 +31,7 @@ GameState-rajapinnan, joka sisältää funktiot `draw`, `update` ja
 `initialize`.
 
 ## Pelin ydin
-`InGameState` on itse pelin ydin. Se luo ja kutsuu `Dungeon`ia, joka
+`InGameState` on itse pelin ydin. Se luo ja kutsuu `Dungeon`:ia, joka
 sisältää tiedot kentän koostavista laatoista, sekä listan kentällä
 oleskelevista eliöístä. `DungeonRenderer` hoitaa pelimaailman
 piirtämisen perustuen `Dungeon`:n dataan. `InGameState`:n tekemät
@@ -36,7 +39,7 @@ kutsut näkyvät sekvenssikaaviossa, mutta informaalimmin:
 `update`-funktiossa `InGameState` tarkistaa painaako pelaaja mitään
 nappeja jotka liikuttaisi pelaajaa, mikäli painaa, pelaaja liikkuu
 kutsulla `Player`:n, ja sitten koska pelaaja liikkui, `InGameState`
-kutsuu myös `Dungeon`:n vuoron prosessointifunktiota. Tämän jälkeen
+kutsuu myös `Dungeon`:n vuoro-prosessointi-funktiota. Tämän jälkeen
 `InGameState` vielä tarkistaa, onko käyttöliittymän nappeja painettu,
 tai ruutuja valittu, ja päivittää käyttöliittymää pelitilanteen
 mukaan. Piirtäminen tapahtuu `draw`-funktiossa, missä `InGameState`
@@ -54,3 +57,16 @@ käytännössä tarkoittaa niiden poistamista `Entity`-listalta.
 ![Tässä on kuva joka esittää ohjelman kulkua sekvenssikaaviona. Jos et
 näe kuvaa, se ei luultavasti ole ladannut tai tule
 latautumaan.](sequence-diagram.png)
+
+## Loppuhuomioita
+
+Pelin tila on käyttöliittymäluokan sisällä, mikä voi vaikuttaa
+ensisilmäyksellä pahalta logiikan ja presentaation
+sekoittamiselta. Perustelen tämän kuitenkin sillä, että tämä välttää
+turhaa tiedon passailua ympäri koodia, ja pelit ovat jokatapauksessa
+hyvin riippuvaisia käyttöliittymästään, joten koodin kytkemistä on
+vaikea välttää.
+
+Käyttöliittymässä ei ole käytetty JavaFX:n ominaisuuksia, lähinnä sen
+takia, että ne toimivat ns. "retained GUI" periaatteella, kun taas
+suunnittelin pelin käyttöliittymän "immediate mode GUI" periaatteilla.
