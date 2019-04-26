@@ -26,4 +26,6 @@
 | 24.4. |  1 | Refaktorointia, kehitystyökalujen ja ohjeiden kirjoittamista |
 | 24.4. |  2 | Uusien grafiikkojen piirtämistä |
 | 24.4. |  2 | JavaDoc-dokumentaation kirjoittamista |
-| Yht.  | 41 | |
+| 25.4. |  2 | Näkyvyysalgoritmin parannuskokeiluja ja väsynyttä koodaamista joka ei koskaan päätynyt commitiin |
+| 26.4. |  1 | Näkyvyyden renderöinnin parannus |
+| Yht.  | 44 | |
