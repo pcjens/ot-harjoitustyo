@@ -28,4 +28,5 @@
 | 24.4. |  2 | JavaDoc-dokumentaation kirjoittamista |
 | 25.4. |  2 | Näkyvyysalgoritmin parannuskokeiluja ja väsynyttä koodaamista joka ei koskaan päätynyt commitiin |
 | 26.4. |  1 | Näkyvyyden renderöinnin parannus |
-| Yht.  | 44 | |
+| 26.4. |  1 | Arkkitehtuuridokumentin kirjoittamista, käyttöliittymän tweakkausta ja releasen tekoa |
+| Yht.  | 45 | |
