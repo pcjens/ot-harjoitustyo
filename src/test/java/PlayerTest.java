@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.dungeon.DungeonGenerator;
 import otm.roguesque.game.entities.Player;
 
 public class PlayerTest {
@@ -15,7 +16,7 @@ public class PlayerTest {
     public void init() {
         GlobalRandom.reset(12);
         player = new Player();
-        dungeon = new Dungeon(1);
+        dungeon = DungeonGenerator.generateNewDungeon(1);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
         player.recalculateLineOfSight(true);
     }
@@ -89,12 +90,16 @@ public class PlayerTest {
 
     @Test
     public void collisionWorksWhenItHappens() {
+        int originalY = player.getY();
         Assert.assertFalse(player.move(0, -1));
+        Assert.assertTrue(player.getY() == originalY);
     }
 
     @Test
     public void collisionWorksWhenItDoesNotHappen() {
+        int originalY = player.getY();
         Assert.assertTrue(player.move(0, 1));
+        Assert.assertTrue(player.getY() == originalY + 1);
     }
 
     @Test
