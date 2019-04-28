@@ -238,7 +238,7 @@ public class InGameState implements GameState {
         seedCopyButton.update(input);
         dungeonRegenerateButton.update(input);
 
-        String currentSeed = Integer.toString(GlobalRandom.getSeed());
+        String currentSeed = Long.toString(GlobalRandom.getSeed());
         if (seedCopyButton.isClicked()) {
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(currentSeed), null);
         }
