@@ -8,6 +8,7 @@ Ohjelmistotekniikan kurssille.
 - [Käyttöohje](dokumentaatio/manual.md)
 - [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
 - [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
+- [Testausdokumentti](dokumentaatio/testaus.md)
 - [Työaikakirjanpito](dokumentaatio/tuntikirjanpito.md)
 
 ## Releaset
