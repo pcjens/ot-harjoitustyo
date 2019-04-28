@@ -29,4 +29,5 @@
 | 25.4. |  2 | Näkyvyysalgoritmin parannuskokeiluja ja väsynyttä koodaamista joka ei koskaan päätynyt commitiin |
 | 26.4. |  1 | Näkyvyyden renderöinnin parannus |
 | 26.4. |  1 | Arkkitehtuuridokumentin kirjoittamista, käyttöliittymän tweakkausta ja releasen tekoa |
-| Yht.  | 45 | |
+| 28.4. |  1 | Bugikorjailuja, refaktorointia |
+| Yht.  | 46 | |

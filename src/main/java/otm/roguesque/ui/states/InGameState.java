@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.dungeon.DungeonGenerator;
 import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
@@ -60,7 +61,7 @@ public class InGameState implements GameState {
 
     private void regenerateDungeon(int level, int seed) {
         GlobalRandom.reset(seed);
-        dungeon = new Dungeon(level);
+        dungeon = DungeonGenerator.generateNewDungeon(level);
         dungeonRenderer.loadDungeon(dungeon);
         dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
         player.resetUncovered();
