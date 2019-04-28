@@ -8,6 +8,7 @@ import otm.roguesque.game.entities.Goblin;
 import otm.roguesque.game.entities.Item;
 import otm.roguesque.game.entities.NullEntity;
 import otm.roguesque.game.entities.Rat;
+import otm.roguesque.game.entities.Skeleton;
 
 /**
  * Tämä luokka luo uusia Dungeoneita. Käytännössä tämä on vain yhden funktion
@@ -34,6 +35,8 @@ public class DungeonGenerator {
 
         public Entity createEntity() {
             switch (this) {
+                case Skeleton:
+                    return new Skeleton();
                 case Goblin:
                     return new Goblin();
                 case Rat:

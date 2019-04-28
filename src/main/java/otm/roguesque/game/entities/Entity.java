@@ -1,6 +1,7 @@
 package otm.roguesque.game.entities;
 
 import javafx.scene.image.Image;
+import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.util.Vector;
 
@@ -222,8 +223,10 @@ public abstract class Entity {
         return moveAndCollide(newX, newY);
     }
 
-    private void takeDamage(int attack) {
-        this.health -= Math.max(0, attack - this.defense);
+    private void takeDamage(int otherAttack) {
+        int atkRoll = otherAttack <= 0 ? otherAttack : (GlobalRandom.get().nextInt(otherAttack) + 1);
+        int defRoll = this.defense <= 0 ? this.defense : (GlobalRandom.get().nextInt(this.defense) + 1);
+        this.health -= Math.max(0, atkRoll - defRoll);
     }
 
     private boolean hitAndCollide(int newX, int newY) {

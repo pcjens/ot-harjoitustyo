@@ -28,7 +28,9 @@ public class Item extends Entity {
     }
 
     private static final ItemData[] ITEMS = new ItemData[]{
-        new ItemData("FireWhip", "The Fiery Whip\n  of Balgor", "Pretty hot.\n\nSo hot you\nmight get\nburned.", 2, -1)
+        new ItemData("FireWhip", "The Fiery Whip\n  of Balgor", "Pretty hot.\n\nSo hot you\nmight get\nburned.", 2, -1),
+        new ItemData("IronSword", "    Sword\n   of Iron", "It's a sword.\n\nNothing\nspecial.", 1, 0),
+        new ItemData("WoodenShield", "   Shield\n   of Wood", "It's a shield.\n\nNothing\nspecial.", 0, 1)
     };
 
     private int attackBoost = 0;

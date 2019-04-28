@@ -56,7 +56,7 @@ public class InGameState implements GameState {
     @Override
     public void initialize() {
         player = new Player();
-        regenerateDungeon(4, GlobalRandom.get().nextInt());
+        regenerateDungeon(6, GlobalRandom.get().nextInt());
     }
 
     private void regenerateDungeon(int level, int seed) {
