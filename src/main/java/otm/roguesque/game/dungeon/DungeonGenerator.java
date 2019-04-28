@@ -3,7 +3,9 @@ package otm.roguesque.game.dungeon;
 import java.util.ArrayList;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.entities.Door;
+import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Item;
+import otm.roguesque.game.entities.NullEntity;
 import otm.roguesque.game.entities.Rat;
 
 /**
@@ -15,6 +17,29 @@ import otm.roguesque.game.entities.Rat;
  * @author Jens Pitkänen
  */
 public class DungeonGenerator {
+
+    private enum EnemyType {
+        Rat(1), Goblin(2), Skeleton(3);
+
+        int value;
+
+        private EnemyType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public Entity createEntity() {
+            switch (this) {
+                case Rat:
+                    return new Rat();
+                default:
+                    return new NullEntity();
+            }
+        }
+    }
 
     private enum RoomType {
         StartRoom, EndRoom, MonsterRoom, ItemRoom
@@ -48,8 +73,7 @@ public class DungeonGenerator {
     private static void generateDungeon() {
         int roomCountX = width / Dungeon.MAX_ROOM_WIDTH;
         int roomCountY = height / Dungeon.MAX_ROOM_HEIGHT;
-        int minimumRooms = (int) Math.ceil(Dungeon.MAX_ROOMS / 3.0);
-        int roomCount = GlobalRandom.get().nextInt(Dungeon.MAX_ROOMS - minimumRooms + 1) + minimumRooms;
+        int roomCount = GlobalRandom.get().nextInt(Dungeon.MAX_ROOMS - Dungeon.MIN_ROOMS + 1) + Dungeon.MIN_ROOMS;
         RoomType[] rooms = generateRoomTypes(roomCount, roomCountX, roomCountY);
         generateRooms(rooms, roomCountX, roomCountY);
     }
@@ -144,7 +168,7 @@ public class DungeonGenerator {
 
     private static RoomType[] generateRoomTypes(int roomCount, int roomCountX, int roomCountY) {
         RoomType[] rooms = new RoomType[roomCountX * roomCountY];
-        int itemRoomCount = 1 + GlobalRandom.get().nextInt(2);
+        int itemRoomCount = roomCount / 5;
         int roomX = GlobalRandom.get().nextInt(roomCountX);
         int roomY = GlobalRandom.get().nextInt(roomCountY);
         RoomType room = RoomType.StartRoom;
@@ -167,14 +191,15 @@ public class DungeonGenerator {
     private static RoomType rollRoom(int roomCount, int itemRoomCount) {
         if (roomCount == 1) {
             return RoomType.EndRoom;
-        } else {
-            int r = GlobalRandom.get().nextInt(roomCount + 1);
-            if (r < itemRoomCount + 1) {
+        } else if (roomCount - itemRoomCount == 1) {
+            return RoomType.ItemRoom;
+        } else if (itemRoomCount > 0) {
+            int r = GlobalRandom.get().nextInt(roomCount);
+            if (r <= itemRoomCount) {
                 return RoomType.ItemRoom;
-            } else {
-                return RoomType.MonsterRoom;
             }
         }
+        return RoomType.MonsterRoom;
     }
 
     private static void addNeighborRooms(ArrayList<Integer> rooms, ArrayList<Integer> visitedRooms, int roomX, int roomY, int roomCountX, int roomCountY) {
@@ -197,10 +222,10 @@ public class DungeonGenerator {
         generateRoomFrame(xOffset, yOffset, roomWidth, roomHeight);
         switch (type) {
             case MonsterRoom:
-                generateRoomEnemies(GlobalRandom.get().nextInt(3) + 2, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
+                generateRoomEnemies(xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case ItemRoom:
-                generateRoomItems(GlobalRandom.get().nextInt(2) + 1, xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
+                generateRoomItems(1 + GlobalRandom.get().nextInt((int) Math.ceil(level / 1.5)), xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case StartRoom:
                 dungeon.setPlayerSpawn(xOffset + 1 + GlobalRandom.get().nextInt(roomWidth - 2), yOffset + 1 + GlobalRandom.get().nextInt(roomHeight - 2));
@@ -239,15 +264,20 @@ public class DungeonGenerator {
         }
     }
 
-    private static void generateRoomEnemies(int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
-        for (int i = 0; i < count; i++) {
+    private static void generateRoomEnemies(int xOffset, int yOffset, int roomWidth, int roomHeight) {
+        int enemyPoints = GlobalRandom.get().nextInt((int) Math.pow(level, 1.2)) + (int) Math.pow(level + 1, 1.3);
+        while (enemyPoints >= 1) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
             int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
-            int enemyType = GlobalRandom.get().nextInt(1);
-            if (enemyType == 0) {
-                dungeon.spawnEntity(new Rat(), x, y);
+            int enemyType = GlobalRandom.get().nextInt(Math.min(Math.max(1, level - 1), EnemyType.values().length));
+            for (int typeIndex = enemyType; typeIndex >= 0; typeIndex--) {
+                EnemyType type = EnemyType.values()[typeIndex];
+                int value = type.getValue();
+                if (value <= enemyPoints) {
+                    enemyPoints -= value;
+                    dungeon.spawnEntity(type.createEntity(), x, y);
+                }
             }
-            // TODO: More enemies.
         }
     }
 

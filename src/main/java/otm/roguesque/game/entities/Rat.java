@@ -13,7 +13,7 @@ public class Rat extends Entity implements AI {
      * Luo uuden rotan.
      */
     public Rat() {
-        super(5, 2, 0, "Rat", "*squeek*", "Small Animals", "/sprites/Rat.png");
+        super(5, 1, 0, "Rat", "*squeek*", "Small Animals", "/sprites/Rat.png");
     }
 
     @Override
@@ -23,9 +23,9 @@ public class Rat extends Entity implements AI {
         int dy = player.getY() - y;
         if (dx > 6 || dy > 6 || GlobalRandom.get().nextBoolean()) {
             int r = GlobalRandom.get().nextInt(4);
-            int x = (int) Math.cos(r * Math.PI / 2.0);
-            int y = (int) Math.sin(r * Math.PI / 2.0);
-            move(x, y);
+            dx = (int) Math.cos(r * Math.PI / 2.0);
+            dy = (int) Math.sin(r * Math.PI / 2.0);
+            move(dx, dy);
         } else {
             if (Math.abs(dx) > Math.abs(dy)) {
                 this.move((int) Math.signum(dx), 0);

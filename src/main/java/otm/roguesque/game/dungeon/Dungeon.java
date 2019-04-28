@@ -19,12 +19,13 @@ import otm.roguesque.game.entities.Player;
  */
 public class Dungeon {
 
-    protected static final int MAX_ROOM_WIDTH = 14;
-    protected static final int MAX_ROOM_HEIGHT = 12;
+    protected static final int MAX_ROOM_WIDTH = 11;
+    protected static final int MAX_ROOM_HEIGHT = 9;
     protected static final int MIN_ROOM_WIDTH = 6;
     protected static final int MIN_ROOM_HEIGHT = 5;
     protected static final int MIN_ROOM_MARGIN = 2;
     protected static final int MAX_ROOMS = 10;
+    protected static final int MIN_ROOMS = 5;
 
     private final boolean[] solid;
     private final TileType[] tiles;
