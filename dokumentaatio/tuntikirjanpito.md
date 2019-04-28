@@ -32,4 +32,5 @@
 | 28.4. |  1 | Bugikorjailuja, refaktorointia |
 |       |  1 | Testausdokumentin kirjoittamista |
 |       |  1 | Luolageneraation uudelleenpainottamista, NullEntityn lisäys |
-| Yht.  | 48 | |
+|       |  2 | Menninkäisten lisäystä, polunetsintäalgoritmin kirjoittamista |
+| Yht.  | 50 | |

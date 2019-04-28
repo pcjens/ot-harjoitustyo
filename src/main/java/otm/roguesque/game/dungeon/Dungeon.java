@@ -1,10 +1,14 @@
 package otm.roguesque.game.dungeon;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashSet;
 import otm.roguesque.game.entities.AI;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
+import otm.roguesque.util.Path;
+import otm.roguesque.util.Pathfinder;
 
 /**
  * Tämä luokka sisältää kaiken, mistä yksi kenttä pelissä koostuu. Käytännössä
@@ -28,6 +32,7 @@ public class Dungeon {
     protected static final int MIN_ROOMS = 5;
 
     private final boolean[] solid;
+    private final boolean[] doored;
     private final TileType[] tiles;
     private final int width;
     private final int height;
@@ -52,6 +57,7 @@ public class Dungeon {
         this.entities = new ArrayList();
         this.tiles = new TileType[width * height];
         this.solid = new boolean[width * height];
+        this.doored = new boolean[width * height];
     }
 
     /**
@@ -178,7 +184,7 @@ public class Dungeon {
         if (x < 0 || x >= width || y < 0 || y >= height || tiles[x + y * width] == null) {
             return true;
         }
-        return solid[x + y * width];
+        return solid[x + y * width] || doored[x + y * width];
     }
 
     /**
@@ -188,6 +194,8 @@ public class Dungeon {
      * @param y Tutkitun ruudun y-koordinaatti.
      * @return Olio annetussa ruudussa, voi olla null.
      */
+    // TODO: Optimize this further, this is called a lot
+    // Also could just remove the `doored` array if this was better.
     public Entity getEntityAt(int x, int y) {
         for (Entity e : entities) {
             if (e.getX() == x && e.getY() == y && !e.isDead()) {
@@ -195,6 +203,62 @@ public class Dungeon {
             }
         }
         return null;
+    }
+
+    /**
+     * Palauttaa lähimmän olion joka on kyseistä tyyppiä.
+     *
+     * @param type Haetun olion tyyppi.
+     * @param x Haun aloituksen x-koordinaatti.
+     * @param y Haun aloituksen y-koordinaatti.
+     * @return Lähin olio annettuihin koordinaatteihin.
+     */
+    public Entity getClosestEntityOfType(Class<?> type, int x, int y) {
+        HashSet<Integer> visited = new HashSet();
+        ArrayDeque<Integer> queue = new ArrayDeque();
+        queue.add(x + y * width);
+        while (!queue.isEmpty()) {
+            int current = queue.pollFirst();
+            if (visited.contains(current) || solid[current]) {
+                continue;
+            }
+            visited.add(current);
+            Entity entity = getEntityAt(current % width, current / width);
+            if (entity != null && entity.getClass() == type) {
+                return entity;
+            }
+            addNeighboringTiles(queue, current);
+        }
+        return null;
+    }
+
+    private void addNeighboringTiles(ArrayDeque<Integer> queue, int index) {
+        int x = index % width;
+        int y = index / width;
+        if (x > 0) {
+            queue.add(index - 1);
+        }
+        if (x < width - 1) {
+            queue.add(index + 1);
+        }
+        if (y > 0) {
+            queue.add(index - height);
+        }
+        if (y < height - 1) {
+            queue.add(index + width);
+        }
+    }
+
+    /**
+     * Palauttaa vektorin suuntaan, johon koordinaateista pitäisi siirtyä, jotta
+     * seuraisi lyhintä reittiä sen luokse, ja vektorin pituus on reitin pituus.
+     *
+     * @param from Polkua seuraava olio.
+     * @param to Olio jota seurataan.
+     * @return Polku olioon.
+     */
+    public Path getPathTo(Entity from, Entity to) {
+        return Pathfinder.findPath(from.getX(), from.getY(), to.getX(), to.getY(), solid, width, height);
     }
 
     /**
@@ -237,7 +301,7 @@ public class Dungeon {
         entities.removeIf((entity) -> {
             boolean dead = entity.isDead();
             if (dead && entity instanceof Door) {
-                solid[entity.getX() + entity.getY() * width] = false;
+                doored[entity.getX() + entity.getY() * width] = false;
             }
             return dead;
         });
@@ -270,14 +334,14 @@ public class Dungeon {
     protected void updateSolidity() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                if (tiles[x + y * width] == TileType.Wall) {
+                if (tiles[x + y * width] == TileType.Wall || tiles[x + y * width] == null) {
                     this.solid[x + y * width] = true;
                 }
             }
         }
         for (Entity e : entities) {
             if (e instanceof Door) {
-                this.solid[e.getX() + e.getY() * width] = true;
+                this.doored[e.getX() + e.getY() * width] = true;
             }
         }
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
+import otm.roguesque.game.entities.Goblin;
 import otm.roguesque.game.entities.Item;
 import otm.roguesque.game.entities.NullEntity;
 import otm.roguesque.game.entities.Rat;
@@ -19,7 +20,7 @@ import otm.roguesque.game.entities.Rat;
 public class DungeonGenerator {
 
     private enum EnemyType {
-        Rat(1), Goblin(2), Skeleton(3);
+        Rat(2), Goblin(3), Skeleton(4);
 
         int value;
 
@@ -33,6 +34,8 @@ public class DungeonGenerator {
 
         public Entity createEntity() {
             switch (this) {
+                case Goblin:
+                    return new Goblin();
                 case Rat:
                     return new Rat();
                 default:
@@ -265,8 +268,8 @@ public class DungeonGenerator {
     }
 
     private static void generateRoomEnemies(int xOffset, int yOffset, int roomWidth, int roomHeight) {
-        int enemyPoints = GlobalRandom.get().nextInt((int) Math.pow(level, 1.2)) + (int) Math.pow(level + 1, 1.3);
-        while (enemyPoints >= 1) {
+        int enemyPoints = GlobalRandom.get().nextInt((int) Math.pow(level, 1.2) + 1) + (int) Math.pow(level + 2, 1.3);
+        while (enemyPoints >= EnemyType.Rat.getValue()) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
             int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
             int enemyType = GlobalRandom.get().nextInt(Math.min(Math.max(1, level - 1), EnemyType.values().length));

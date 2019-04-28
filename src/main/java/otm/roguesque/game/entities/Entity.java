@@ -2,6 +2,7 @@ package otm.roguesque.game.entities;
 
 import javafx.scene.image.Image;
 import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.util.Vector;
 
 /**
  * Pohjaluokka kaikille pelin olioille.
@@ -37,6 +38,31 @@ public abstract class Entity {
 
     protected final void loadImage(String spritePath) {
         this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
+    }
+
+    /**
+     * Palauttaa vektorin toiseen olioon. Eli: jos palautetun vektorin
+     * x-komponentin lisää tämän olion x-koordinaattiin, ja y-komponentin
+     * y-koordinaattiin, saa otherEntityn koordinaatit.
+     *
+     * @param otherEntity Toinen olio.
+     * @return Vektori tästä oliosta toiseen.
+     */
+    public Vector getVectorTo(Entity otherEntity) {
+        return new Vector(otherEntity.getX() - getX(), otherEntity.getY() - getY());
+    }
+
+    /**
+     * Palauttaa vektorin siihen suuntaan, mihin olion pitäisi liikkua, jotta se
+     * siirtyisi kohti otherEntityä. Vektorin suunta on liikkumasuunta, vektorin
+     * pituus on löydetyn reitin pituus.
+     *
+     * @param otherEntity Toinen olio.
+     * @return Vektori suuntaan, mihin olion pitäisi siirtyä päätyäkseen toisen
+     * luokse.
+     */
+    public Vector pathfindTo(Entity otherEntity) {
+        return new Vector(otherEntity.getX() - getX(), otherEntity.getY() - getY());
     }
 
     /**

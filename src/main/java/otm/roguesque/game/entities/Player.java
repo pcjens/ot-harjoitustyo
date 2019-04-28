@@ -5,17 +5,47 @@ package otm.roguesque.game.entities;
  *
  * @author Jens Pitkänen
  */
-public class Player extends Entity {
+public class Player extends Entity implements AI {
 
     private boolean[] tilesInLOS;
     private boolean[] uncoveredTiles;
     private int sightDistance = 7;
+    private int autoHealCooldown = 10;
+    private int currentAutoHealCooldown = autoHealCooldown;
 
     /**
      * Luo uuden pelaaja-olion.
      */
     public Player() {
         super(10, 2, 1, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/Player.png");
+    }
+
+    @Override
+    public void processRound() {
+        if (health < maxHealth && --currentAutoHealCooldown <= 0) {
+            health = Math.min(maxHealth, health + maxHealth / 10);
+            currentAutoHealCooldown = autoHealCooldown;
+        }
+    }
+
+    /**
+     * Palauttaa vuoromäärän joka pelaajalla menee saada passiivisesti 10%
+     * elämäpisteistään takaisin.
+     *
+     * @returns "Autoheal" vuoromäärä.
+     */
+    public int getAutoHealCooldown() {
+        return autoHealCooldown;
+    }
+
+    /**
+     * Asettaa vuoromäärän joka pelaajalla menee saada passiivisesti 10%
+     * elämäpisteistään takaisin.
+     *
+     * @param autoHealCooldown Uusi "autoheal" vuoromäärä.
+     */
+    public void setAutoHealCooldown(int autoHealCooldown) {
+        this.autoHealCooldown = autoHealCooldown;
     }
 
     /**
