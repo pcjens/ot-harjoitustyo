@@ -30,4 +30,5 @@
 | 26.4. |  1 | Näkyvyyden renderöinnin parannus |
 |       |  1 | Arkkitehtuuridokumentin kirjoittamista, käyttöliittymän tweakkausta ja releasen tekoa |
 | 28.4. |  1 | Bugikorjailuja, refaktorointia |
-| Yht.  | 46 | |
+|       |  1 | Testausdokumentin kirjoittamista |
+| Yht.  | 47 | |
