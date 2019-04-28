@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
@@ -40,9 +41,9 @@ public class InGameState implements GameState {
     private int selectionY;
     private double tileSize = 32.0;
 
-    private final Button nextLevelButton = new Button("Move to the next floor?", 0, 0, 290, 45, 0);
-    private final Button seedCopyButton = new Button("Copy seed", 220, 60, 120, 35, 0, 9);
-    private final Button dungeonRegenerateButton = new Button("Regenerate level", 360, 60, 195, 35, 0, 9);
+    private final Button nextLevelButton = new Button(new KeyCode[]{KeyCode.M}, "Move to the next floor?", 0, 0, 290, 45, 0);
+    private final Button seedCopyButton = new Button(new KeyCode[]{KeyCode.C}, "Copy seed", 220, 60, 120, 35, 0, 9);
+    private final Button dungeonRegenerateButton = new Button(new KeyCode[]{KeyCode.R}, "Regenerate level", 360, 60, 195, 35, 0, 9);
 
     /**
      * Luo uuden instanssin tästä tilasta. Luodaan kerran peliä käynnistäessä.
@@ -66,6 +67,7 @@ public class InGameState implements GameState {
         player.recalculateLineOfSight(true);
         statusLine = "Loading...";
         descriptionText = null;
+        descriptionBoxFadeAway = 0;
         selectionX = -1;
         selectionY = -1;
     }
@@ -142,7 +144,7 @@ public class InGameState implements GameState {
 
         if (dungeon.canFinish()) {
             nextLevelButton.update(input);
-            if (nextLevelButton.isClicked() || input.isPressed(Input.CONTROL_NEXT_LEVEL)) {
+            if (nextLevelButton.isClicked()) {
                 regenerateDungeon(dungeon.getLevel() + 1, GlobalRandom.get().nextInt());
             }
         }

@@ -20,14 +20,6 @@ public class Input {
     };
 
     /**
-     * Pelin käynnistysnappi.
-     */
-    public static final KeyCode[] CONTROL_PLAY = new KeyCode[]{KeyCode.P};
-    /**
-     * Pelin sulkemisnappi.
-     */
-    public static final KeyCode[] CONTROL_QUIT = new KeyCode[]{KeyCode.Q};
-    /**
      * Intron skippaamisnappi.
      */
     public static final KeyCode[] CONTROL_SKIP_INTRO = new KeyCode[]{
@@ -58,10 +50,6 @@ public class Input {
     public static final KeyCode[] CONTROL_MOVE_RIGHT = new KeyCode[]{
         KeyCode.D, KeyCode.RIGHT, KeyCode.L
     };
-    /**
-     * Nappi jolla siirrytään seuraavaan tasoon (mikäli tikkaissa).
-     */
-    public static final KeyCode[] CONTROL_NEXT_LEVEL = new KeyCode[]{KeyCode.M};
 
     private final ArrayList<KeyCode> keysPressed = new ArrayList();
     private final ArrayList<MouseButton> mouseButtonsPressed = new ArrayList();

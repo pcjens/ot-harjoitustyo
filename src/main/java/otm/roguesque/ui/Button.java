@@ -1,6 +1,7 @@
 package otm.roguesque.ui;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 
@@ -11,6 +12,7 @@ import javafx.scene.paint.Color;
  */
 public class Button {
 
+    private KeyCode[] keys;
     private String text;
     private int x;
     private int y;
@@ -24,6 +26,7 @@ public class Button {
     /**
      * Luo uuden napin.
      *
+     * @param keys Näppäimet jotka toimivat napin aktivointinappeina.
      * @param text Napin teksti.
      * @param x Napin x-koordinaatti.
      * @param y Napin y-koordinaatti.
@@ -32,7 +35,8 @@ public class Button {
      * @param hotkeyUnderlineOffset Kuinka monta pikseliä alaviivaa siirretään
      * oikealle?
      */
-    public Button(String text, int x, int y, int width, int height, int hotkeyUnderlineOffset) {
+    public Button(KeyCode[] keys, String text, int x, int y, int width, int height, int hotkeyUnderlineOffset) {
+        this.keys = keys;
         this.text = text;
         this.x = x;
         this.y = y;
@@ -45,6 +49,7 @@ public class Button {
     /**
      * Luo uuden napin.
      *
+     * @param keys Näppäimet jotka toimivat napin aktivointinappeina.
      * @param text Napin teksti.
      * @param x Napin x-koordinaatti.
      * @param y Napin y-koordinaatti.
@@ -55,7 +60,8 @@ public class Button {
      * @param padding Kuinka monta pikseliä tekstin ja napin reunojen välillä
      * on?
      */
-    public Button(String text, int x, int y, int width, int height, int hotkeyUnderlineOffset, int padding) {
+    public Button(KeyCode[] keys, String text, int x, int y, int width, int height, int hotkeyUnderlineOffset, int padding) {
+        this.keys = keys;
         this.text = text;
         this.x = x;
         this.y = y;
@@ -72,7 +78,7 @@ public class Button {
      */
     public void update(Input input) {
         hovered = input.containsMouse(x, y, width, height);
-        clicked = hovered && input.clicked(MouseButton.PRIMARY);
+        clicked = input.isPressed(keys) || (hovered && input.clicked(MouseButton.PRIMARY));
     }
 
     /**

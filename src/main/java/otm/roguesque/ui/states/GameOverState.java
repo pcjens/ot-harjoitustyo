@@ -2,6 +2,7 @@ package otm.roguesque.ui.states;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
@@ -15,8 +16,8 @@ import otm.roguesque.ui.RoguesqueApp;
  */
 public class GameOverState implements GameState {
 
-    private Button replayButton = new Button("Replay", 180, 280, 100, 45, 20);
-    private Button quitButton = new Button("Quit", 300, 280, 80, 45, 0);
+    private Button replayButton = new Button(new KeyCode[]{KeyCode.P}, "Replay", 180, 280, 100, 45, 20);
+    private Button quitButton = new Button(new KeyCode[]{KeyCode.Q}, "Quit", 300, 280, 80, 45, 0);
 
     @Override
     public void initialize() {
@@ -41,10 +42,10 @@ public class GameOverState implements GameState {
         replayButton.update(input);
         quitButton.update(input);
 
-        if (input.isPressed(Input.CONTROL_PLAY) || replayButton.isClicked()) {
+        if (replayButton.isClicked()) {
             return GameState.STATE_INGAME;
         }
-        if (input.isPressed(Input.CONTROL_QUIT) || quitButton.isClicked()) {
+        if (quitButton.isClicked()) {
             return GameState.STATE_QUIT;
         }
         return -1;
