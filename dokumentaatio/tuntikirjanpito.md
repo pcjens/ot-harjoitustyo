@@ -31,4 +31,5 @@
 |       |  1 | Arkkitehtuuridokumentin kirjoittamista, käyttöliittymän tweakkausta ja releasen tekoa |
 | 28.4. |  1 | Bugikorjailuja, refaktorointia |
 |       |  1 | Testausdokumentin kirjoittamista |
-| Yht.  | 47 | |
+|       |  1 | Luolageneraation uudelleenpainottamista, NullEntityn lisäys |
+| Yht.  | 48 | |
