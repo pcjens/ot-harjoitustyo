@@ -4,8 +4,8 @@ import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.util.Path;
 
 /**
- * Menninkäinen. Syö rottia kun tulee nälkä, muulloin lähinnä käy pelaajan
- * kimppuun.
+ * Luuranko. Seuraa pelaajaa maailman ääriin asti, mutta jaksaa askeltaa vain
+ * joka toisella vuorolla.
  *
  * @author Jens Pitkänen
  */
@@ -15,10 +15,10 @@ public class Skeleton extends Entity implements AI {
     private boolean offRound = false;
 
     /**
-     * Luo uuden menninkäisen.
+     * Luo uuden luurangon.
      */
     public Skeleton() {
-        super(8, 2, 1, "Skeleton", "Spooky.\n And scary.", "Skeletons", "/sprites/Skeleton.png");
+        super(10, 3, 0, "Skeleton", "Spooky.\n And scary.", "Skeletons", "/sprites/Skeleton.png");
     }
 
     @Override

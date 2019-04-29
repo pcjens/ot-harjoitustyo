@@ -1,8 +1,12 @@
 package otm.roguesque.game.entities;
 
+import java.util.ArrayList;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.ui.Notification;
 import otm.roguesque.util.Vector;
 
 /**
@@ -25,6 +29,8 @@ public abstract class Entity {
     protected Image image;
     protected Entity lastEntityInteractedWith;
 
+    private ArrayList<Notification> notifications = new ArrayList();
+
     protected Entity(int maxHealth, int attack, int defense, String name, String description, String friendlyGroup, String spritePath) {
         this.maxHealth = this.health = maxHealth;
         this.attack = attack;
@@ -39,6 +45,27 @@ public abstract class Entity {
 
     protected final void loadImage(String spritePath) {
         this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
+    }
+
+    /**
+     * Piirtää notifikaatiot.
+     *
+     * @param ctx Piirtokonteksti.
+     * @param offsetX
+     * @param offsetY
+     * @param deltaTime Delta-aika.
+     * @param tileSize
+     */
+    public void drawNotifications(GraphicsContext ctx, int offsetX, int offsetY, double tileSize, float deltaTime) {
+        for (Notification n : notifications) {
+            n.draw(ctx, offsetX, offsetY, tileSize, deltaTime);
+        }
+        notifications.removeIf(n -> n.hasDisappeared());
+    }
+
+    protected void notify(String text, Color color, float length) {
+        Notification notif = new Notification(x * 32, y * 32 - 3 - 18 * notifications.size(), text, color, length);
+        notifications.add(notif);
     }
 
     /**
@@ -226,7 +253,11 @@ public abstract class Entity {
     private void takeDamage(int otherAttack) {
         int atkRoll = otherAttack <= 0 ? otherAttack : (GlobalRandom.get().nextInt(otherAttack) + 1);
         int defRoll = this.defense <= 0 ? this.defense : (GlobalRandom.get().nextInt(this.defense) + 1);
-        this.health -= Math.max(0, atkRoll - defRoll);
+        int damage = (int) Math.max(atkRoll / 2, atkRoll - defRoll);
+        this.health -= damage;
+        if (!(this instanceof Player)) {
+            notify("" + damage, damage == 0 ? Color.GRAY : Color.RED, 0.5f);
+        }
     }
 
     private boolean hitAndCollide(int newX, int newY) {

@@ -56,7 +56,7 @@ public class InGameState implements GameState {
     @Override
     public void initialize() {
         player = new Player();
-        regenerateDungeon(6, GlobalRandom.get().nextInt());
+        regenerateDungeon(1, GlobalRandom.get().nextInt());
     }
 
     private void regenerateDungeon(int level, int seed) {
@@ -76,6 +76,9 @@ public class InGameState implements GameState {
     @Override
     public void draw(GraphicsContext ctx, float deltaSeconds, boolean showDebugInfo) {
         dungeonRenderer.draw(ctx, tileSize, selectionX, selectionY);
+        for (Entity e : dungeon.getEntities()) {
+            e.drawNotifications(ctx, dungeonRenderer.getOffsetX(), dungeonRenderer.getOffsetY(), tileSize, deltaSeconds);
+        }
 
         Canvas canvas = ctx.getCanvas();
         double width = canvas.getWidth();

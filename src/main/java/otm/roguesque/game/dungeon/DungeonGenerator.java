@@ -231,7 +231,7 @@ public class DungeonGenerator {
                 generateRoomEnemies(xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case ItemRoom:
-                generateRoomItems(1 + GlobalRandom.get().nextInt((int) Math.ceil(level / 1.5)), xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
+                generateRoomItems(1 + (level <= 2 && GlobalRandom.get().nextBoolean() ? 1 : 0), xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case StartRoom:
                 dungeon.setPlayerSpawn(xOffset + 1 + GlobalRandom.get().nextInt(roomWidth - 2), yOffset + 1 + GlobalRandom.get().nextInt(roomHeight - 2));
@@ -271,16 +271,20 @@ public class DungeonGenerator {
     }
 
     private static void generateRoomEnemies(int xOffset, int yOffset, int roomWidth, int roomHeight) {
-        int enemyPoints = GlobalRandom.get().nextInt((int) Math.pow(level, 1.2) + 1) + (int) Math.pow(level + 2, 1.3);
-        while (enemyPoints >= EnemyType.Rat.getValue()) {
-            int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
-            int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
+        int missCount = 0, enemyPoints = GlobalRandom.get().nextInt((int) Math.pow(level, 1.2) + 1) + (int) Math.pow(level + 2, 1.3);
+        while (enemyPoints >= EnemyType.Rat.getValue() && missCount < 10) {
+            int x = xOffset + GlobalRandom.get().nextInt(roomWidth), y = yOffset + GlobalRandom.get().nextInt(roomHeight);
+            if (dungeon.getEntityAt(x, y) != null) {
+                missCount++;
+                continue;
+            } else {
+                missCount = 0;
+            }
             int enemyType = GlobalRandom.get().nextInt(Math.min(Math.max(1, level - 1), EnemyType.values().length));
             for (int typeIndex = enemyType; typeIndex >= 0; typeIndex--) {
                 EnemyType type = EnemyType.values()[typeIndex];
-                int value = type.getValue();
-                if (value <= enemyPoints) {
-                    enemyPoints -= value;
+                if (type.getValue() <= enemyPoints) {
+                    enemyPoints -= type.getValue();
                     dungeon.spawnEntity(type.createEntity(), x, y);
                 }
             }
@@ -291,6 +295,10 @@ public class DungeonGenerator {
         for (int i = 0; i < count; i++) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
             int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
+            if (dungeon.getEntityAt(x, y) != null) {
+                i--;
+                continue;
+            }
             dungeon.spawnEntity(new Item(level), x, y);
         }
     }
