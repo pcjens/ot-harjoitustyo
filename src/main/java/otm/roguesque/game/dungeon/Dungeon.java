@@ -276,13 +276,14 @@ public class Dungeon {
     }
 
     /**
-     * Pyörittää olioita (joilla on tekoäly) yhden vuoron eteenpäin.
+     * Pyörittää olioita (joilla on tekoäly ja ovat hengissä) yhden vuoron
+     * eteenpäin.
      *
      * @see otm.roguesque.game.entities.AI
      */
     public void processRound() {
         for (Entity e : entities) {
-            if (e instanceof AI) {
+            if (e instanceof AI && !e.isDead()) {
                 ((AI) e).processRound();
             }
         }
