@@ -16,8 +16,8 @@ import otm.roguesque.ui.RoguesqueApp;
  */
 public class GameOverState implements GameState {
 
-    private Button replayButton = new Button(new KeyCode[]{KeyCode.P}, "Replay", 180, 280, 100, 45, 20);
-    private Button quitButton = new Button(new KeyCode[]{KeyCode.Q}, "Quit", 300, 280, 80, 45, 0);
+    private Button mainmenuButton = new Button(new KeyCode[]{KeyCode.M}, "Main menu", 180, 280, 140, 45, 0);
+    private Button quitButton = new Button(new KeyCode[]{KeyCode.Q}, "Quit", 340, 280, 80, 45, 0);
 
     @Override
     public void initialize() {
@@ -33,17 +33,17 @@ public class GameOverState implements GameState {
         ctx.setFont(RoguesqueApp.FONT_LOGO_SMALL);
         ctx.fillText("You are dead.", 180.0, 220.0);
 
-        replayButton.draw(ctx);
+        mainmenuButton.draw(ctx);
         quitButton.draw(ctx);
     }
 
     @Override
     public int update(Input input, float deltaSeconds, boolean showDebugInfo) {
-        replayButton.update(input);
+        mainmenuButton.update(input);
         quitButton.update(input);
 
-        if (replayButton.isClicked()) {
-            return GameState.STATE_INGAME;
+        if (mainmenuButton.isClicked()) {
+            return GameState.STATE_MAINMENU;
         }
         if (quitButton.isClicked()) {
             return GameState.STATE_QUIT;

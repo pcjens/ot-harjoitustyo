@@ -113,16 +113,17 @@ public class RoguesqueApp extends Application {
             Platform.exit();
         } else if (newState >= 0 && newState < GameState.STATE_COUNT) {
             currentGameStateIndex = newState;
+            showDebugInfo = false;
             gameStates[currentGameStateIndex].initialize();
         }
     }
+
     private final AnimationTimer mainLoop = new AnimationTimer() {
         long lastTime = 0;
 
-        /* The currentTime argument doesn't start at 0, so lastTime is
-             * wrong during the first frame, causing a big spike in delta time
-             * at the very start. I'd rather just skip a frame to avoid that.
-         */
+        // The currentTime argument doesn't start at 0, so lastTime is
+        // wrong during the first frame, causing a big spike in delta time
+        // at the very start. I'd rather just skip a frame to avoid that.
         boolean firstRun = true;
 
         @Override

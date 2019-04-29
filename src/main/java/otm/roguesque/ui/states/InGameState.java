@@ -12,8 +12,8 @@ import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
-import otm.roguesque.game.dungeon.PlayerAction;
 import otm.roguesque.game.dungeon.TileType;
+import otm.roguesque.game.dungeon.replay.PlayerAction;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
 import otm.roguesque.ui.Button;
@@ -48,6 +48,7 @@ public class InGameState implements GameState {
     private final Button nextLevelButton = new Button(new KeyCode[]{KeyCode.M}, "Move to the next floor?", 0, 0, 290, 45, 0);
     private final Button seedCopyButton = new Button(new KeyCode[]{KeyCode.C}, "Copy seed", 220, 60, 120, 35, 0, 9);
     private final Button dungeonRegenerateButton = new Button(new KeyCode[]{KeyCode.R}, "Regenerate level", 360, 60, 195, 35, 0, 9);
+    private final Button saveReplayButton = new Button(new KeyCode[]{KeyCode.V}, "Save replay", 360, 110, 195, 35, 40, 9);
 
     /**
      * Luo uuden instanssin tästä tilasta. Luodaan kerran peliä käynnistäessä.
@@ -138,6 +139,7 @@ public class InGameState implements GameState {
         int y = 80;
         seedCopyButton.draw(ctx);
         dungeonRegenerateButton.draw(ctx);
+        saveReplayButton.draw(ctx);
         ctx.fillText("Seed: " + GlobalRandom.getSeed(), 10, y += 20);
         ctx.fillText("Player coordinates: " + player.getX() + ", " + player.getY(), 10, y += 20);
         ctx.fillText("Room dimensions: " + dungeon.getWidth() + ", " + dungeon.getHeight(), 10, y += 20);
@@ -174,7 +176,7 @@ public class InGameState implements GameState {
         boolean shouldProcessRound = movePlayer(input);
 
         if (shouldProcessRound && processRound()) {
-            saveReplay();
+            saveReplay("roguesque-replay-latest.rgsq");
             return true;
         }
 
@@ -188,9 +190,9 @@ public class InGameState implements GameState {
         return false;
     }
 
-    private void saveReplay() {
+    private void saveReplay(String fileName) {
         try {
-            dungeon.getReplay().saveTo(new File("replay-for-debugging.rgsq"));
+            dungeon.getReplay().saveTo(new File(fileName));
         } catch (IOException ex) {
         }
     }
@@ -273,6 +275,7 @@ public class InGameState implements GameState {
     private void updateDebugButtons(Input input) {
         seedCopyButton.update(input);
         dungeonRegenerateButton.update(input);
+        saveReplayButton.update(input);
 
         String currentSeed = Long.toString(GlobalRandom.getSeed());
         if (seedCopyButton.isClicked()) {
@@ -283,11 +286,13 @@ public class InGameState implements GameState {
             // Not a high priority though, this is a debugging feature
             String result = JOptionPane.showInputDialog(null, "Please enter a new seed:", currentSeed);
             try {
-                int seed = Integer.parseInt(result);
-                initializeDungeon(seed);
+                initializeDungeon(Long.parseLong(result));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "The seed was not a number.", "Dungeon not regenerated", JOptionPane.ERROR_MESSAGE);
             }
+        }
+        if (saveReplayButton.isClicked()) {
+            saveReplay(JOptionPane.showInputDialog("Save file name:", "roguesque-replay.rgsq"));
         }
     }
 }

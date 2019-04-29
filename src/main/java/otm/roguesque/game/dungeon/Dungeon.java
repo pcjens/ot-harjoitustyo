@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import otm.roguesque.game.GlobalRandom;
+import otm.roguesque.game.dungeon.replay.PlayerAction;
+import otm.roguesque.game.dungeon.replay.Replay;
 import otm.roguesque.game.entities.AI;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
@@ -370,13 +372,13 @@ public class Dungeon {
      */
     public void movePlayerNTimes(int x, int y) {
         for (int i = 0; i < Math.abs(x); i++) {
-            player.move((int) Math.signum(x), 0);
+            runPlayerAction(x < 0 ? PlayerAction.MoveLeft : PlayerAction.MoveRight);
             processRound();
             cleanupDeadEntities();
             player.recalculateLineOfSight(false);
         }
         for (int i = 0; i < Math.abs(y); i++) {
-            player.move(0, (int) Math.signum(y));
+            runPlayerAction(y < 0 ? PlayerAction.MoveUp : PlayerAction.MoveDown);
             processRound();
             cleanupDeadEntities();
             player.recalculateLineOfSight(false);

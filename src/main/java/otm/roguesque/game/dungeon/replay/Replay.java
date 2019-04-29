@@ -1,4 +1,4 @@
-package otm.roguesque.game.dungeon;
+package otm.roguesque.game.dungeon.replay;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import otm.roguesque.game.dungeon.Dungeon;
 
 /**
  * Tämä luokka kuvaa yhtä peliä, pelaajan tekemien asioiden näkökulmasta. Pelin
@@ -59,6 +60,15 @@ public class Replay {
             writer.write((int) (seed & 0xFFFF));
             for (PlayerAction action : actions) {
                 writer.write(action.ordinal());
+            }
+        }
+    }
+
+    public void play(Dungeon dungeon) {
+        for (PlayerAction action : actions) {
+            dungeon.runPlayerAction(action);
+            if (action.proceedsRound()) {
+                dungeon.processRound();
             }
         }
     }

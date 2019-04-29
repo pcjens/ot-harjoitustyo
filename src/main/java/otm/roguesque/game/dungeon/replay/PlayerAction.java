@@ -1,4 +1,4 @@
-package otm.roguesque.game.dungeon;
+package otm.roguesque.game.dungeon.replay;
 
 /**
  * Pelaajan tekemiä asioita kuvaava enum.
