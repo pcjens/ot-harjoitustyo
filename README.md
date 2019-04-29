@@ -56,3 +56,8 @@ Koodin laatutarkastukset voi suorittaa seuraavalla komennolla:
 ```sh
 mvn jxr:jxr checkstyle:checkstyle
 ```
+
+## Muut huomiot
+Henkilökohtainen GitHub-tilini [`neonmoe`](https://github.com/neonmoe/)
+saattaa näkyä commit-listalla, koska en aina muista muuttaa git configeja 
+ja Git-historia on ikuisempi kuin timantit :)
