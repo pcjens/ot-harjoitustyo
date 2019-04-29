@@ -15,6 +15,7 @@ import otm.roguesque.ui.states.GameState;
 import otm.roguesque.ui.states.InGameState;
 import otm.roguesque.ui.states.IntroState;
 import otm.roguesque.ui.states.MainMenuState;
+import otm.roguesque.ui.states.ReplayGameState;
 
 /**
  * Roguesque-pelin käyttöliittymä sekä ydin.
@@ -53,7 +54,7 @@ public class RoguesqueApp extends Application {
     private int deltaSecondsHistoryCounter = 0;
 
     // Game state stuff
-    private GameState[] gameStates;
+    private final GameState[] gameStates;
     private int currentGameStateIndex;
 
     /**
@@ -68,6 +69,7 @@ public class RoguesqueApp extends Application {
         gameStates[GameState.STATE_INTRO] = new IntroState();
         gameStates[GameState.STATE_MAINMENU] = new MainMenuState();
         gameStates[GameState.STATE_INGAME] = new InGameState();
+        gameStates[GameState.STATE_REPLAY] = new ReplayGameState();
         gameStates[GameState.STATE_GAMEOVER] = new GameOverState();
 
         currentGameStateIndex = GameState.STATE_INTRO;

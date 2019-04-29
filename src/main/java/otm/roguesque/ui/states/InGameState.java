@@ -2,6 +2,8 @@ package otm.roguesque.ui.states;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
+import java.io.IOException;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -10,7 +12,7 @@ import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
-import otm.roguesque.game.dungeon.DungeonGenerator;
+import otm.roguesque.game.dungeon.PlayerAction;
 import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
@@ -28,8 +30,9 @@ import otm.roguesque.ui.RoguesqueApp;
  */
 public class InGameState implements GameState {
 
+    protected Dungeon dungeon;
+
     private final DungeonRenderer dungeonRenderer;
-    private Dungeon dungeon;
     private Player player;
 
     private String statusLine;
@@ -38,9 +41,9 @@ public class InGameState implements GameState {
     private float descriptionBoxFadeAway;
     private final float descriptionBoxFadeAwayDuration = 0.15f;
 
+    private final double tileSize = 32.0;
     private int selectionX;
     private int selectionY;
-    private double tileSize = 32.0;
 
     private final Button nextLevelButton = new Button(new KeyCode[]{KeyCode.M}, "Move to the next floor?", 0, 0, 290, 45, 0);
     private final Button seedCopyButton = new Button(new KeyCode[]{KeyCode.C}, "Copy seed", 220, 60, 120, 35, 0, 9);
@@ -55,15 +58,18 @@ public class InGameState implements GameState {
 
     @Override
     public void initialize() {
-        player = new Player();
-        regenerateDungeon(1, GlobalRandom.get().nextInt());
+        long initialSeed = GlobalRandom.get().nextInt(0xFFFF);
+        initializeDungeon(initialSeed);
     }
 
-    private void regenerateDungeon(int level, int seed) {
-        GlobalRandom.reset(seed);
-        dungeon = DungeonGenerator.generateNewDungeon(level);
+    protected void initializeDungeon(long seed) {
+        dungeon = new Dungeon(seed, 1);
+        player = dungeon.getPlayer();
+        reloadUI();
+    }
+
+    protected void reloadUI() {
         dungeonRenderer.loadDungeon(dungeon);
-        dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
         player.resetUncovered();
         player.recalculateLineOfSight(true);
         statusLine = "Loading...";
@@ -140,17 +146,8 @@ public class InGameState implements GameState {
 
     @Override
     public int update(Input input, float deltaSeconds, boolean showDebugInfo) {
-        boolean shouldProcessRound = movePlayer(input);
-
-        if (shouldProcessRound && processRound()) {
+        if (updateGame(input)) {
             return GameState.STATE_GAMEOVER;
-        }
-
-        if (dungeon.canFinish()) {
-            nextLevelButton.update(input);
-            if (nextLevelButton.isClicked()) {
-                regenerateDungeon(dungeon.getLevel() + 1, GlobalRandom.get().nextInt());
-            }
         }
 
         selectTile(input);
@@ -159,25 +156,61 @@ public class InGameState implements GameState {
         if (showDebugInfo) {
             updateDebugButtons(input);
         }
+
         return -1;
+    }
+
+    /**
+     * Päivittää pelin tilan perustuen näppäimiin ja klikkauksiin joita tällä
+     * päivityksellä tapahtui. ReplayGameState overridee tämän.
+     *
+     * @see
+     * otm.roguesque.ui.states.ReplayGameState#updateGame(otm.roguesque.ui.Input)
+     *
+     * @param input Input-olio.
+     * @return Loppuiko peli gameoveriin?
+     */
+    protected boolean updateGame(Input input) {
+        boolean shouldProcessRound = movePlayer(input);
+
+        if (shouldProcessRound && processRound()) {
+            saveReplay();
+            return true;
+        }
+
+        if (dungeon.canFinish()) {
+            nextLevelButton.update(input);
+            if (nextLevelButton.isClicked()) {
+                dungeon.runPlayerAction(PlayerAction.NextLevel);
+                reloadUI();
+            }
+        }
+        return false;
+    }
+
+    private void saveReplay() {
+        try {
+            dungeon.getReplay().saveTo(new File("replay-for-debugging.rgsq"));
+        } catch (IOException ex) {
+        }
     }
 
     private boolean movePlayer(Input input) {
         if (input.isPressed(Input.CONTROL_MOVE_UP)) {
-            player.move(0, -1);
+            dungeon.runPlayerAction(PlayerAction.MoveUp);
         } else if (input.isPressed(Input.CONTROL_MOVE_LEFT)) {
-            player.move(-1, 0);
+            dungeon.runPlayerAction(PlayerAction.MoveLeft);
         } else if (input.isPressed(Input.CONTROL_MOVE_DOWN)) {
-            player.move(0, 1);
+            dungeon.runPlayerAction(PlayerAction.MoveDown);
         } else if (input.isPressed(Input.CONTROL_MOVE_RIGHT)) {
-            player.move(1, 0);
+            dungeon.runPlayerAction(PlayerAction.MoveRight);
         } else {
             return false;
         }
         return true;
     }
 
-    private boolean processRound() {
+    protected boolean processRound() {
         dungeon.processRound();
         if (player.isDead()) {
             return true;
@@ -251,7 +284,7 @@ public class InGameState implements GameState {
             String result = JOptionPane.showInputDialog(null, "Please enter a new seed:", currentSeed);
             try {
                 int seed = Integer.parseInt(result);
-                regenerateDungeon(dungeon.getLevel(), seed);
+                initializeDungeon(seed);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "The seed was not a number.", "Dungeon not regenerated", JOptionPane.ERROR_MESSAGE);
             }

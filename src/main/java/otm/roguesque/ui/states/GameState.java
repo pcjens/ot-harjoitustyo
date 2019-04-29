@@ -13,12 +13,12 @@ public interface GameState {
     /**
      * Kuinka monta eri tilaa käyttöliittymällä on?
      */
-    public static final int STATE_COUNT = 4;
+    public static final int STATE_COUNT = 5;
 
     /**
      * "Sulje peli -tila".
      */
-    public static final int STATE_QUIT = 4;
+    public static final int STATE_QUIT = 5;
     /**
      * Intro-tila.
      */
@@ -32,9 +32,13 @@ public interface GameState {
      */
     public static final int STATE_INGAME = 2;
     /**
+     * "Replay"-tila.
+     */
+    public static final int STATE_REPLAY = 3;
+    /**
      * "Game over" -tila.
      */
-    public static final int STATE_GAMEOVER = 3;
+    public static final int STATE_GAMEOVER = 4;
 
     /**
      * Piirrä tämä tila.

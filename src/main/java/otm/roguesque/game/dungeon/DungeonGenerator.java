@@ -63,16 +63,15 @@ public class DungeonGenerator {
     private DungeonGenerator() {
     }
 
-    public static Dungeon generateNewDungeon(int level) {
-        DungeonGenerator.dungeon = new Dungeon(level);
-        DungeonGenerator.level = level;
+    protected static void generateNewDungeon(Dungeon dungeon) {
+        DungeonGenerator.dungeon = dungeon;
+        DungeonGenerator.level = dungeon.getLevel();
         DungeonGenerator.width = dungeon.getWidth();
         DungeonGenerator.height = dungeon.getHeight();
         DungeonGenerator.tiles = dungeon.getTiles();
 
         generateDungeon();
         dungeon.updateSolidity();
-        return dungeon;
     }
 
     // Sorry about the fragmentation of the functions; CheckStyle doesn't like long functions.

@@ -34,4 +34,5 @@
 |       |  1 | Luolageneraation uudelleenpainottamista, NullEntityn lisäys |
 |       |  2 | Menninkäisten (ja luurankojen) lisäystä, polunetsintäalgoritmin kirjoittamista |
 |       |  1 | Taistelumekaniikkojen uudelleenpainottamista, uusien tavaroiden ja notifikaatioiden lisäystä |
-| Yht.  | 51 | |
+| 29.4. |  2 | Replay-moodin kirjoittamista, joka myös vaati hieman käyttöliittymän ja pelin liimakoodin refaktorointia |
+| Yht.  | 53 | |

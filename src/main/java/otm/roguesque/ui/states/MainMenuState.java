@@ -17,6 +17,7 @@ import otm.roguesque.ui.RoguesqueApp;
 public class MainMenuState implements GameState {
 
     private final Button playButton = new Button(new KeyCode[]{KeyCode.P}, "Play", 180, 280, 80, 45, 0);
+    private final Button replayButton = new Button(new KeyCode[]{KeyCode.R}, "Replay", 180, 350, 100, 45, 0);
     private final Button quitButton = new Button(new KeyCode[]{KeyCode.Q}, "Quit", 280, 280, 80, 45, 0);
 
     @Override
@@ -34,18 +35,27 @@ public class MainMenuState implements GameState {
 
         playButton.draw(ctx);
         quitButton.draw(ctx);
+        if (showDebugInfo) {
+            replayButton.draw(ctx);
+        }
     }
 
     @Override
     public int update(Input input, float deltaSeconds, boolean showDebugInfo) {
         playButton.update(input);
         quitButton.update(input);
+        if (showDebugInfo) {
+            replayButton.update(input);
+        }
 
         if (playButton.isClicked()) {
             return GameState.STATE_INGAME;
         }
         if (quitButton.isClicked()) {
             return GameState.STATE_QUIT;
+        }
+        if (showDebugInfo && replayButton.isClicked()) {
+            return GameState.STATE_REPLAY;
         }
 
         return -1;

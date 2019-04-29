@@ -3,6 +3,7 @@ package otm.roguesque.game.dungeon;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
+import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.entities.AI;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
@@ -34,30 +35,83 @@ public class Dungeon {
     private final boolean[] solid;
     private final boolean[] doored;
     private final TileType[] tiles;
+    private final ArrayList<Entity> entities;
+    private final Player player;
     private final int width;
     private final int height;
-    private final int level;
+    private final Replay replay;
+    private int level;
 
-    private ArrayList<Entity> entities;
-    private Player player;
     private int playerSpawnX;
     private int playerSpawnY;
 
     /**
      * Luo uuden pelikentän.
      *
-     * @param level Kuinka mones taso kyseessä. Pienimmillään 1, tämä kuvaa
-     * kentän vaikeustasoa. Peräkkäisten kenttien levelin kuuluisi nousta 1:llä
-     * joka tasossa.
+     * @param seed Alkuperäinen seed-luku kentän generointiin.
+     * @param level Ensimmäisen kentän vaikeustaso.
      */
-    public Dungeon(int level) {
+    public Dungeon(long seed, int level) {
         this.width = (int) (MAX_ROOM_WIDTH * (Math.sqrt(MAX_ROOMS) + 1));
         this.height = (int) (MAX_ROOM_HEIGHT * (Math.sqrt(MAX_ROOMS) + 1));
-        this.level = level;
-        this.entities = new ArrayList();
         this.tiles = new TileType[width * height];
+        this.entities = new ArrayList();
+        this.player = new Player();
         this.solid = new boolean[width * height];
         this.doored = new boolean[width * height];
+        this.replay = new Replay(seed);
+        this.level = level;
+        regenerateDungeon(seed);
+    }
+
+    /**
+     * Tekee jonkin pelaajan määrittämän actionin.
+     *
+     * @param action Mitä pelaaja haluaa tehdä?
+     */
+    public void runPlayerAction(PlayerAction action) {
+        switch (action) {
+            case NextLevel:
+                if (canFinish()) {
+                    level++;
+                    regenerateDungeon(GlobalRandom.get().nextLong());
+                }
+                break;
+            case MoveUp:
+                player.move(0, -1);
+                break;
+            case MoveLeft:
+                player.move(-1, 0);
+                break;
+            case MoveDown:
+                player.move(0, 1);
+                break;
+            case MoveRight:
+                player.move(1, 0);
+                break;
+            default:
+                break;
+        }
+        replay.addAction(action);
+    }
+
+    /**
+     * Palauttaa Replay-olion. Tämän voi tallentaa tiedostoon myöhempää katselua
+     * varten.
+     *
+     * @return
+     */
+    public Replay getReplay() {
+        return replay;
+    }
+
+    private void regenerateDungeon(long seed) {
+        entities.clear();
+        clearTiles();
+
+        GlobalRandom.reset(seed);
+        DungeonGenerator.generateNewDungeon(this);
+        spawnEntity(player, playerSpawnX, playerSpawnY);
     }
 
     /**
@@ -71,9 +125,6 @@ public class Dungeon {
         this.entities.add(entity);
         entity.setDungeon(this);
         entity.setPosition(x, y);
-        if (entity instanceof Player) {
-            this.player = (Player) entity;
-        }
     }
 
     /**
@@ -350,5 +401,13 @@ public class Dungeon {
     protected void setPlayerSpawn(int x, int y) {
         playerSpawnX = x;
         playerSpawnY = y;
+    }
+
+    private void clearTiles() {
+        for (int i = 0; i < tiles.length; i++) {
+            tiles[i] = null;
+            solid[i] = false;
+            doored[i] = false;
+        }
     }
 }
