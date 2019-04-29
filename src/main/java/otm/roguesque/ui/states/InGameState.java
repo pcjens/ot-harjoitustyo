@@ -14,6 +14,7 @@ import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.game.dungeon.replay.PlayerAction;
+import otm.roguesque.game.dungeon.replay.Replay;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
 import otm.roguesque.ui.Button;
@@ -29,6 +30,8 @@ import otm.roguesque.ui.RoguesqueApp;
  * @author Jens Pitkänen
  */
 public class InGameState implements GameState {
+
+    protected static Replay latestReplay;
 
     protected Dungeon dungeon;
 
@@ -59,11 +62,11 @@ public class InGameState implements GameState {
 
     @Override
     public void initialize() {
-        long initialSeed = GlobalRandom.get().nextInt(0xFFFF);
+        short initialSeed = (short) GlobalRandom.get().nextInt(0xFFFF);
         initializeDungeon(initialSeed);
     }
 
-    protected void initializeDungeon(long seed) {
+    protected void initializeDungeon(short seed) {
         dungeon = new Dungeon(seed, 1);
         player = dungeon.getPlayer();
         reloadUI();
@@ -149,6 +152,7 @@ public class InGameState implements GameState {
     @Override
     public int update(Input input, float deltaSeconds, boolean showDebugInfo) {
         if (updateGame(input)) {
+            latestReplay = dungeon.getReplay();
             return GameState.STATE_GAMEOVER;
         }
 
@@ -176,7 +180,6 @@ public class InGameState implements GameState {
         boolean shouldProcessRound = movePlayer(input);
 
         if (shouldProcessRound && processRound()) {
-            saveReplay("roguesque-replay-latest.rgsq");
             return true;
         }
 
@@ -286,7 +289,7 @@ public class InGameState implements GameState {
             // Not a high priority though, this is a debugging feature
             String result = JOptionPane.showInputDialog(null, "Please enter a new seed:", currentSeed);
             try {
-                initializeDungeon(Long.parseLong(result));
+                initializeDungeon(Short.parseShort(result));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "The seed was not a number.", "Dungeon not regenerated", JOptionPane.ERROR_MESSAGE);
             }

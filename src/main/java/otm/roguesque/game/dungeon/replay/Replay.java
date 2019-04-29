@@ -20,10 +20,10 @@ import otm.roguesque.game.dungeon.Dungeon;
  */
 public class Replay {
 
-    private final long seed;
+    private final short seed;
     private final ArrayDeque<PlayerAction> actions;
 
-    public Replay(long seed) {
+    public Replay(short seed) {
         this.seed = seed;
         this.actions = new ArrayDeque();
     }
@@ -31,7 +31,7 @@ public class Replay {
     public Replay(File file) throws FileNotFoundException, IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             this.actions = new ArrayDeque();
-            this.seed = reader.read();
+            this.seed = (short) reader.read();
             int action;
             while ((action = reader.read()) != -1) {
                 actions.add(PlayerAction.values()[action]);
@@ -47,7 +47,7 @@ public class Replay {
         return actions.pollFirst();
     }
 
-    public long getSeed() {
+    public short getSeed() {
         return seed;
     }
 

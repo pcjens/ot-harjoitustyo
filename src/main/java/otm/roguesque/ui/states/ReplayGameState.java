@@ -36,7 +36,7 @@ public class ReplayGameState extends InGameState {
 
         try {
             replay = new Replay(new File(JOptionPane.showInputDialog("Save file to load?", "roguesque-replay.rgsq")));
-            long initialSeed = replay.getSeed();
+            short initialSeed = replay.getSeed();
             initializeDungeon(initialSeed);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "No such file.", "Error", JOptionPane.ERROR_MESSAGE);

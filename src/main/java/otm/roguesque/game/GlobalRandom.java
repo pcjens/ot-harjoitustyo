@@ -12,9 +12,9 @@ import java.util.Random;
  */
 public class GlobalRandom {
 
-    private static final long INITIAL_SEED = System.currentTimeMillis();
+    private static final short INITIAL_SEED = (short) (System.currentTimeMillis() & 0xFFFF);
     private static Random random = new Random(INITIAL_SEED);
-    private static long seed = INITIAL_SEED;
+    private static short seed = INITIAL_SEED;
 
     /**
      * Palauttaa instanssin Random-luokasta. Tätä instanssia on tarkoitus
@@ -49,7 +49,7 @@ public class GlobalRandom {
      *
      * @param seed Seed-luku, johon perustuen satunnaislukugeneraattori luodaan.
      */
-    public static void reset(long seed) {
+    public static void reset(short seed) {
         GlobalRandom.seed = seed;
         random = new Random(seed);
     }

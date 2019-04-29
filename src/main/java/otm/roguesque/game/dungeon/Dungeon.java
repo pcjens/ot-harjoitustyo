@@ -53,7 +53,7 @@ public class Dungeon {
      * @param seed Alkuperäinen seed-luku kentän generointiin.
      * @param level Ensimmäisen kentän vaikeustaso.
      */
-    public Dungeon(long seed, int level) {
+    public Dungeon(short seed, int level) {
         this.width = (int) (MAX_ROOM_WIDTH * (Math.sqrt(MAX_ROOMS) + 1));
         this.height = (int) (MAX_ROOM_HEIGHT * (Math.sqrt(MAX_ROOMS) + 1));
         this.tiles = new TileType[width * height];
@@ -76,7 +76,7 @@ public class Dungeon {
             case NextLevel:
                 if (canFinish()) {
                     level++;
-                    regenerateDungeon(GlobalRandom.get().nextLong());
+                    regenerateDungeon((short) GlobalRandom.get().nextInt(0xFFFF));
                 }
                 break;
             case MoveUp:
@@ -107,7 +107,7 @@ public class Dungeon {
         return replay;
     }
 
-    private void regenerateDungeon(long seed) {
+    private void regenerateDungeon(short seed) {
         entities.clear();
         clearTiles();
 

@@ -42,7 +42,7 @@ public class Item extends Entity {
      * @param level Kentän vaikeustaso mistä tämä tavara löytyy.
      */
     public Item(int level) {
-        super(1, 0, 1000000, "", "", "Items", "");
+        super(100000, 0, 0, "", "", "Items", "");
 
         ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
         loadImage("/sprites/Item" + data.identifier + ".png");
