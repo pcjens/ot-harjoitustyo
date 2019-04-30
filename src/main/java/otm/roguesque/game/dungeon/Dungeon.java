@@ -26,14 +26,6 @@ import otm.roguesque.util.Pathfinder;
  */
 public class Dungeon {
 
-    protected static final int MAX_ROOM_WIDTH = 11;
-    protected static final int MAX_ROOM_HEIGHT = 9;
-    protected static final int MIN_ROOM_WIDTH = 6;
-    protected static final int MIN_ROOM_HEIGHT = 5;
-    protected static final int MIN_ROOM_MARGIN = 2;
-    protected static final int MAX_ROOMS = 10;
-    protected static final int MIN_ROOMS = 5;
-
     private final boolean[] solid;
     private final boolean[] doored;
     private final TileType[] tiles;
@@ -44,8 +36,8 @@ public class Dungeon {
     private final Replay replay;
     private int level;
 
-    private int playerSpawnX;
-    private int playerSpawnY;
+    int playerSpawnX;
+    int playerSpawnY;
 
     /**
      * Luo uuden pelikentän.
@@ -54,8 +46,8 @@ public class Dungeon {
      * @param level Ensimmäisen kentän vaikeustaso.
      */
     public Dungeon(short seed, int level) {
-        this.width = (int) (MAX_ROOM_WIDTH * (Math.sqrt(MAX_ROOMS) + 1));
-        this.height = (int) (MAX_ROOM_HEIGHT * (Math.sqrt(MAX_ROOMS) + 1));
+        this.width = (int) (DungeonGenerator.MAX_ROOM_WIDTH * (Math.sqrt(DungeonGenerator.MAX_ROOMS) + 1));
+        this.height = (int) (DungeonGenerator.MAX_ROOM_HEIGHT * (Math.sqrt(DungeonGenerator.MAX_ROOMS) + 1));
         this.tiles = new TileType[width * height];
         this.entities = new ArrayList();
         this.player = new Player();
@@ -101,7 +93,7 @@ public class Dungeon {
      * Palauttaa Replay-olion. Tämän voi tallentaa tiedostoon myöhempää katselua
      * varten.
      *
-     * @return
+     * @return Tämän kentän tähän hetkeen asti pelattu Replay.
      */
     public Replay getReplay() {
         return replay;
@@ -127,32 +119,6 @@ public class Dungeon {
         this.entities.add(entity);
         entity.setDungeon(this);
         entity.setPosition(x, y);
-    }
-
-    /**
-     * Palauttaa x-koordinaatin kohdasta, johon pelaaja pitäisi spawnata.
-     *
-     * @see
-     * otm.roguesque.game.dungeon.Dungeon#spawnEntity(otm.roguesque.game.entities.Entity,
-     * int, int)
-     *
-     * @return Pelaajan alkukohdan x-koordinaatti.
-     */
-    public int getPlayerSpawnX() {
-        return playerSpawnX;
-    }
-
-    /**
-     * Palauttaa y-koordinaatin kohdasta, johon pelaaja pitäisi spawnata.
-     *
-     * @see
-     * otm.roguesque.game.dungeon.Dungeon#spawnEntity(otm.roguesque.game.entities.Entity,
-     * int, int)
-     *
-     * @return Pelaajan alkukohdan y-koordinaatti.
-     */
-    public int getPlayerSpawnY() {
-        return playerSpawnY;
     }
 
     /**
@@ -207,7 +173,7 @@ public class Dungeon {
     /**
      * Palauttaa kentän vaikeustason.
      *
-     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(int)
+     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(short, int)
      *
      * @return Kentän vaikeustaso.
      */
@@ -385,7 +351,7 @@ public class Dungeon {
         }
     }
 
-    protected void updateSolidity() {
+    void updateSolidity() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (tiles[x + y * width] == TileType.Wall || tiles[x + y * width] == null) {
@@ -398,11 +364,6 @@ public class Dungeon {
                 this.doored[e.getX() + e.getY() * width] = true;
             }
         }
-    }
-
-    protected void setPlayerSpawn(int x, int y) {
-        playerSpawnX = x;
-        playerSpawnY = y;
     }
 
     private void clearTiles() {

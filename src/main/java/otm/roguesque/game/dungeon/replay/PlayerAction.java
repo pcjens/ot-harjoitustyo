@@ -6,7 +6,26 @@ package otm.roguesque.game.dungeon.replay;
  * @author Jens Pitkänen
  */
 public enum PlayerAction {
-    NextLevel(false), MoveUp(true), MoveLeft(true), MoveDown(true), MoveRight(true);
+    /**
+     * Seuraavaan tasoon siirtyminen, kun pelaaja on tikkaiden päällä.
+     */
+    NextLevel(false),
+    /**
+     * Yksi askel ylös.
+     */
+    MoveUp(true),
+    /**
+     * Yksi askel vasemmalle.
+     */
+    MoveLeft(true),
+    /**
+     * Yksi askel alas.
+     */
+    MoveDown(true),
+    /**
+     * Yksi askel oikealle.
+     */
+    MoveRight(true);
 
     private final boolean proceedsRound;
 
@@ -14,6 +33,12 @@ public enum PlayerAction {
         this.proceedsRound = proceedsRound;
     }
 
+    /**
+     * Palauttaa true, mikäli tämän PlayerActionin pitäisi edistää peliä
+     * vuorolla. Käytännössä siis kaikki paitsi NextLevel.
+     *
+     * @return Tuleeko peliä edistää vuorolla tämän jälkeen?
+     */
     public boolean proceedsRound() {
         return proceedsRound;
     }

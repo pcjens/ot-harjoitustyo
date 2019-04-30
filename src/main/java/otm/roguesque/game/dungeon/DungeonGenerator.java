@@ -18,7 +18,17 @@ import otm.roguesque.game.entities.Skeleton;
  *
  * @author Jens Pitkänen
  */
-public class DungeonGenerator {
+class DungeonGenerator {
+
+    static final int MAX_ROOM_WIDTH = 11;
+    static final int MAX_ROOM_HEIGHT = 9;
+
+    private static final int MIN_ROOM_WIDTH = 6;
+    private static final int MIN_ROOM_HEIGHT = 5;
+    private static final int MIN_ROOM_MARGIN = 2;
+
+    static final int MAX_ROOMS = 10;
+    private static final int MIN_ROOMS = 5;
 
     private enum EnemyType {
         Rat(2), Goblin(3), Skeleton(4);
@@ -63,7 +73,7 @@ public class DungeonGenerator {
     private DungeonGenerator() {
     }
 
-    protected static void generateNewDungeon(Dungeon dungeon) {
+    static void generateNewDungeon(Dungeon dungeon) {
         DungeonGenerator.dungeon = dungeon;
         DungeonGenerator.level = dungeon.getLevel();
         DungeonGenerator.width = dungeon.getWidth();
@@ -76,9 +86,9 @@ public class DungeonGenerator {
 
     // Sorry about the fragmentation of the functions; CheckStyle doesn't like long functions.
     private static void generateDungeon() {
-        int roomCountX = width / Dungeon.MAX_ROOM_WIDTH;
-        int roomCountY = height / Dungeon.MAX_ROOM_HEIGHT;
-        int roomCount = GlobalRandom.get().nextInt(Dungeon.MAX_ROOMS - Dungeon.MIN_ROOMS + 1) + Dungeon.MIN_ROOMS;
+        int roomCountX = width / MAX_ROOM_WIDTH;
+        int roomCountY = height / MAX_ROOM_HEIGHT;
+        int roomCount = GlobalRandom.get().nextInt(MAX_ROOMS - MIN_ROOMS + 1) + MIN_ROOMS;
         RoomType[] rooms = generateRoomTypes(roomCount, roomCountX, roomCountY);
         generateRooms(rooms, roomCountX, roomCountY);
     }
@@ -88,14 +98,14 @@ public class DungeonGenerator {
             for (int roomX = 0; roomX < roomCountX; roomX++) {
                 RoomType type = rooms[roomX + roomY * roomCountX];
                 if (type != null) {
-                    int roomWidth = GlobalRandom.get().nextInt(Dungeon.MAX_ROOM_WIDTH - (Dungeon.MIN_ROOM_WIDTH + Dungeon.MIN_ROOM_MARGIN)) + Dungeon.MIN_ROOM_WIDTH;
-                    int roomHeight = GlobalRandom.get().nextInt(Dungeon.MAX_ROOM_HEIGHT - (Dungeon.MIN_ROOM_HEIGHT + Dungeon.MIN_ROOM_MARGIN)) + Dungeon.MIN_ROOM_HEIGHT;
-                    int x = roomX * Dungeon.MAX_ROOM_WIDTH + GlobalRandom.get().nextInt(Dungeon.MAX_ROOM_WIDTH - roomWidth - 2) + 2;
-                    int y = roomY * Dungeon.MAX_ROOM_HEIGHT + GlobalRandom.get().nextInt(Dungeon.MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
+                    int roomWidth = GlobalRandom.get().nextInt(MAX_ROOM_WIDTH - (MIN_ROOM_WIDTH + MIN_ROOM_MARGIN)) + MIN_ROOM_WIDTH;
+                    int roomHeight = GlobalRandom.get().nextInt(MAX_ROOM_HEIGHT - (MIN_ROOM_HEIGHT + MIN_ROOM_MARGIN)) + MIN_ROOM_HEIGHT;
+                    int x = roomX * MAX_ROOM_WIDTH + GlobalRandom.get().nextInt(MAX_ROOM_WIDTH - roomWidth - 2) + 2;
+                    int y = roomY * MAX_ROOM_HEIGHT + GlobalRandom.get().nextInt(MAX_ROOM_HEIGHT - roomHeight - 2) + 2;
                     generateRoom(type, x, y, roomWidth, roomHeight);
                     generateCorridors(rooms, roomX, roomY, roomCountX, roomCountY,
-                            x, y, roomWidth, roomHeight, roomX * Dungeon.MAX_ROOM_WIDTH, roomY * Dungeon.MAX_ROOM_HEIGHT,
-                            (roomX + 1) * Dungeon.MAX_ROOM_WIDTH, (roomY + 1) * Dungeon.MAX_ROOM_HEIGHT);
+                            x, y, roomWidth, roomHeight, roomX * MAX_ROOM_WIDTH, roomY * MAX_ROOM_HEIGHT,
+                            (roomX + 1) * MAX_ROOM_WIDTH, (roomY + 1) * MAX_ROOM_HEIGHT);
                     generateDoors(x, y, roomWidth, roomHeight);
                 }
             }
@@ -233,7 +243,8 @@ public class DungeonGenerator {
                 generateRoomItems(1 + (level <= 2 && GlobalRandom.get().nextBoolean() ? 1 : 0), xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
                 break;
             case StartRoom:
-                dungeon.setPlayerSpawn(xOffset + 1 + GlobalRandom.get().nextInt(roomWidth - 2), yOffset + 1 + GlobalRandom.get().nextInt(roomHeight - 2));
+                dungeon.playerSpawnX = xOffset + 1 + GlobalRandom.get().nextInt(roomWidth - 2);
+                dungeon.playerSpawnY = yOffset + 1 + GlobalRandom.get().nextInt(roomHeight - 2);
                 break;
             case EndRoom:
                 tiles[(xOffset + GlobalRandom.get().nextInt(roomWidth - 2) + 1) + (yOffset + GlobalRandom.get().nextInt(roomHeight - 2) + 1) * width] = TileType.Ladder;

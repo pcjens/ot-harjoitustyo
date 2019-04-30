@@ -15,14 +15,19 @@ public class Door extends Entity {
     }
 
     @Override
-    public String getDescription() {
+    public String getRichDescription() {
         return "Door\n\nIt's a door.\nWhere does\nit lead?";
     }
 
+    /**
+     * Jos hyökkäävä olio on pelaaja, ovi "aukeaa" (eli kuolee).
+     *
+     * @param attackingEntity Hyökkäävä olio.
+     */
     @Override
     protected void reactToAttack(Entity attackingEntity) {
         if (attackingEntity instanceof Player) {
-            health = 0;
+            setHealth(0);
         }
     }
 }

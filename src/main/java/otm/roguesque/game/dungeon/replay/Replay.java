@@ -13,21 +13,42 @@ import otm.roguesque.game.dungeon.Dungeon;
 /**
  * Tämä luokka kuvaa yhtä peliä, pelaajan tekemien asioiden näkökulmasta. Pelin
  * aikana Dungeon rakentaa tällaista, ja tämän voi sitten tallentaa tiedostoon.
- * Tämän jälkeen tämän voisi ladata tiedostosta, ja tähän perustuen voidaan
+ * Jälkeenpäin tämän voisi ladata tiedostosta, ja tähän perustuen voidaan
  * pyörittää kokonainen peli uudestaan.
  *
- * @author jens
+ * @see otm.roguesque.game.dungeon.replay.Replay#popAction()
+ * @see otm.roguesque.game.dungeon.replay.Replay#getSeed()
+ *
+ * @author Jens Pitkänen
  */
 public class Replay {
 
     private final short seed;
     private final ArrayDeque<PlayerAction> actions;
 
+    /**
+     * Luo uuden Replayn, tarkoitettu kutsuttavaksi Dungeonista.
+     *
+     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(short, int)
+     *
+     * @param seed Seed-luku johon ylempänä mainittu Dungeon pohjautuu.
+     */
     public Replay(short seed) {
         this.seed = seed;
         this.actions = new ArrayDeque();
     }
 
+    /**
+     * Lataa Replayn tiedostosta.
+     *
+     * @see otm.roguesque.game.dungeon.replay.Replay#saveTo(java.io.File)
+     *
+     * @param file Tiedosto johon Replay on tallennettu.
+     * @throws FileNotFoundException Jos tiedostoa ei löydy, siitä ei voida
+     * luoda Replayta.
+     * @throws IOException Jos tiedoston lukemisessa tulee ongelma, siitä ei
+     * void aluoda Replayta.
+     */
     public Replay(File file) throws FileNotFoundException, IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             this.actions = new ArrayDeque();
@@ -39,18 +60,15 @@ public class Replay {
         }
     }
 
-    public void addAction(PlayerAction action) {
-        actions.addLast(action);
-    }
-
-    public PlayerAction popAction() {
-        return actions.pollFirst();
-    }
-
-    public short getSeed() {
-        return seed;
-    }
-
+    /**
+     * Tallentaa Replayn tiedostoon.
+     *
+     * @see otm.roguesque.game.dungeon.replay.Replay#Replay(java.io.File)
+     *
+     * @param file Tiedosto johon Replay tallennetaan.
+     * @throws IOException Tiedoston kirjoittamisessa voi tulla vastaan
+     * ongelmia.
+     */
     public void saveTo(File file) throws IOException {
         if (file.exists()) {
             file.delete();
@@ -64,6 +82,47 @@ public class Replay {
         }
     }
 
+    /**
+     * Lisää uusi pelaaja-action listaan. Tätä kutsutaan Dungeonista pelin
+     * edetessä.
+     *
+     * @param action Pelaajan tekemä asia.
+     */
+    public void addAction(PlayerAction action) {
+        actions.addLast(action);
+    }
+
+    /**
+     * Lukee yhden pelaaja-actionin listasta, lähtien ensimmäisestä lisätystä.
+     *
+     * @see
+     * otm.roguesque.game.dungeon.replay.Replay#addAction(otm.roguesque.game.dungeon.replay.PlayerAction)
+     *
+     * @return Pelaajan tekemä asia.
+     */
+    public PlayerAction popAction() {
+        return actions.pollFirst();
+    }
+
+    /**
+     * Palauttaa sen Dungeonin seed-luvun, jossa tämä Replay-instanssi alunperin
+     * luotiin.
+     *
+     * @return Tämän Replayn Dungeonin seed-luku.
+     */
+    public short getSeed() {
+        return seed;
+    }
+
+    /**
+     * Pyörittää jokaisen pelaajan tekemän asian järjestyksessä läpi annetun
+     * Dungeonin sisällä.
+     *
+     * @see otm.roguesque.game.dungeon.replay.Replay#getSeed()
+     *
+     * @param dungeon Dungeon, jossa pelaajan tekemiset simuloidaan. Tämän
+     * Dungeonin seed-luku tulee olla sama kuin tämän Replayn.
+     */
     public void play(Dungeon dungeon) {
         for (PlayerAction action : actions) {
             dungeon.runPlayerAction(action);

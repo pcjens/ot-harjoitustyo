@@ -19,7 +19,7 @@ public class Rat extends Entity implements AI {
 
     @Override
     public void processRound() {
-        Vector delta = getVectorTo(dungeon.getPlayer());
+        Vector delta = getVectorTo(getDungeon().getPlayer());
         if (delta.getDistance() > 8 || GlobalRandom.get().nextBoolean()) {
             int r = GlobalRandom.get().nextInt(4);
             int dx = (int) Math.cos(r * Math.PI / 2.0);

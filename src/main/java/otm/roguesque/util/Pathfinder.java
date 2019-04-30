@@ -10,6 +10,9 @@ import java.util.PriorityQueue;
  */
 public class Pathfinder {
 
+    private Pathfinder() {
+    }
+
     /**
      * Etsii polun paikasta A paikkaan B.
      *
@@ -21,7 +24,7 @@ public class Pathfinder {
      * voi kävellä läpi.)
      * @param width Kentän leveys.
      * @param height Kentän korkeus.
-     * @return
+     * @return Polku paikasta A paikkaan B.
      */
     public static Path findPath(int startX, int startY, int endX, int endY, boolean[] solid, int width, int height) {
         if (startX == endX && startY == endY) {
@@ -34,12 +37,12 @@ public class Pathfinder {
         addInitialNeighbors(queue, startX, startY, endX, endY, solid, width, height);
         while (!queue.isEmpty()) {
             Path current = queue.poll();
-            int i = current.x + current.y * width;
+            int i = current.getX() + current.getY() * width;
             if (visited.contains(i)) {
                 continue;
             }
             visited.add(i);
-            if (current.x == endX && current.y == endY) {
+            if (current.getX() == endX && current.getY() == endY) {
                 return current;
             }
             addNeighbors(queue, visited, current, solid, width, height);
@@ -64,8 +67,8 @@ public class Pathfinder {
     }
 
     private static void addNeighbors(PriorityQueue<Path> queue, HashSet<Integer> visited, Path previousPath, boolean[] solid, int width, int height) {
-        int x = previousPath.x;
-        int y = previousPath.y;
+        int x = previousPath.getX();
+        int y = previousPath.getY();
         if (x > 0 && !solid[x - 1 + y * width] && !visited.contains(x - 1 + y * width)) {
             queue.add(new Path(x - 1, y, previousPath));
         }

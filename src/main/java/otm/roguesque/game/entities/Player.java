@@ -1,5 +1,7 @@
 package otm.roguesque.game.entities;
 
+import otm.roguesque.game.dungeon.Dungeon;
+
 /**
  * Pelaaja-olio.
  *
@@ -22,8 +24,8 @@ public class Player extends Entity implements AI {
 
     @Override
     public void processRound() {
-        if (health < maxHealth && --currentAutoHealCooldown <= 0) {
-            health = Math.min(maxHealth, health + maxHealth / 10);
+        if (getHealth() < getMaxHealth() && --currentAutoHealCooldown <= 0) {
+            setHealth(Math.min(getMaxHealth(), getHealth() + getMaxHealth() / 10));
             currentAutoHealCooldown = autoHealCooldown;
         }
     }
@@ -32,7 +34,7 @@ public class Player extends Entity implements AI {
      * Palauttaa vuoromäärän joka pelaajalla menee saada passiivisesti 10%
      * elämäpisteistään takaisin.
      *
-     * @returns "Autoheal" vuoromäärä.
+     * @return "Autoheal" vuoromäärä.
      */
     public int getAutoHealCooldown() {
         return autoHealCooldown;
@@ -64,8 +66,8 @@ public class Player extends Entity implements AI {
      * @return Törmätyn olion kuvausteksti.
      */
     public String getExaminationText() {
-        if (lastEntityInteractedWith != null) {
-            return lastEntityInteractedWith.getDescription();
+        if (getLastEntityInteractedWith() != null) {
+            return getLastEntityInteractedWith().getRichDescription();
         }
         return null;
     }
@@ -79,7 +81,7 @@ public class Player extends Entity implements AI {
      */
     public boolean inLineOfSight(int x, int y) {
         if (tilesInLOS != null) {
-            return tilesInLOS[x + y * dungeon.getWidth()];
+            return tilesInLOS[x + y * getDungeon().getWidth()];
         } else {
             return false;
         }
@@ -94,7 +96,7 @@ public class Player extends Entity implements AI {
      */
     public boolean isUncovered(int x, int y) {
         if (uncoveredTiles != null) {
-            return uncoveredTiles[x + y * dungeon.getWidth()];
+            return uncoveredTiles[x + y * getDungeon().getWidth()];
         } else {
             return false;
         }
@@ -120,6 +122,7 @@ public class Player extends Entity implements AI {
      * (Tarkoittaa käytännössä ääretöntä näköetäisyyttä.)
      */
     public void recalculateLineOfSight(boolean ignoreDistance) {
+        Dungeon dungeon = getDungeon();
         if (dungeon != null) {
             int width = dungeon.getWidth();
             int height = dungeon.getHeight();
@@ -196,7 +199,7 @@ public class Player extends Entity implements AI {
         }
         int[] vals = new int[]{2 * dy - dx, y0};
         for (int scanX = x0; scanX <= x1; scanX++) {
-            if (dungeon.solid(scanX, vals[1])) {
+            if (getDungeon().solid(scanX, vals[1])) {
                 return true;
             }
             step(yStep, dx, dy, vals);
@@ -214,7 +217,7 @@ public class Player extends Entity implements AI {
         }
         int[] vals = new int[]{2 * dx - dy, x0};
         for (int scanY = y0; scanY <= y1; scanY++) {
-            if (dungeon.solid(vals[1], scanY)) {
+            if (getDungeon().solid(vals[1], scanY)) {
                 return true;
             }
             step(xStep, dy, dx, vals);

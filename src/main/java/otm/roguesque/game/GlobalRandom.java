@@ -21,7 +21,7 @@ public class GlobalRandom {
      * käyttää kaikkiin pelimekaniikkoihin vaikuttaviin asioihin, eikä mihinkään
      * muuhun, jotta peli pysyy deterministisenä.
      *
-     * @see otm.roguesque.game.GlobalRandom#reset(int)
+     * @see otm.roguesque.game.GlobalRandom#reset(short)
      *
      * @return Random joka luodaan resetissä.
      */
@@ -32,7 +32,7 @@ public class GlobalRandom {
     /**
      * Palauttaa seed-luvun joka määriteltiin viimeisimmässä resetissä.
      *
-     * @see otm.roguesque.game.GlobalRandom#reset(int)
+     * @see otm.roguesque.game.GlobalRandom#reset(short)
      *
      * @return Seed-luku joka annetaan resetissä parametrinä.
      */

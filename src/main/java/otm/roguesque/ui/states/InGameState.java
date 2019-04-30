@@ -265,7 +265,7 @@ public class InGameState implements GameState {
     private String getDescriptionFromSelection() {
         Entity e = dungeon.getEntityAt(selectionX, selectionY);
         if (e != null) {
-            return e.getDescription();
+            return e.getRichDescription();
         } else {
             TileType tile = dungeon.getTileAt(selectionX, selectionY);
             if (tile != null) {

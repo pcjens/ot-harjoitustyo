@@ -36,4 +36,5 @@
 |       |  1 | Taistelumekaniikkojen uudelleenpainottamista, uusien tavaroiden ja notifikaatioiden lisäystä |
 | 29.4. |  2 | Replay-moodin kirjoittamista, joka myös vaati hieman käyttöliittymän ja pelin liimakoodin refaktorointia |
 |       |  1 | Replay-moodin debuggaamista |
-| Yht.  | 54 | |
+| 30.4. |  2 | JavaDocien korjaamista |
+| Yht.  | 55 | |

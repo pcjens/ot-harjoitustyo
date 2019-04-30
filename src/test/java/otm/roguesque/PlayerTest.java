@@ -1,10 +1,9 @@
+package otm.roguesque;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
-import otm.roguesque.game.dungeon.DungeonGenerator;
 import otm.roguesque.game.entities.Player;
 
 public class PlayerTest {
@@ -14,10 +13,8 @@ public class PlayerTest {
 
     @Before
     public void init() {
-        GlobalRandom.reset(12);
-        player = new Player();
-        dungeon = DungeonGenerator.generateNewDungeon(1);
-        dungeon.spawnEntity(player, dungeon.getPlayerSpawnX(), dungeon.getPlayerSpawnY());
+        dungeon = new Dungeon((short) 12, 1);
+        player = dungeon.getPlayer();
         player.recalculateLineOfSight(true);
     }
 

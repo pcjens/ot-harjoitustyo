@@ -16,22 +16,22 @@ import otm.roguesque.util.Vector;
  */
 public abstract class Entity {
 
-    protected Dungeon dungeon;
-    protected int x;
-    protected int y;
-    protected int maxHealth;
-    protected int health;
-    protected int attack;
-    protected int defense;
-    protected String name;
-    protected String description;
-    protected String friendlyGroup;
-    protected Image image;
-    protected Entity lastEntityInteractedWith;
+    private Dungeon dungeon;
+    private int x;
+    private int y;
+    private int maxHealth;
+    private int health;
+    private int attack;
+    private int defense;
+    private String name;
+    private String description;
+    private String friendlyGroup;
+    private Image image;
+    private Entity lastEntityInteractedWith;
 
     private ArrayList<Notification> notifications = new ArrayList();
 
-    protected Entity(int maxHealth, int attack, int defense, String name, String description, String friendlyGroup, String spritePath) {
+    Entity(int maxHealth, int attack, int defense, String name, String description, String friendlyGroup, String spritePath) {
         this.maxHealth = this.health = maxHealth;
         this.attack = attack;
         this.defense = defense;
@@ -43,18 +43,14 @@ public abstract class Entity {
         }
     }
 
-    protected final void loadImage(String spritePath) {
-        this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
-    }
-
     /**
      * Piirtää notifikaatiot.
      *
      * @param ctx Piirtokonteksti.
-     * @param offsetX
-     * @param offsetY
+     * @param offsetX Kameran siirtymä x-akselilla.
+     * @param offsetY Kameran siirtymä y-akselilla.
      * @param deltaTime Delta-aika.
-     * @param tileSize
+     * @param tileSize Yhden laatan koko.
      */
     public void drawNotifications(GraphicsContext ctx, int offsetX, int offsetY, double tileSize, float deltaTime) {
         for (Notification n : notifications) {
@@ -63,7 +59,7 @@ public abstract class Entity {
         notifications.removeIf(n -> n.hasDisappeared());
     }
 
-    protected void notify(String text, Color color, float length) {
+    void notify(String text, Color color, float length) {
         Notification notif = new Notification(x * 32, y * 32 - 3 - 18 * notifications.size(), text, color, length);
         notifications.add(notif);
     }
@@ -150,7 +146,7 @@ public abstract class Entity {
     }
 
     /**
-     * Palauttaa olion hyökkäysarvon.
+     * Palauttaa olion puolustusarvon.
      *
      * @see otm.roguesque.game.entities.Entity#getAttack()
      *
@@ -196,7 +192,7 @@ public abstract class Entity {
      *
      * @return Kuvaus oliosta.
      */
-    public String getDescription() {
+    public String getRichDescription() {
         return String.format("%s\n\n%s\n\nHP: %d/%d\nATK: %d\nDEF: %d", name, description, health, maxHealth, attack, defense);
     }
 
@@ -287,6 +283,93 @@ public abstract class Entity {
         }
     }
 
+    /**
+     * Reaktio, kun jokin hyökkää tähän olioon. Oletuksena ei siis mitään.
+     *
+     * @param attackingEntity Olio joka hyökkää.
+     */
     protected void reactToAttack(Entity attackingEntity) {
+    }
+
+    /**
+     * Palauttaa Dungeonin, jossa tämä olio elää.
+     *
+     * @return Dungeon, jossa tämä olio on.
+     */
+    protected final Dungeon getDungeon() {
+        return dungeon;
+    }
+
+    /**
+     * Palauttaa olion nimen.
+     *
+     * @return Olion nimi.
+     */
+    protected final String getName() {
+        return name;
+    }
+
+    /**
+     * Palauttaa olion kuvauksen.
+     *
+     * @return Olion kuvaus.
+     */
+    protected final String getDescription() {
+        return description;
+    }
+
+    /**
+     * Asettaa annetussa polussa olevan resurssin olion kuvaksi.
+     *
+     * @param spritePath Polku resurssiin, / viittaa
+     * otm.roguesque.resources-pakettiin.
+     */
+    protected final void loadImage(String spritePath) {
+        this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
+    }
+
+    /**
+     * Asettaa olion elämäpisteet.
+     *
+     * @param health Uudet elämäpisteet.
+     */
+    protected final void setHealth(int health) {
+        this.health = health;
+    }
+
+    /**
+     * Asettaa olion hyökkäysarvon.
+     *
+     * @param attack Uusi hyökkäysarvo.
+     */
+    protected final void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    /**
+     * Asettaa olion puolustusarvon.
+     *
+     * @param defense Uusi puolustusarvo.
+     */
+    protected final void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    /**
+     * Asettaa olion kuvauksen.
+     *
+     * @param description Uusi kuvaus.
+     */
+    protected final void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Asettaa olion nimen.
+     *
+     * @param name Uusi nimi.
+     */
+    protected final void setName(String name) {
+        this.name = name;
     }
 }

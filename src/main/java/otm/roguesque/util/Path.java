@@ -3,20 +3,20 @@ package otm.roguesque.util;
 /**
  * Polku.
  *
- * @see otm.roguesque.util.Pathfinder#findPath(int, int, int, int, int, int,
- * boolean[])
+ * @see otm.roguesque.util.Pathfinder#findPath(int, int, int, int, boolean[],
+ * int, int)
  */
 public class Path implements Comparable<Path> {
 
-    protected int x;
-    protected int y;
+    private int x;
+    private int y;
     private int length;
     private int nextDeltaX;
     private int nextDeltaY;
     private int targetX;
     private int targetY;
 
-    protected Path(int x, int y, Path previousPath) {
+    Path(int x, int y, Path previousPath) {
         this.x = x;
         this.y = y;
         this.length = previousPath.length + 1;
@@ -26,7 +26,7 @@ public class Path implements Comparable<Path> {
         this.targetY = previousPath.targetY;
     }
 
-    protected Path(int x, int y, int length, int nextDeltaX, int nextDeltaY, int targetX, int targetY) {
+    Path(int x, int y, int length, int nextDeltaX, int nextDeltaY, int targetX, int targetY) {
         this.x = x;
         this.y = y;
         this.length = length;
@@ -68,5 +68,13 @@ public class Path implements Comparable<Path> {
         Double thisLength = this.length + Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
         Double otherLength = t.length + Math.sqrt(Math.pow(t.x, 2) + Math.pow(t.y, 2));
         return thisLength.compareTo(otherLength);
+    }
+
+    int getX() {
+        return x;
+    }
+
+    int getY() {
+        return y;
     }
 }

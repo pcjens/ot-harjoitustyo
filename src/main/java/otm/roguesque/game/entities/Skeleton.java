@@ -1,6 +1,7 @@
 package otm.roguesque.game.entities;
 
 import otm.roguesque.game.GlobalRandom;
+import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.util.Path;
 
 /**
@@ -28,6 +29,7 @@ public class Skeleton extends Entity implements AI {
             return;
         }
 
+        Dungeon dungeon = getDungeon();
         Entity player = dungeon.getPlayer();
         Path path = dungeon.getPathTo(this, player);
         if (path != null) {

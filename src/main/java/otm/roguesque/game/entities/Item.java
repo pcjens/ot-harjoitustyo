@@ -46,10 +46,10 @@ public class Item extends Entity {
 
         ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
         loadImage("/sprites/Item" + data.identifier + ".png");
-        this.name = data.displayName;
+        this.setName(data.displayName);
         this.attackBoost = data.attackBoost;
         this.defenseBoost = data.defenseBoost;
-        this.description = data.description;
+        this.setDescription(data.description);
     }
 
     private String getStringFromBonus(int bonus) {
@@ -61,17 +61,17 @@ public class Item extends Entity {
     }
 
     @Override
-    public String getDescription() {
-        return String.format("%s\n\n%s\n\nATK: %s\nDEF: %s", name, description, getStringFromBonus(attackBoost), getStringFromBonus(defenseBoost));
+    public String getRichDescription() {
+        return String.format("%s\n\n%s\n\nATK: %s\nDEF: %s", getName(), getDescription(), getStringFromBonus(attackBoost), getStringFromBonus(defenseBoost));
     }
 
     @Override
     protected void reactToAttack(Entity attackingEntity) {
         if (attackingEntity instanceof Player) {
             Player player = (Player) attackingEntity;
-            player.attack = Math.max(1, player.attack + attackBoost);
-            player.defense = Math.max(0, player.defense + defenseBoost);
-            health = 0;
+            player.setAttack(Math.max(1, player.getAttack() + attackBoost));
+            player.setDefense(Math.max(0, player.getDefense() + defenseBoost));
+            setHealth(0);
         }
     }
 }

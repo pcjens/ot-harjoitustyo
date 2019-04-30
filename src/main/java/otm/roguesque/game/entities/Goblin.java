@@ -24,17 +24,17 @@ public class Goblin extends Entity implements AI {
 
     @Override
     public void processRound() {
-        Entity target = dungeon.getPlayer();
+        Entity target = getDungeon().getPlayer();
         Vector delta = getVectorTo(target);
         Path pathToPlayer;
-        if (delta.getDistance() < 10 && (pathToPlayer = dungeon.getPathTo(this, target)) != null && playerChaseRoundCount < 4) {
+        if (delta.getDistance() < 10 && (pathToPlayer = getDungeon().getPathTo(this, target)) != null && playerChaseRoundCount < 4) {
             delta = new Vector(pathToPlayer.getNextDeltaX(), pathToPlayer.getNextDeltaY());
             playerChaseRoundCount++;
         } else if (playerChaseRoundCount == 4) {
             playerChaseRoundCount = 0;
             delta = new Vector(0, 0);
         } else if (hunger == 0) {
-            target = dungeon.getClosestEntityOfType(Rat.class, x, y);
+            target = getDungeon().getClosestEntityOfType(Rat.class, getX(), getY());
             if (target != null) {
                 delta = getVectorTo(target).lesserComponentZeroed().unit();
             }
