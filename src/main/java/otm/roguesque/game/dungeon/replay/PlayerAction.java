@@ -1,45 +1,60 @@
 package otm.roguesque.game.dungeon.replay;
 
 /**
- * Pelaajan tekemiä asioita kuvaava enum.
+ * Yhtä pelaajan tekemää asiaa kuvaava luokka, joka sisältää myös tiedon asian
+ * toistomäärästä.
  *
  * @author Jens Pitkänen
  */
-public enum PlayerAction {
-    /**
-     * Seuraavaan tasoon siirtyminen, kun pelaaja on tikkaiden päällä.
-     */
-    NextLevel(false),
-    /**
-     * Yksi askel ylös.
-     */
-    MoveUp(true),
-    /**
-     * Yksi askel vasemmalle.
-     */
-    MoveLeft(true),
-    /**
-     * Yksi askel alas.
-     */
-    MoveDown(true),
-    /**
-     * Yksi askel oikealle.
-     */
-    MoveRight(true);
+public class PlayerAction {
 
-    private final boolean proceedsRound;
+    private PlayerActionType type;
+    private int count;
 
-    PlayerAction(boolean proceedsRound) {
-        this.proceedsRound = proceedsRound;
+    /**
+     * Luo uuden PlayerActionin.
+     *
+     * @param type Pelaajan tekemän asian tyyppi.
+     * @param count Pelaajan tekemän asian toistot.
+     */
+    public PlayerAction(PlayerActionType type, int count) {
+        this.type = type;
+        this.count = count;
     }
 
     /**
-     * Palauttaa true, mikäli tämän PlayerActionin pitäisi edistää peliä
-     * vuorolla. Käytännössä siis kaikki paitsi NextLevel.
+     * Palauttaa pelaajan tekemän asian olemuksen.
      *
-     * @return Tuleeko peliä edistää vuorolla tämän jälkeen?
+     * @return Pelaajan tekemän asian tyyppi.
      */
-    public boolean proceedsRound() {
-        return proceedsRound;
+    public PlayerActionType getType() {
+        return type;
+    }
+
+    /**
+     * Palauttaa sen, kuinka monta kertaa pelaaja toisti tämän actionin.
+     *
+     * @return Toistojen määrä.
+     */
+    public int getCount() {
+        return count;
+    }
+
+    /**
+     * Nostaa tehtyjen actionien määrää yhdellä.
+     *
+     * @see otm.roguesque.game.dungeon.replay.PlayerAction#getCount()
+     */
+    public void increment() {
+        this.count++;
+    }
+
+    /**
+     * Laskee tehtyjen actionien määrää yhdellä.
+     *
+     * @see otm.roguesque.game.dungeon.replay.PlayerAction#getCount()
+     */
+    public void decrement() {
+        this.count--;
     }
 }

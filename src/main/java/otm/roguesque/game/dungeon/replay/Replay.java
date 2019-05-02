@@ -53,9 +53,10 @@ public class Replay {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             this.actions = new ArrayDeque();
             this.seed = (short) reader.read();
+            int count;
             int action;
-            while ((action = reader.read()) != -1) {
-                actions.add(PlayerAction.values()[action]);
+            while ((count = reader.read()) != -1 && (action = reader.read()) != -1) {
+                actions.add(new PlayerAction(PlayerActionType.values()[action], count));
             }
         }
     }
@@ -77,7 +78,8 @@ public class Replay {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write((int) (seed & 0xFFFF));
             for (PlayerAction action : actions) {
-                writer.write(action.ordinal());
+                writer.write(action.getCount());
+                writer.write(action.getType().ordinal());
             }
         }
     }
@@ -88,8 +90,12 @@ public class Replay {
      *
      * @param action Pelaajan tekemä asia.
      */
-    public void addAction(PlayerAction action) {
-        actions.addLast(action);
+    public void addAction(PlayerActionType action) {
+        if (!actions.isEmpty() && actions.getLast().getType() == action) {
+            actions.getLast().increment();
+        } else {
+            actions.addLast(new PlayerAction(action, 1));
+        }
     }
 
     /**
@@ -100,8 +106,16 @@ public class Replay {
      *
      * @return Pelaajan tekemä asia.
      */
-    public PlayerAction popAction() {
-        return actions.pollFirst();
+    public PlayerActionType popAction() {
+        if (actions.isEmpty()) {
+            return null;
+        }
+        PlayerAction action = actions.peekFirst();
+        action.decrement();
+        if (action.getCount() <= 0) {
+            actions.removeFirst();
+        }
+        return action.getType();
     }
 
     /**
@@ -124,7 +138,8 @@ public class Replay {
      * Dungeonin seed-luku tulee olla sama kuin tämän Replayn.
      */
     public void play(Dungeon dungeon) {
-        for (PlayerAction action : actions) {
+        PlayerActionType action;
+        while ((action = popAction()) != null) {
             dungeon.runPlayerAction(action);
             if (action.proceedsRound()) {
                 dungeon.processRound();

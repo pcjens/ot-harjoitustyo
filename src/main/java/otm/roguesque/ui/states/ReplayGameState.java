@@ -5,7 +5,7 @@ import java.io.IOException;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javax.swing.JOptionPane;
-import otm.roguesque.game.dungeon.replay.PlayerAction;
+import otm.roguesque.game.dungeon.replay.PlayerActionType;
 import otm.roguesque.game.dungeon.replay.Replay;
 import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
@@ -23,7 +23,7 @@ public class ReplayGameState extends InGameState {
     private boolean failedToLoad;
     private boolean finished;
 
-    private final int actionCooldown = 10;
+    private final int actionCooldown = 3;
     private int actionTime = 0;
 
     private final Button returnButton = new Button(new KeyCode[]{KeyCode.R}, "Return to main menu", 200, 300, 250, 45, 0);
@@ -84,13 +84,13 @@ public class ReplayGameState extends InGameState {
             return false;
         }
         actionTime = actionCooldown;
-        PlayerAction action = replay.popAction();
+        PlayerActionType action = replay.popAction();
         if (action == null) {
             finished = true;
             return false;
         }
         dungeon.runPlayerAction(action);
-        if (action == PlayerAction.NextLevel) {
+        if (action == PlayerActionType.NextLevel) {
             reloadUI();
         }
         return action.proceedsRound() && processRound();

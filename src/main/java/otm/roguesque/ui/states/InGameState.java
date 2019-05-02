@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.game.dungeon.TileType;
-import otm.roguesque.game.dungeon.replay.PlayerAction;
+import otm.roguesque.game.dungeon.replay.PlayerActionType;
 import otm.roguesque.game.dungeon.replay.Replay;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Player;
@@ -186,7 +186,7 @@ public class InGameState implements GameState {
         if (dungeon.canFinish()) {
             nextLevelButton.update(input);
             if (nextLevelButton.isClicked()) {
-                dungeon.runPlayerAction(PlayerAction.NextLevel);
+                dungeon.runPlayerAction(PlayerActionType.NextLevel);
                 reloadUI();
             }
         }
@@ -202,13 +202,13 @@ public class InGameState implements GameState {
 
     private boolean movePlayer(Input input) {
         if (input.isPressed(Input.CONTROL_MOVE_UP)) {
-            dungeon.runPlayerAction(PlayerAction.MoveUp);
+            dungeon.runPlayerAction(PlayerActionType.MoveUp);
         } else if (input.isPressed(Input.CONTROL_MOVE_LEFT)) {
-            dungeon.runPlayerAction(PlayerAction.MoveLeft);
+            dungeon.runPlayerAction(PlayerActionType.MoveLeft);
         } else if (input.isPressed(Input.CONTROL_MOVE_DOWN)) {
-            dungeon.runPlayerAction(PlayerAction.MoveDown);
+            dungeon.runPlayerAction(PlayerActionType.MoveDown);
         } else if (input.isPressed(Input.CONTROL_MOVE_RIGHT)) {
-            dungeon.runPlayerAction(PlayerAction.MoveRight);
+            dungeon.runPlayerAction(PlayerActionType.MoveRight);
         } else {
             return false;
         }
