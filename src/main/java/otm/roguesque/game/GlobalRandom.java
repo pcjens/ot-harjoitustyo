@@ -12,16 +12,16 @@ import java.util.Random;
  */
 public class GlobalRandom {
 
-    private static final short INITIAL_SEED = (short) (System.currentTimeMillis() & 0xFFFF);
+    private static final long INITIAL_SEED = System.currentTimeMillis();
     private static Random random = new Random(INITIAL_SEED);
-    private static short seed = INITIAL_SEED;
+    private static long seed = INITIAL_SEED;
 
     /**
      * Palauttaa instanssin Random-luokasta. Tätä instanssia on tarkoitus
      * käyttää kaikkiin pelimekaniikkoihin vaikuttaviin asioihin, eikä mihinkään
      * muuhun, jotta peli pysyy deterministisenä.
      *
-     * @see otm.roguesque.game.GlobalRandom#reset(short)
+     * @see otm.roguesque.game.GlobalRandom#reset(long)
      *
      * @return Random joka luodaan resetissä.
      */
@@ -32,7 +32,7 @@ public class GlobalRandom {
     /**
      * Palauttaa seed-luvun joka määriteltiin viimeisimmässä resetissä.
      *
-     * @see otm.roguesque.game.GlobalRandom#reset(short)
+     * @see otm.roguesque.game.GlobalRandom#reset(long)
      *
      * @return Seed-luku joka annetaan resetissä parametrinä.
      */
@@ -49,7 +49,7 @@ public class GlobalRandom {
      *
      * @param seed Seed-luku, johon perustuen satunnaislukugeneraattori luodaan.
      */
-    public static void reset(short seed) {
+    public static void reset(long seed) {
         GlobalRandom.seed = seed;
         random = new Random(seed);
     }

@@ -1,12 +1,10 @@
 package otm.roguesque.game.dungeon.replay;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayDeque;
 import otm.roguesque.game.dungeon.Dungeon;
 
@@ -23,17 +21,19 @@ import otm.roguesque.game.dungeon.Dungeon;
  */
 public class Replay {
 
-    private final short seed;
+    private static final byte[] FILE_HEADER = new byte[]{'R', 'G', 'S', 'Q'};
+    private static final byte FILE_HEADER_VERSION = 0;
+    private final long seed;
     private final ArrayDeque<PlayerAction> actions;
 
     /**
      * Luo uuden Replayn, tarkoitettu kutsuttavaksi Dungeonista.
      *
-     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(short, int)
+     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(long, int)
      *
      * @param seed Seed-luku johon ylempänä mainittu Dungeon pohjautuu.
      */
-    public Replay(short seed) {
+    public Replay(long seed) {
         this.seed = seed;
         this.actions = new ArrayDeque();
     }
@@ -43,22 +43,44 @@ public class Replay {
      *
      * @see otm.roguesque.game.dungeon.replay.Replay#saveTo(java.io.File)
      *
-     * @param file Tiedosto johon Replay on tallennettu.
+     * @param path Polku tiedostoon johon Replay on tallennettu.
      * @throws FileNotFoundException Jos tiedostoa ei löydy, siitä ei voida
      * luoda Replayta.
      * @throws IOException Jos tiedoston lukemisessa tulee ongelma, siitä ei
      * void aluoda Replayta.
      */
-    public Replay(File file) throws FileNotFoundException, IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            this.actions = new ArrayDeque();
-            this.seed = (short) reader.read();
-            int count;
-            int action;
-            while ((count = reader.read()) != -1 && (action = reader.read()) != -1) {
-                actions.add(new PlayerAction(PlayerActionType.values()[action], count));
+    public Replay(Path path) throws IOException {
+        byte[] contents = Files.readAllBytes(path);
+        for (int i = 0; i < FILE_HEADER.length; i++) {
+            if (contents[i] != FILE_HEADER[i]) {
+                throw new IOException("Invalid file header.");
             }
         }
+
+        actions = new ArrayDeque();
+        // Switch based on the file version
+        switch (contents[FILE_HEADER.length]) {
+            case 0:
+                seed = loadReplay(contents, FILE_HEADER.length + 1);
+                break;
+            default:
+                throw new IOException("Invalid file version. (This could be caused by trying to load a newer save on an old version.)");
+        }
+    }
+
+    private long loadReplay(byte[] bytes, int offset) {
+        long loadedSeed = 0;
+        for (int shift = 0; shift < 8; shift++) {
+            loadedSeed <<= 8;
+            loadedSeed |= bytes[offset + shift] & 0xFF;
+        }
+        for (int i = offset + 8; i < bytes.length; i += 2) {
+            byte count = bytes[i];
+            byte action = bytes[i + 1];
+            actions.add(new PlayerAction(PlayerActionType.values()[action], count));
+        }
+        System.out.println(loadedSeed);
+        return loadedSeed;
     }
 
     /**
@@ -66,22 +88,27 @@ public class Replay {
      *
      * @see otm.roguesque.game.dungeon.replay.Replay#Replay(java.io.File)
      *
-     * @param file Tiedosto johon Replay tallennetaan.
+     * @param path Tiedosto johon Replay tallennetaan.
      * @throws IOException Tiedoston kirjoittamisessa voi tulla vastaan
      * ongelmia.
      */
-    public void saveTo(File file) throws IOException {
-        if (file.exists()) {
-            file.delete();
-            file.createNewFile();
+    public void saveTo(Path path) throws IOException {
+        byte[] bytes = new byte[FILE_HEADER.length + 9 + actions.size() * 2];
+        System.arraycopy(FILE_HEADER, 0, bytes, 0, FILE_HEADER.length);
+        int index = FILE_HEADER.length;
+        bytes[index++] = FILE_HEADER_VERSION;
+        long savedSeed = seed;
+        for (int shift = 7; shift >= 0; shift--) {
+            bytes[index + shift] = (byte) (savedSeed & 0xFF);
+            savedSeed >>= 8;
         }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write((int) (seed & 0xFFFF));
-            for (PlayerAction action : actions) {
-                writer.write(action.getCount());
-                writer.write(action.getType().ordinal());
-            }
+        index += 8;
+        System.out.println(seed);
+        for (PlayerAction action : actions) {
+            bytes[index++] = action.getCount();
+            bytes[index++] = (byte) action.getType().ordinal();
         }
+        Files.write(path, bytes, StandardOpenOption.CREATE);
     }
 
     /**
@@ -91,11 +118,14 @@ public class Replay {
      * @param action Pelaajan tekemä asia.
      */
     public void addAction(PlayerActionType action) {
-        if (!actions.isEmpty() && actions.getLast().getType() == action) {
-            actions.getLast().increment();
-        } else {
-            actions.addLast(new PlayerAction(action, 1));
+        if (!actions.isEmpty()) {
+            PlayerAction latestAction = actions.getLast();
+            if (latestAction.getType() == action && latestAction.getCount() < 127) {
+                latestAction.increment();
+                return;
+            }
         }
+        actions.addLast(new PlayerAction(action, (byte) 1));
     }
 
     /**
@@ -124,7 +154,7 @@ public class Replay {
      *
      * @return Tämän Replayn Dungeonin seed-luku.
      */
-    public short getSeed() {
+    public long getSeed() {
         return seed;
     }
 

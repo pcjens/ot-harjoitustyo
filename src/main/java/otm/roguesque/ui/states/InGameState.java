@@ -2,8 +2,8 @@ package otm.roguesque.ui.states;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -62,11 +62,11 @@ public class InGameState implements GameState {
 
     @Override
     public void initialize() {
-        short initialSeed = (short) GlobalRandom.get().nextInt(0xFFFF);
+        long initialSeed = GlobalRandom.get().nextLong();
         initializeDungeon(initialSeed);
     }
 
-    protected void initializeDungeon(short seed) {
+    protected void initializeDungeon(long seed) {
         dungeon = new Dungeon(seed, 1);
         player = dungeon.getPlayer();
         reloadUI();
@@ -195,7 +195,7 @@ public class InGameState implements GameState {
 
     private void saveReplay(String fileName) {
         try {
-            dungeon.getReplay().saveTo(new File(fileName));
+            dungeon.getReplay().saveTo(Paths.get(System.getProperty("user.dir"), fileName));
         } catch (IOException ex) {
         }
     }
@@ -289,7 +289,7 @@ public class InGameState implements GameState {
             // Not a high priority though, this is a debugging feature
             String result = JOptionPane.showInputDialog(null, "Please enter a new seed:", currentSeed);
             try {
-                initializeDungeon(Short.parseShort(result));
+                initializeDungeon(Long.parseLong(result));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "The seed was not a number.", "Dungeon not regenerated", JOptionPane.ERROR_MESSAGE);
             }

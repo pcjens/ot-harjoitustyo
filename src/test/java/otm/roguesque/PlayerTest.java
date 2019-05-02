@@ -13,7 +13,7 @@ public class PlayerTest {
 
     @Before
     public void init() {
-        dungeon = new Dungeon((short) 12, 1);
+        dungeon = new Dungeon(12, 1);
         player = dungeon.getPlayer();
         player.recalculateLineOfSight(true);
     }

@@ -1,7 +1,7 @@
 package otm.roguesque.ui.states;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javax.swing.JOptionPane;
@@ -35,8 +35,8 @@ public class ReplayGameState extends InGameState {
         replay = null;
 
         try {
-            replay = new Replay(new File(JOptionPane.showInputDialog("Save file to load?", "roguesque-replay.rgsq")));
-            short initialSeed = replay.getSeed();
+            replay = new Replay(Paths.get(System.getProperty("user.dir"), JOptionPane.showInputDialog("Save file to load?", "roguesque-replay.rgsq")));
+            long initialSeed = replay.getSeed();
             initializeDungeon(initialSeed);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "No such file.", "Error", JOptionPane.ERROR_MESSAGE);

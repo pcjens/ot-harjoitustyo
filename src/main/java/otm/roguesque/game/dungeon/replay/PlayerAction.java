@@ -9,7 +9,7 @@ package otm.roguesque.game.dungeon.replay;
 public class PlayerAction {
 
     private PlayerActionType type;
-    private int count;
+    private byte count;
 
     /**
      * Luo uuden PlayerActionin.
@@ -17,7 +17,7 @@ public class PlayerAction {
      * @param type Pelaajan tekemän asian tyyppi.
      * @param count Pelaajan tekemän asian toistot.
      */
-    public PlayerAction(PlayerActionType type, int count) {
+    public PlayerAction(PlayerActionType type, byte count) {
         this.type = type;
         this.count = count;
     }
@@ -36,7 +36,7 @@ public class PlayerAction {
      *
      * @return Toistojen määrä.
      */
-    public int getCount() {
+    public byte getCount() {
         return count;
     }
 

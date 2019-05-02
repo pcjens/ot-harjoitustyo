@@ -1,7 +1,7 @@
 package otm.roguesque.ui.states;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -60,7 +60,8 @@ public class GameOverState implements GameState {
         }
         if (showDebugInfo && saveReplayButton.isClicked()) {
             try {
-                InGameState.latestReplay.saveTo(new File(JOptionPane.showInputDialog("Save file name:", "roguesque-replay.rgsq")));
+                InGameState.latestReplay.saveTo(Paths.get(System.getProperty("user.dir"),
+                        JOptionPane.showInputDialog("Save file name:", "roguesque-replay.rgsq")));
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Couldn't save replay. Are you lacking permissions?", "Replay not saved", JOptionPane.WARNING_MESSAGE);
             }

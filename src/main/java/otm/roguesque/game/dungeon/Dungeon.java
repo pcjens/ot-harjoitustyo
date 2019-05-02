@@ -45,7 +45,7 @@ public class Dungeon {
      * @param seed Alkuperäinen seed-luku kentän generointiin.
      * @param level Ensimmäisen kentän vaikeustaso.
      */
-    public Dungeon(short seed, int level) {
+    public Dungeon(long seed, int level) {
         this.width = (int) (DungeonGenerator.MAX_ROOM_WIDTH * (Math.sqrt(DungeonGenerator.MAX_ROOMS) + 1));
         this.height = (int) (DungeonGenerator.MAX_ROOM_HEIGHT * (Math.sqrt(DungeonGenerator.MAX_ROOMS) + 1));
         this.tiles = new TileType[width * height];
@@ -68,7 +68,7 @@ public class Dungeon {
             case NextLevel:
                 if (canFinish()) {
                     level++;
-                    regenerateDungeon((short) GlobalRandom.get().nextInt(0xFFFF));
+                    regenerateDungeon(GlobalRandom.get().nextLong());
                 }
                 break;
             case MoveUp:
@@ -99,7 +99,7 @@ public class Dungeon {
         return replay;
     }
 
-    private void regenerateDungeon(short seed) {
+    private void regenerateDungeon(long seed) {
         entities.clear();
         clearTiles();
 
@@ -173,7 +173,7 @@ public class Dungeon {
     /**
      * Palauttaa kentän vaikeustason.
      *
-     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(short, int)
+     * @see otm.roguesque.game.dungeon.Dungeon#Dungeon(long, int)
      *
      * @return Kentän vaikeustaso.
      */
