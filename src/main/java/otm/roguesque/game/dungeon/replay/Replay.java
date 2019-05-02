@@ -41,7 +41,7 @@ public class Replay {
     /**
      * Lataa Replayn tiedostosta.
      *
-     * @see otm.roguesque.game.dungeon.replay.Replay#saveTo(java.io.File)
+     * @see otm.roguesque.game.dungeon.replay.Replay#saveTo(java.nio.file.Path)
      *
      * @param path Polku tiedostoon johon Replay on tallennettu.
      * @throws FileNotFoundException Jos tiedostoa ei löydy, siitä ei voida
@@ -86,7 +86,7 @@ public class Replay {
     /**
      * Tallentaa Replayn tiedostoon.
      *
-     * @see otm.roguesque.game.dungeon.replay.Replay#Replay(java.io.File)
+     * @see otm.roguesque.game.dungeon.replay.Replay#Replay(java.nio.file.Path)
      *
      * @param path Tiedosto johon Replay tallennetaan.
      * @throws IOException Tiedoston kirjoittamisessa voi tulla vastaan
@@ -132,7 +132,7 @@ public class Replay {
      * Lukee yhden pelaaja-actionin listasta, lähtien ensimmäisestä lisätystä.
      *
      * @see
-     * otm.roguesque.game.dungeon.replay.Replay#addAction(otm.roguesque.game.dungeon.replay.PlayerAction)
+     * otm.roguesque.game.dungeon.replay.Replay#addAction(otm.roguesque.game.dungeon.replay.PlayerActionType)
      *
      * @return Pelaajan tekemä asia.
      */

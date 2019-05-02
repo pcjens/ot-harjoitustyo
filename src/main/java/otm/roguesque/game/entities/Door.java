@@ -12,6 +12,7 @@ public class Door extends Entity {
      */
     public Door() {
         super(100000, 0, 0, "", "", "Doors", "/sprites/Door.png");
+        setInvulnerability(true);
     }
 
     @Override

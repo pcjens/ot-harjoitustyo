@@ -3,10 +3,9 @@ package otm.roguesque.game.entities;
 import java.util.ArrayList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.dungeon.Dungeon;
-import otm.roguesque.ui.Notification;
+import otm.roguesque.ui.HitNotification;
 import otm.roguesque.util.Vector;
 
 /**
@@ -28,8 +27,9 @@ public abstract class Entity {
     private String friendlyGroup;
     private Image image;
     private Entity lastEntityInteractedWith;
+    private boolean invulnerable;
 
-    private ArrayList<Notification> notifications = new ArrayList();
+    private ArrayList<HitNotification> notifications = new ArrayList();
 
     Entity(int maxHealth, int attack, int defense, String name, String description, String friendlyGroup, String spritePath) {
         this.maxHealth = this.health = maxHealth;
@@ -41,26 +41,34 @@ public abstract class Entity {
         if (!spritePath.isEmpty()) {
             this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
         }
+        this.invulnerable = false;
     }
 
     /**
      * Piirtää notifikaatiot.
      *
      * @param ctx Piirtokonteksti.
-     * @param offsetX Kameran siirtymä x-akselilla.
-     * @param offsetY Kameran siirtymä y-akselilla.
-     * @param deltaTime Delta-aika.
-     * @param tileSize Yhden laatan koko.
      */
-    public void drawNotifications(GraphicsContext ctx, int offsetX, int offsetY, double tileSize, float deltaTime) {
-        for (Notification n : notifications) {
-            n.draw(ctx, offsetX, offsetY, tileSize, deltaTime);
+    public void drawNotifications(GraphicsContext ctx) {
+        for (HitNotification n : notifications) {
+            n.draw(ctx);
+        }
+    }
+
+    /**
+     * Päivittää notifikaatiot.
+     *
+     * @param deltaTime Delta-aika.
+     */
+    public void updateNotifications(float deltaTime) {
+        for (HitNotification n : notifications) {
+            n.update(deltaTime);
         }
         notifications.removeIf(n -> n.hasDisappeared());
     }
 
-    void notify(String text, Color color, float length) {
-        Notification notif = new Notification(x * 32, y * 32 - 3 - 18 * notifications.size(), text, color, length);
+    void hitNotify(int amount, float length) {
+        HitNotification notif = new HitNotification(8, 8 - 18 * notifications.size(), amount, length);
         notifications.add(notif);
     }
 
@@ -251,9 +259,7 @@ public abstract class Entity {
         int defRoll = this.defense <= 0 ? this.defense : (GlobalRandom.get().nextInt(this.defense) + 1);
         int damage = (int) Math.max(atkRoll / 2, atkRoll - defRoll);
         this.health -= damage;
-        if (!(this instanceof Player)) {
-            notify("" + damage, damage == 0 ? Color.GRAY : Color.RED, 0.5f);
-        }
+        hitNotify(damage, 0.5f);
     }
 
     private boolean hitAndCollide(int newX, int newY) {
@@ -261,7 +267,7 @@ public abstract class Entity {
         if (hitEntity != null) {
             lastEntityInteractedWith = hitEntity;
             hitEntity.reactToAttack(this);
-            if (hitEntity.friendlyGroup.equals(this.friendlyGroup)) {
+            if (hitEntity.friendlyGroup.equals(this.friendlyGroup) || hitEntity.invulnerable) {
                 return true;
             }
             hitEntity.takeDamage(attack);
@@ -371,5 +377,9 @@ public abstract class Entity {
      */
     protected final void setName(String name) {
         this.name = name;
+    }
+
+    protected final void setInvulnerability(boolean invulnerable) {
+        this.invulnerable = invulnerable;
     }
 }

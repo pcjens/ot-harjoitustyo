@@ -85,14 +85,11 @@ public class InGameState implements GameState {
 
     @Override
     public void draw(GraphicsContext ctx, float deltaSeconds, boolean showDebugInfo) {
-        dungeonRenderer.draw(ctx, tileSize, selectionX, selectionY);
-        for (Entity e : dungeon.getEntities()) {
-            e.drawNotifications(ctx, dungeonRenderer.getOffsetX(), dungeonRenderer.getOffsetY(), tileSize, deltaSeconds);
-        }
-
         Canvas canvas = ctx.getCanvas();
         double width = canvas.getWidth();
         double height = canvas.getHeight();
+
+        drawWorld(ctx);
 
         RenderingUtil.drawBox(ctx, 20.0, height - 80.0, width - 40.0, 60.0, false);
 
@@ -105,6 +102,17 @@ public class InGameState implements GameState {
         }
         if (showDebugInfo) {
             drawDebugInformation(ctx);
+        }
+    }
+
+    private void drawWorld(GraphicsContext ctx) {
+        dungeonRenderer.draw(ctx, tileSize, selectionX, selectionY);
+        for (Entity e : dungeon.getEntities()) {
+            if (player.inLineOfSight(e.getX(), e.getY())) {
+                ctx.translate((e.getX() - dungeonRenderer.getOffsetX()) * tileSize, (e.getY() - dungeonRenderer.getOffsetY()) * tileSize);
+                e.drawNotifications(ctx);
+                ctx.translate(-(e.getX() - dungeonRenderer.getOffsetX()) * tileSize, -(e.getY() - dungeonRenderer.getOffsetY()) * tileSize);
+            }
         }
     }
 
@@ -158,6 +166,9 @@ public class InGameState implements GameState {
 
         selectTile(input);
         updateTexts();
+        for (Entity e : dungeon.getEntities()) {
+            e.updateNotifications(deltaSeconds);
+        }
 
         if (showDebugInfo) {
             updateDebugButtons(input);

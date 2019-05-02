@@ -39,7 +39,7 @@ public class RoguesqueApp extends Application {
     /**
      * Pienen notifikaatiotekstin fontti.
      */
-    public static final Font FONT_NOTIFICATION = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 18.0);
+    public static final Font FONT_NOTIFICATION = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 14.0);
 
     // UI
     private final BorderPane mainPanel;
