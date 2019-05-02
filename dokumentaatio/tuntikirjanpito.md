@@ -38,4 +38,5 @@
 |       |  1 | Replay-moodin debuggaamista |
 | 30.4. |  2 | JavaDocien korjaamista |
 |  2.5. |  1 | Replay-tiedostotyypin parantelua |
-| Yht.  | 56 | |
+|       |  1 | Refaktorointia ja osumanotifikaatioiden parantelua |
+| Yht.  | 57 | |
