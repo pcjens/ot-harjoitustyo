@@ -44,4 +44,5 @@
 |       |  1 | Tavaroiden korjailua, kuvien lataamisen refaktorointia, automaattinen rivitys lisätietolaatikolle |
 |       |  1 | Uusien tavaroiden lisäämistä |
 |       |  2 | Animaatioiden lisäämistä ja uusien tavaroiden lisäämistä |
-| Yht.  | 63 | |
+|       |  1 | Lohikäärmeiden lisäämistä |
+| Yht.  | 64 | |

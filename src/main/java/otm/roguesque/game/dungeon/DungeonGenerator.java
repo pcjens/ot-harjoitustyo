@@ -3,6 +3,7 @@ package otm.roguesque.game.dungeon;
 import java.util.ArrayList;
 import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.entities.Door;
+import otm.roguesque.game.entities.Dragon;
 import otm.roguesque.game.entities.Entity;
 import otm.roguesque.game.entities.Goblin;
 import otm.roguesque.game.entities.Item;
@@ -31,7 +32,7 @@ class DungeonGenerator {
     private static final int MIN_ROOMS = 5;
 
     private enum EnemyType {
-        Rat(2), Goblin(3), Skeleton(4);
+        Rat(2), Goblin(3), Skeleton(4), Dragon(30);
 
         int value;
 
@@ -45,6 +46,8 @@ class DungeonGenerator {
 
         public Entity createEntity() {
             switch (this) {
+                case Dragon:
+                    return new Dragon();
                 case Skeleton:
                     return new Skeleton();
                 case Goblin:

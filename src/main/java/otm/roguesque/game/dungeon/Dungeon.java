@@ -238,7 +238,11 @@ public class Dungeon {
      * @return Oliot annetussa ruudussa.
      */
     public ArrayList<Entity> getEntitiesAt(int x, int y) {
-        return entityCache[x + y * width];
+        if (x < 0 || y < 0 || x >= width || y >= height) {
+            return new ArrayList();
+        } else {
+            return entityCache[x + y * width];
+        }
     }
 
     /**

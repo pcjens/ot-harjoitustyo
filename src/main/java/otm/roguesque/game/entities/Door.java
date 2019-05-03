@@ -29,7 +29,7 @@ public class Door extends Entity {
      */
     @Override
     protected void reactToAttack(Entity attackingEntity) {
-        if (attackingEntity instanceof Player) {
+        if (attackingEntity instanceof Player || attackingEntity instanceof Dragon) {
             setHealth(0);
         }
     }
