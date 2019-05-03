@@ -39,4 +39,5 @@
 | 30.4. |  2 | JavaDocien korjaamista |
 |  2.5. |  1 | Replay-tiedostotyypin parantelua |
 |       |  1 | Refaktorointia, osumanotifikaatioiden parantelua, ja tavaroiden lataaminen konfiguraatiotiedostosta |
-| Yht.  | 57 | |
+|  3.5. |  1 | Refaktorointia, optimointia, tavaroiden laatikoimista |
+| Yht.  | 58 | |

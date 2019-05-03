@@ -39,6 +39,7 @@ public abstract class Entity {
         this.description = description;
         this.friendlyGroup = friendlyGroup;
         if (!spritePath.isEmpty()) {
+            // FIXME(low priority): Cache images, don't load each entity's image individually
             this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
         }
         this.invulnerable = false;
@@ -334,6 +335,15 @@ public abstract class Entity {
      */
     protected final void loadImage(String spritePath) {
         this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
+    }
+
+    /**
+     * Asettaa annetun kuvan olion kuvaksi.
+     *
+     * @param sprite Uusi kuva.
+     */
+    protected final void setImage(Image sprite) {
+        this.image = sprite;
     }
 
     /**

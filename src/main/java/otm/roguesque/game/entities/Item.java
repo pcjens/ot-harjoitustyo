@@ -3,7 +3,9 @@ package otm.roguesque.game.entities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import javafx.scene.image.Image;
 import otm.roguesque.game.GlobalRandom;
 
 /**
@@ -35,6 +37,8 @@ public class Item extends Entity {
         new ItemData("WoodenShield", "   Shield\n   of Wood", "It's a shield.\n\nNothing\nspecial.", 0, 1)
     };
 
+    private static HashMap<String, Image> ITEM_IMAGES = new HashMap();
+
     static {
         int i = 0;
         try {
@@ -60,6 +64,10 @@ public class Item extends Entity {
 
     private int attackBoost = 0;
     private int defenseBoost = 0;
+    private boolean boxed = true;
+    private Image itemImage;
+    private String itemName;
+    private String itemDescription;
 
     /**
      * Luo uuden tavaran.
@@ -67,14 +75,29 @@ public class Item extends Entity {
      * @param level Kentän vaikeustaso mistä tämä tavara löytyy.
      */
     public Item(int level) {
-        super(100000, 0, 0, "", "", "Items", "");
+        super(100000, 0, 0, "", "", "Items", "/sprites/ItemChest.png");
 
         ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
-        loadImage("/sprites/Item" + data.identifier + ".png");
-        this.setName(data.displayName);
+
+        this.setName("Chest");
+        this.setDescription("What could\nbe inside?");
+        this.setInvulnerability(true);
+
+        this.itemName = data.displayName;
+        this.itemDescription = data.description;
+        this.itemImage = loadItemImage(data.identifier);
         this.attackBoost = data.attackBoost;
         this.defenseBoost = data.defenseBoost;
-        this.setDescription(data.description);
+    }
+
+    private Image loadItemImage(String identifier) {
+        if (!ITEM_IMAGES.containsKey(identifier)) {
+            Image loadedImage = new Image(getClass().getResourceAsStream("/sprites/Item" + identifier + ".png"), 32, 32, true, false);
+            ITEM_IMAGES.put(identifier, loadedImage);
+            return loadedImage;
+        } else {
+            return ITEM_IMAGES.get(identifier);
+        }
     }
 
     private String getStringFromBonus(int bonus) {
@@ -87,16 +110,27 @@ public class Item extends Entity {
 
     @Override
     public String getRichDescription() {
-        return String.format("%s\n\n%s\n\nATK: %s\nDEF: %s", getName(), getDescription(), getStringFromBonus(attackBoost), getStringFromBonus(defenseBoost));
+        if (boxed) {
+            return String.format("%s\n\n%s", getName(), getDescription());
+        } else {
+            return String.format("%s\n\n%s\n\nATK: %s\nDEF: %s", getName(), getDescription(), getStringFromBonus(attackBoost), getStringFromBonus(defenseBoost));
+        }
     }
 
     @Override
     protected void reactToAttack(Entity attackingEntity) {
         if (attackingEntity instanceof Player) {
-            Player player = (Player) attackingEntity;
-            player.setAttack(Math.max(1, player.getAttack() + attackBoost));
-            player.setDefense(Math.max(0, player.getDefense() + defenseBoost));
-            setHealth(0);
+            if (boxed) {
+                boxed = false;
+                setImage(itemImage);
+                setName(itemName);
+                setDescription(itemDescription);
+            } else {
+                Player player = (Player) attackingEntity;
+                player.setAttack(Math.max(1, player.getAttack() + attackBoost));
+                player.setDefense(Math.max(0, player.getDefense() + defenseBoost));
+                setHealth(0);
+            }
         }
     }
 }
