@@ -1,3 +1,5 @@
-jar:/sprites/ItemFireWhip.png;The Fiery Whip of Balgor;Pretty hot. So hot you might get burned.;2;0;-1
-jar:/sprites/ItemIronSword.png;Sword of Iron;It's a sword. Nothing special.;0;1;0
-jar:/sprites/ItemWoodenShield.png;Shield of Wood;It's a shield. Nothing special.;0;0;1
+jar:/sprites/ItemFireWhip.png;The Fiery Whip of Balgor;Pretty hot. So hot you might get burned.;;2;0;-1
+jar:/sprites/ItemIronSword.png;Sword of Iron;It's a sword. Nothing special.;;0;1;0
+jar:/sprites/ItemWoodenShield.png;Shield of Wood;It's a shield. Nothing special.;;0;0;1
+jar:/sprites/ItemBinoculars.png;Binoculars;You can see very far with these.\n\nSIGHT: +2;binoculars;0;0;0
+jar:/sprites/ItemHerbs.png;Magical Herbs;Some nice smelling herbs. Good for relaxing.\n\nTURNS/HEAL: -2;medication;0;0;0

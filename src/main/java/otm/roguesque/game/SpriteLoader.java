@@ -3,6 +3,7 @@ package otm.roguesque.game;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import javafx.scene.image.Image;
 
@@ -19,6 +20,7 @@ import javafx.scene.image.Image;
  */
 public class SpriteLoader {
 
+    private static final Image NULL_IMAGE = new Image(SpriteLoader.class.getResourceAsStream("/sprites/Null.png"));
     private static HashMap<String, Image> cache = new HashMap();
 
     /**
@@ -47,25 +49,26 @@ public class SpriteLoader {
     private static Image loadImageFromUrl(String url) {
         if (!url.contains(":")) {
             System.err.println("No scheme provided in url: '" + url + "'.");
-            return null;
+            return NULL_IMAGE;
         }
         String[] split = url.split(":");
         String scheme = split[0];
         String location = split[1];
         switch (scheme) {
             case "jar":
-                return new Image(SpriteLoader.class.getResourceAsStream(location));
+                InputStream stream = SpriteLoader.class.getResourceAsStream(location);
+                return stream != null ? new Image(stream) : NULL_IMAGE;
             case "file": {
                 try {
                     return new Image(new FileInputStream(new File(location)));
                 } catch (FileNotFoundException ex) {
                     System.err.println("No file found at: '" + location + "'");
-                    return null;
+                    return NULL_IMAGE;
                 }
             }
             default:
                 System.err.println("Invalid scheme in url: '" + url + "'.");
-                return null;
+                return NULL_IMAGE;
         }
     }
 }

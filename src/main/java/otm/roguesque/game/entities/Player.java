@@ -31,6 +31,11 @@ public class Player extends Entity implements AI {
         }
     }
 
+    @Override
+    public String getRichDescription() {
+        return super.getRichDescription() + String.format("\nSIGHT: %d\nTURNS/HEAL: %d", sightDistance, autoHealCooldown);
+    }
+
     /**
      * Palauttaa vuoromäärän joka pelaajalla menee saada passiivisesti 10%
      * elämäpisteistään takaisin.
@@ -58,6 +63,16 @@ public class Player extends Entity implements AI {
      */
     public int getSightDistance() {
         return sightDistance;
+    }
+
+    /**
+     * Asettaa pelaajan näköetäisyyden.
+     *
+     * @param sightDistance Uusi näköetäisyys.
+     */
+    public void setSightDistance(int sightDistance) {
+        this.sightDistance = sightDistance;
+        recalculateLineOfSight(false);
     }
 
     /**
