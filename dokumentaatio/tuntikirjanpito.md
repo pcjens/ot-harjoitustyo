@@ -41,4 +41,5 @@
 |       |  1 | Refaktorointia, osumanotifikaatioiden parantelua, ja tavaroiden lataaminen konfiguraatiotiedostosta |
 |  3.5. |  1 | Refaktorointia, optimointia, tavaroiden laatikoimista |
 |       |  1 | Notifikaatioiden korjausta, taistelumekaniikkojen uudelleenkirjoittamista (kts. [edellisen commitin](https://github.com/pcjens/otm-roguesque/commit/5118b3f85d85808513dcd89ae66ad98fc0c6067a) lisätiedot) |
-| Yht.  | 59 | |
+|       |  1 | Tavaroiden korjailua, kuvien lataamisen refaktorointia, automaattinen rivitys lisätietolaatikolle |
+| Yht.  | 60 | |

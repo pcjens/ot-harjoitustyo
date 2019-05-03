@@ -32,6 +32,8 @@ import otm.roguesque.ui.RoguesqueApp;
  */
 public class InGameState implements GameState {
 
+    private static final int MAX_DESCRIPTION_LINE_LENGTH = 14;
+
     protected static Replay latestReplay;
 
     protected Dungeon dungeon;
@@ -276,11 +278,31 @@ public class InGameState implements GameState {
             descriptionText = getDescriptionFromSelection();
         }
         if (descriptionText != null) {
-            descriptionBoxFadeAway = -1.0f;
-            descriptionBoxLines = descriptionText.split("\n").length;
+            setupDescriptionBox();
         } else if (descriptionBoxFadeAway == -1) {
             descriptionBoxFadeAway = descriptionBoxFadeAwayDuration;
         }
+    }
+
+    private void setupDescriptionBox() {
+        descriptionBoxFadeAway = -1.0f;
+        int currentLineStart = 0;
+        int currentWordStart = 0;
+        ArrayList<Integer> newLines = new ArrayList();
+        for (int i = 0; i < descriptionText.length(); i++) {
+            if (descriptionText.charAt(i) == '\n') {
+                currentLineStart = i + 1;
+            } else if (descriptionText.charAt(i) == ' ') {
+                currentWordStart = i + 1;
+            } else if (i - currentLineStart >= MAX_DESCRIPTION_LINE_LENGTH) {
+                currentLineStart = currentWordStart = i = currentWordStart > currentLineStart ? currentWordStart : i;
+                newLines.add(newLines.size() + i);
+            }
+        }
+        for (Integer i : newLines) {
+            descriptionText = descriptionText.substring(0, i) + "\n" + descriptionText.substring(i);
+        }
+        descriptionBoxLines = descriptionText.split("\n").length;
     }
 
     private String getDescriptionFromSelection() {

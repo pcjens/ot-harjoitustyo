@@ -19,7 +19,7 @@ public class Door extends Entity {
 
     @Override
     public String getRichDescription() {
-        return "Door\n\nIt's a door.\nWhere does\nit lead?";
+        return "Door\n\nIt's a door.\nWhere does it lead?";
     }
 
     /**

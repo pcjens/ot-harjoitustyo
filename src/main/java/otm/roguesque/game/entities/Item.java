@@ -89,7 +89,7 @@ public class Item extends Entity {
         ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
 
         this.setName("Chest");
-        this.setDescription("What could\nbe inside?");
+        this.setDescription("What could be inside?");
         this.setInvulnerability(true);
 
         this.itemName = data.displayName;
