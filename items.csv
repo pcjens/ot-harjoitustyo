@@ -1,3 +1,3 @@
-FireWhip;The Fiery Whip\n  of Balgor;Pretty hot.\n\nSo hot you\nmight get\nburned.2;0;-1
-IronSword;    Sword\n   of Iron;It's a sword.\n\nNothing\nspecial.;0;1;0
-WoodenShield;   Shield\n   of Wood;It's a shield.\n\nNothing\nspecial.;0;0;1
+jar:/sprites/ItemFireWhip.png;The Fiery Whip of Balgor;Pretty hot. So hot you might get burned.;2;0;-1
+jar:/sprites/ItemIronSword.png;Sword of Iron;It's a sword. Nothing special.;0;1;0
+jar:/sprites/ItemWoodenShield.png;Shield of Wood;It's a shield. Nothing special.;0;0;1

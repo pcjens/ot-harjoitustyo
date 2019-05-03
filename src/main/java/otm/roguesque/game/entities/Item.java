@@ -3,7 +3,6 @@ package otm.roguesque.game.entities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 import javafx.scene.image.Image;
 import otm.roguesque.game.GlobalRandom;
@@ -36,28 +35,28 @@ public class Item extends Entity {
     }
 
     private static ItemData[] ITEMS = new ItemData[]{
-        new ItemData("jar:/sprites/ItemIronSword.png", "    Sword\n   of Iron", "It's a sword.\n\nNothing\nspecial.", 0, 1, 0),
-        new ItemData("jar:/sprites/ItemWoodenShield.png", "   Shield\n   of Wood", "It's a shield.\n\nNothing\nspecial.", 0, 0, 1)
+        new ItemData("jar:/sprites/ItemIronSword.png", "Sword of Iron", "It's a sword. Nothing special.", 0, 1, 0),
+        new ItemData("jar:/sprites/ItemWoodenShield.png", "Shield of Wood", "It's a shield. Nothing special.", 0, 0, 1)
     };
-
-    private static HashMap<String, Image> ITEM_IMAGES = new HashMap();
 
     static {
         int i = 0;
+        String latestLine;
         try {
             List<String> lines = Files.readAllLines(Paths.get(System.getProperty("user.dir"), "items.csv"));
             ItemData[] loadedItems = new ItemData[lines.size()];
             for (String line : lines) {
+                latestLine = line;
                 String[] parts = line.split(";");
                 if (parts.length == 6) {
-                    loadedItems[i] = new ItemData(parts[0].replace("\\n", "\n"),
+                    loadedItems[i] = new ItemData(parts[0],
                             parts[1].replace("\\n", "\n"),
                             parts[2].replace("\\n", "\n"),
                             Integer.parseInt(parts[3]),
                             Integer.parseInt(parts[4]),
                             Integer.parseInt(parts[5]));
                 } else {
-                    System.err.println("Wrong amount of parts on line " + i + ".");
+                    System.err.println("Wrong amount of parts on line " + i + ": " + latestLine);
                     throw new Exception();
                 }
                 i++;
@@ -129,6 +128,7 @@ public class Item extends Entity {
                 setDescription(itemDescription);
             } else {
                 Player player = (Player) attackingEntity;
+                player.setDamage(Math.max(1, player.getDamage() + damageBoost));
                 player.setAttack(Math.max(1, player.getAttack() + attackBoost));
                 player.setDefense(Math.max(0, player.getDefense() + defenseBoost));
                 setHealth(0);
