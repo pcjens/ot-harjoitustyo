@@ -1,6 +1,7 @@
 package otm.roguesque.game.entities;
 
 import otm.roguesque.game.GlobalRandom;
+import otm.roguesque.game.SpriteLoader;
 import otm.roguesque.util.Vector;
 
 /**
@@ -14,7 +15,7 @@ public class Rat extends Entity implements AI {
      * Luo uuden rotan.
      */
     public Rat() {
-        super(5, 1, 1, 1, "Rat", "*squeek*", "Small Animals", "/sprites/Rat.png");
+        super(5, 1, 1, 1, "Rat", "*squeek*", "Small Animals", SpriteLoader.loadImage("jar:/sprites/Rat.png"));
     }
 
     @Override

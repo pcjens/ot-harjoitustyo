@@ -1,5 +1,7 @@
 package otm.roguesque.game.entities;
 
+import otm.roguesque.game.SpriteLoader;
+
 /**
  * Ovi-olio. Ovet "aukeavat" (kuolevat) kun pelaaja "avaa sen" (eli lyö sitä).
  *
@@ -11,7 +13,7 @@ public class Door extends Entity {
      * Luo uuden oven.
      */
     public Door() {
-        super(100000, 0, 0, 0, "", "", "Doors", "/sprites/Door.png");
+        super(100000, 0, 0, 0, "", "", "Doors", SpriteLoader.loadImage("jar:/sprites/Door.png"));
         setInvulnerability(true);
     }
 

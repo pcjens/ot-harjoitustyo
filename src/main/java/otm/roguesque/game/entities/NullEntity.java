@@ -1,6 +1,7 @@
 package otm.roguesque.game.entities;
 
 import otm.roguesque.game.GlobalRandom;
+import otm.roguesque.game.SpriteLoader;
 
 /**
  * Null-olio.
@@ -16,7 +17,7 @@ public class NullEntity extends Entity implements AI {
      * vastustajaolioiden luomisen hoitavassa switch-käskyssä.
      */
     public NullEntity() {
-        super(100, 0, 0, 0, "Null", "???", "???", "/sprites/Null.png");
+        super(100, 0, 0, 0, "Null", "???", "???", SpriteLoader.loadImage("jar:/sprites/Null.png"));
     }
 
     @Override

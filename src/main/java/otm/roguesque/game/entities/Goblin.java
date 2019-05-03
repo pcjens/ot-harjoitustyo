@@ -1,6 +1,7 @@
 package otm.roguesque.game.entities;
 
 import otm.roguesque.game.GlobalRandom;
+import otm.roguesque.game.SpriteLoader;
 import otm.roguesque.util.Path;
 import otm.roguesque.util.Vector;
 
@@ -19,7 +20,7 @@ public class Goblin extends Entity implements AI {
      * Luo uuden menninkäisen.
      */
     public Goblin() {
-        super(8, 3, 3, 1, "Goblin", "Looks hungry.\n\nAnd evil.", "Goblins", "/sprites/Goblin.png");
+        super(8, 3, 3, 1, "Goblin", "Looks hungry.\n\nAnd evil.", "Goblins", SpriteLoader.loadImage("jar:/sprites/Goblin.png"));
     }
 
     @Override

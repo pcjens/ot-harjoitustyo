@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import otm.roguesque.game.SpriteLoader;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.game.entities.Door;
@@ -38,18 +39,17 @@ public class DungeonRenderer {
         // Check the tiles in TileType.java, these should be in the same order
         // (This is also tested in TileGraphicTest.java)
         tileTypeNames = new String[]{
-            "/sprites/Floor.png",
-            "/sprites/Wall.png",
-            "/sprites/Corridor.png",
-            "/sprites/Ladder.png"
+            "jar:/sprites/Floor.png",
+            "jar:/sprites/Wall.png",
+            "jar:/sprites/Corridor.png",
+            "jar:/sprites/Ladder.png"
         };
 
         tileTypes = new Image[tileTypeNames.length];
         for (int i = 0; i < tileTypeNames.length; i++) {
-            tileTypes[i] = new Image(getClass().getResourceAsStream(tileTypeNames[i]),
-                    32, 32, true, false);
+            tileTypes[i] = SpriteLoader.loadImage(tileTypeNames[i]);
         }
-        selectionImage = new Image(getClass().getResourceAsStream("/sprites/Selection.png"), 32, 32, true, false);
+        selectionImage = SpriteLoader.loadImage("jar:/sprites/Selection.png");
     }
 
     /**

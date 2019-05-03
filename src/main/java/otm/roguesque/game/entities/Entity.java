@@ -32,7 +32,7 @@ public abstract class Entity {
 
     private ArrayList<HitNotification> notifications = new ArrayList();
 
-    Entity(int maxHealth, int damage, int attack, int defense, String name, String description, String friendlyGroup, String spritePath) {
+    Entity(int maxHealth, int damage, int attack, int defense, String name, String description, String friendlyGroup, Image image) {
         this.maxHealth = this.health = maxHealth;
         this.damage = damage;
         this.attack = attack;
@@ -40,10 +40,7 @@ public abstract class Entity {
         this.name = name;
         this.description = description;
         this.friendlyGroup = friendlyGroup;
-        if (!spritePath.isEmpty()) {
-            // FIXME(low priority): Cache images, don't load each entity's image individually
-            this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
-        }
+        this.image = image;
         this.invulnerable = false;
     }
 
@@ -335,16 +332,6 @@ public abstract class Entity {
      */
     protected final String getDescription() {
         return description;
-    }
-
-    /**
-     * Asettaa annetussa polussa olevan resurssin olion kuvaksi.
-     *
-     * @param spritePath Polku resurssiin, / viittaa
-     * otm.roguesque.resources-pakettiin.
-     */
-    protected final void loadImage(String spritePath) {
-        this.image = new Image(getClass().getResourceAsStream(spritePath), 32, 32, true, false);
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import javafx.scene.image.Image;
 import otm.roguesque.game.GlobalRandom;
+import otm.roguesque.game.SpriteLoader;
 
 /**
  * Tavara-olio.
@@ -35,8 +36,8 @@ public class Item extends Entity {
     }
 
     private static ItemData[] ITEMS = new ItemData[]{
-        new ItemData("IronSword", "    Sword\n   of Iron", "It's a sword.\n\nNothing\nspecial.", 0, 1, 0),
-        new ItemData("WoodenShield", "   Shield\n   of Wood", "It's a shield.\n\nNothing\nspecial.", 0, 0, 1)
+        new ItemData("jar:/sprites/ItemIronSword.png", "    Sword\n   of Iron", "It's a sword.\n\nNothing\nspecial.", 0, 1, 0),
+        new ItemData("jar:/sprites/ItemWoodenShield.png", "   Shield\n   of Wood", "It's a shield.\n\nNothing\nspecial.", 0, 0, 1)
     };
 
     private static HashMap<String, Image> ITEM_IMAGES = new HashMap();
@@ -84,7 +85,7 @@ public class Item extends Entity {
      * @param level Kentän vaikeustaso mistä tämä tavara löytyy.
      */
     public Item(int level) {
-        super(100000, 0, 0, 0, "", "", "Items", "/sprites/ItemChest.png");
+        super(100000, 0, 0, 0, "", "", "Items", SpriteLoader.loadImage("jar:/sprites/ItemChest.png"));
 
         ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
 
@@ -94,20 +95,10 @@ public class Item extends Entity {
 
         this.itemName = data.displayName;
         this.itemDescription = data.description;
-        this.itemImage = loadItemImage(data.identifier);
+        this.itemImage = SpriteLoader.loadImage(data.identifier);
         this.damageBoost = data.damageBoost;
         this.attackBoost = data.attackBoost;
         this.defenseBoost = data.defenseBoost;
-    }
-
-    private Image loadItemImage(String identifier) {
-        if (!ITEM_IMAGES.containsKey(identifier)) {
-            Image loadedImage = new Image(getClass().getResourceAsStream("/sprites/Item" + identifier + ".png"), 32, 32, true, false);
-            ITEM_IMAGES.put(identifier, loadedImage);
-            return loadedImage;
-        } else {
-            return ITEM_IMAGES.get(identifier);
-        }
     }
 
     private String getStringFromBonus(int bonus) {

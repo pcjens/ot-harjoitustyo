@@ -3,6 +3,7 @@ package otm.roguesque.ui;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import otm.roguesque.game.SpriteLoader;
 
 /**
  * Notifikaatioteksti joka voi ilmestyä olennon päälle informoimaan otetusta
@@ -12,8 +13,8 @@ import javafx.scene.paint.Color;
  */
 public class HitNotification {
 
-    private static final Image SPLASH_IMAGE = new Image(HitNotification.class.getResourceAsStream("/sprites/Splash.png"));
-    private static final Image NEUTRAL_SPLASH_IMAGE = new Image(HitNotification.class.getResourceAsStream("/sprites/SplashNeutral.png"));
+    private static final Image SPLASH_IMAGE = SpriteLoader.loadImage("jar:/sprites/Splash.png");
+    private static final Image NEUTRAL_SPLASH_IMAGE = SpriteLoader.loadImage("jar:/sprites/SplashNeutral.png");
 
     private int amount;
     private float length;

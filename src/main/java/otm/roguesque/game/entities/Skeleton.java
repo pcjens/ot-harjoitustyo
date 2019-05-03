@@ -1,6 +1,7 @@
 package otm.roguesque.game.entities;
 
 import otm.roguesque.game.GlobalRandom;
+import otm.roguesque.game.SpriteLoader;
 import otm.roguesque.game.dungeon.Dungeon;
 import otm.roguesque.util.Path;
 
@@ -19,7 +20,7 @@ public class Skeleton extends Entity implements AI {
      * Luo uuden luurangon.
      */
     public Skeleton() {
-        super(10, 5, 1, 5, "Skeleton", "Spooky.\n And scary.", "Skeletons", "/sprites/Skeleton.png");
+        super(10, 5, 1, 5, "Skeleton", "Spooky.\n And scary.", "Skeletons", SpriteLoader.loadImage("jar:/sprites/Skeleton.png"));
     }
 
     @Override
