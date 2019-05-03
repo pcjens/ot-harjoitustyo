@@ -3,6 +3,8 @@ package otm.roguesque.game.entities;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javafx.scene.image.Image;
 import otm.roguesque.game.GlobalRandom;
@@ -42,33 +44,48 @@ public class Item extends Entity {
     };
 
     static {
-        int i = 0;
-        String latestLine;
+        int lineNumber = 0;
+        String lineContent = "";
         try {
             List<String> lines = Files.readAllLines(Paths.get(System.getProperty("user.dir"), "items.csv"));
-            ItemData[] loadedItems = new ItemData[lines.size()];
+            List<ItemData> loadedItems = new ArrayList();
             for (String line : lines) {
-                latestLine = line;
+                lineContent = line;
                 String[] parts = line.split(";");
-                if (parts.length == 7) {
-                    loadedItems[i] = new ItemData(parts[0], parts[1],
-                            parts[2].replace("\\n", "\n"), parts[3],
-                            Integer.parseInt(parts[4]),
-                            Integer.parseInt(parts[5]),
-                            Integer.parseInt(parts[6]));
+                lineNumber++;
+                if (parts.length == 8) {
+                    int count = Integer.parseInt(parts[7]);
+                    for (int j = 0; j < count; j++) {
+                        loadedItems.add(new ItemData(parts[0], parts[1],
+                                parts[2].replace("\\n", "\n"), parts[3],
+                                Integer.parseInt(parts[4]),
+                                Integer.parseInt(parts[5]),
+                                Integer.parseInt(parts[6])));
+                    }
                 } else {
-                    System.err.println("Wrong amount of parts on line " + i + ": " + latestLine);
+                    System.err.println("Wrong amount of parts on line " + lineNumber + ": " + lineContent);
                     throw new Exception();
                 }
-                i++;
             }
-            ITEMS = loadedItems;
+            ITEMS = (ItemData[]) loadedItems.toArray();
         } catch (IOException ex) {
-            System.err.println("Item configuration file 'items.config' is missing, using default item set.");
+            System.err.println("Item configuration file 'items.config' is missing or can't be read, using default item set.");
         } catch (NumberFormatException ex) {
-            System.err.println("Couldn't parse number on line " + i + ".");
+            System.err.println("Couldn't parse number on line " + lineNumber + ": " + lineContent);
         } catch (Exception ex) {
         }
+    }
+
+    private static final int ITEM_REPEATS_PER_DECK = 2;
+    private static ArrayList<ItemData> itemDeck = new ArrayList();
+
+    private static ItemData getRandomItem() {
+        if (itemDeck.isEmpty()) {
+            for (int i = 0; i < ITEM_REPEATS_PER_DECK; i++) {
+                itemDeck.addAll(Arrays.asList(ITEMS));
+            }
+        }
+        return itemDeck.remove(GlobalRandom.get().nextInt(itemDeck.size()));
     }
 
     private final String effect;
@@ -89,7 +106,7 @@ public class Item extends Entity {
     public Item(int level) {
         super(100000, 0, 0, 0, "", "", "Items", SpriteLoader.loadImage("jar:/sprites/ItemChest.png"));
 
-        ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
+        ItemData data = getRandomItem();
 
         this.setName("Chest");
         this.setDescription("What could be inside?");
