@@ -166,6 +166,7 @@ public class InGameState implements GameState {
         }
 
         selectTile(input);
+        clearSelections(input);
         updateTexts();
         for (Entity e : dungeon.getEntities()) {
             e.updateNotifications(deltaSeconds);
@@ -257,6 +258,14 @@ public class InGameState implements GameState {
             player.resetLastEntityInteractedWith();
             selectionX = (int) (input.getMouseX() / tileSize) + dungeonRenderer.getOffsetX();
             selectionY = (int) (input.getMouseY() / tileSize) + dungeonRenderer.getOffsetY();
+        }
+    }
+
+    private void clearSelections(Input input) {
+        if (input.isPressed(Input.CONTROL_CLEAR_SELECTION)) {
+            selectionX = -1;
+            selectionY = -1;
+            player.resetLastEntityInteractedWith();
         }
     }
 

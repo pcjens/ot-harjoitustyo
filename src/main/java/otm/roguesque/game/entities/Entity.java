@@ -68,8 +68,11 @@ public abstract class Entity {
         notifications.removeIf(n -> n.hasDisappeared());
     }
 
-    void hitNotify(int amount, float length) {
-        HitNotification notif = new HitNotification(8, 8 - 18 * notifications.size(), amount, length);
+    private void hitNotify(int amount, float length) {
+        for (HitNotification n : notifications) {
+            n.bump();
+        }
+        HitNotification notif = new HitNotification(8, 8, amount, length);
         notifications.add(notif);
     }
 

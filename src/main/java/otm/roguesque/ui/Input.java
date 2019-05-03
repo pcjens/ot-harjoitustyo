@@ -50,6 +50,12 @@ public class Input {
     public static final KeyCode[] CONTROL_MOVE_RIGHT = new KeyCode[]{
         KeyCode.D, KeyCode.RIGHT, KeyCode.L
     };
+    /**
+     * Napit joilla voi "poistaa valinnan," eli sulkea infolaatikon.
+     */
+    public static final KeyCode[] CONTROL_CLEAR_SELECTION = new KeyCode[]{
+        KeyCode.ESCAPE
+    };
 
     private final ArrayList<KeyCode> keysPressed = new ArrayList();
     private final ArrayList<MouseButton> mouseButtonsPressed = new ArrayList();
