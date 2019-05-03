@@ -30,6 +30,9 @@ public abstract class Entity {
     private Entity lastEntityInteractedWith;
     private boolean invulnerable;
 
+    private double offsetX = 0;
+    private double offsetY = 0;
+
     private ArrayList<HitNotification> notifications = new ArrayList();
 
     Entity(int maxHealth, int damage, int attack, int defense, String name, String description, String friendlyGroup, Image image) {
@@ -240,6 +243,52 @@ public abstract class Entity {
     }
 
     /**
+     * Palauttaa animaatio-siirtymän x-akselilla tälle oliolle, ruuduissa.
+     *
+     * @return Animaatio-siirtymä x-akselilla tälle oliolle, ruuduissa.
+     */
+    public double getOffsetX() {
+        return offsetX;
+    }
+
+    /**
+     * Palauttaa animaatio-siirtymän y-akselilla tälle oliolle, ruuduissa.
+     *
+     * @return Animaatio-siirtymä y-akselilla tälle oliolle, ruuduissa.
+     */
+    public double getOffsetY() {
+        return offsetY;
+    }
+
+    /**
+     * Päivittää animaatiot deltaTimen verran eteenpäin.
+     *
+     * @param deltaSeconds Delta-aika.
+     */
+    public void updateAnimation(float deltaSeconds) {
+        double sign = Math.signum(offsetX);
+        this.offsetX -= sign * deltaSeconds * 10;
+        if (sign != Math.signum(offsetX)) {
+            offsetX = 0;
+        }
+        sign = Math.signum(offsetY);
+        this.offsetY -= sign * deltaSeconds * 10;
+        if (sign != Math.signum(offsetY)) {
+            offsetY = 0;
+        }
+    }
+
+    private void animateMovement(boolean moved, int deltaX, int deltaY) {
+        if (moved) {
+            offsetX = -deltaX;
+            offsetY = -deltaY;
+        } else {
+            offsetX = 0.25 * deltaX;
+            offsetY = 0.25 * deltaY;
+        }
+    }
+
+    /**
      * Liikuta olio uuteen paikkaan.
      *
      * @param deltaX Kuinka paljon nykyiseen x-koordinaattiin lisätään.
@@ -254,11 +303,15 @@ public abstract class Entity {
         int newX = x + deltaX;
         int newY = y + deltaY;
 
+        boolean moved;
         if (hitAndCollide(newX, newY)) {
-            return false;
+            moved = false;
+        } else {
+            moved = moveAndCollide(newX, newY);
         }
 
-        return moveAndCollide(newX, newY);
+        animateMovement(moved, deltaX, deltaY);
+        return moved;
     }
 
     private void takeDamage(Entity attacker) {

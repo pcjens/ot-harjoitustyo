@@ -327,6 +327,19 @@ public class Dungeon {
     }
 
     /**
+     * Päivittää kaikkien olioiden animaatiot.
+     *
+     * @see otm.roguesque.game.entities.Entity#updateAnimation(float)
+     *
+     * @param deltaSeconds Delta-aika.
+     */
+    public void updateAnimations(float deltaSeconds) {
+        for (Entity e : entities) {
+            e.updateAnimation(deltaSeconds);
+        }
+    }
+
+    /**
      * Siivoaa kuolleet oliot kentältä (eli poistaa kokonaan oliolistalta).
      */
     public void cleanupDeadEntities() {
