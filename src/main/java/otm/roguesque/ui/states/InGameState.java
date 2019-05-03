@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -274,10 +275,10 @@ public class InGameState implements GameState {
     }
 
     private String getDescriptionFromSelection() {
-        Entity e = dungeon.getEntityAt(selectionX, selectionY);
-        if (e != null) {
-            return e.getRichDescription();
-        } else {
+        ArrayList<Entity> e = dungeon.getEntitiesAt(selectionX, selectionY);
+        if (!e.isEmpty() && player.inLineOfSight(selectionX, selectionY)) {
+            return e.get(e.size() - 1).getRichDescription();
+        } else if (player.isUncovered(selectionX, selectionY)) {
             TileType tile = dungeon.getTileAt(selectionX, selectionY);
             if (tile != null) {
                 return tile.getDescription();

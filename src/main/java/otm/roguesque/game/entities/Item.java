@@ -13,7 +13,6 @@ import otm.roguesque.game.GlobalRandom;
  */
 public class Item extends Entity {
 
-    // TODO: Move the ItemData to a config file
     private static class ItemData {
 
         public String identifier;

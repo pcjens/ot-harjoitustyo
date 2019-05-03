@@ -27,9 +27,9 @@ import otm.roguesque.util.Pathfinder;
 public class Dungeon {
 
     private final boolean[] solid;
-    private final boolean[] doored;
     private final TileType[] tiles;
     private final ArrayList<Entity> entities;
+    private final ArrayList<Entity>[] entityCache;
     private final Player player;
     private final int width;
     private final int height;
@@ -50,12 +50,21 @@ public class Dungeon {
         this.height = (int) (DungeonGenerator.MAX_ROOM_HEIGHT * (Math.sqrt(DungeonGenerator.MAX_ROOMS) + 1));
         this.tiles = new TileType[width * height];
         this.entities = new ArrayList();
+        this.entityCache = new ArrayList[width * height];
         this.player = new Player();
         this.solid = new boolean[width * height];
-        this.doored = new boolean[width * height];
         this.replay = new Replay(seed);
         this.level = level;
         regenerateDungeon(seed);
+    }
+
+    private void regenerateDungeon(long seed) {
+        entities.clear();
+        clearTiles();
+
+        GlobalRandom.reset(seed);
+        DungeonGenerator.generateNewDungeon(this);
+        spawnEntity(player, playerSpawnX, playerSpawnY);
     }
 
     /**
@@ -97,15 +106,6 @@ public class Dungeon {
      */
     public Replay getReplay() {
         return replay;
-    }
-
-    private void regenerateDungeon(long seed) {
-        entities.clear();
-        clearTiles();
-
-        GlobalRandom.reset(seed);
-        DungeonGenerator.generateNewDungeon(this);
-        spawnEntity(player, playerSpawnX, playerSpawnY);
     }
 
     /**
@@ -203,25 +203,42 @@ public class Dungeon {
         if (x < 0 || x >= width || y < 0 || y >= height || tiles[x + y * width] == null) {
             return true;
         }
-        return solid[x + y * width] || doored[x + y * width];
+        if (solid[x + y * width]) {
+            return true;
+        }
+        for (Entity e : getEntitiesAt(x, y)) {
+            if (e != null && e instanceof Door) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * Palauttaa olion annetuissa koordinaateissa.
+     * Päivittää olion sijainnin taulukossa, josta getEntitiesAt hakee niitä.
+     * Kutsutaan Entityjen move-metodissa.
+     *
+     * @see otm.roguesque.game.dungeon.Dungeon#getEntitiesAt(int, int)
+     * @see otm.roguesque.game.entities.Entity#move(int, int)
+     *
+     * @param e Olio joka liikkui.
+     * @param previousX Olion entinen x-koordinaatti.
+     * @param previousY Olion entinen y-koordinaatti.
+     */
+    public void updateEntityCache(Entity e, int previousX, int previousY) {
+        entityCache[previousX + previousY * width].remove(e);
+        entityCache[e.getX() + e.getY() * width].add(e);
+    }
+
+    /**
+     * Palauttaa oliot annetuissa koordinaateissa.
      *
      * @param x Tutkitun ruudun x-koordinaatti.
      * @param y Tutkitun ruudun y-koordinaatti.
-     * @return Olio annetussa ruudussa, voi olla null.
+     * @return Oliot annetussa ruudussa.
      */
-    // TODO: Optimize this further, this is called a lot
-    // Also could just remove the `doored` array if this was better.
-    public Entity getEntityAt(int x, int y) {
-        for (Entity e : entities) {
-            if (e.getX() == x && e.getY() == y && !e.isDead()) {
-                return e;
-            }
-        }
-        return null;
+    public ArrayList<Entity> getEntitiesAt(int x, int y) {
+        return entityCache[x + y * width];
     }
 
     /**
@@ -242,9 +259,10 @@ public class Dungeon {
                 continue;
             }
             visited.add(current);
-            Entity entity = getEntityAt(current % width, current / width);
-            if (entity != null && entity.getClass() == type) {
-                return entity;
+            for (Entity entity : getEntitiesAt(current % width, current / width)) {
+                if (entity != null && entity.getClass() == type) {
+                    return entity;
+                }
             }
             addNeighboringTiles(queue, current);
         }
@@ -320,8 +338,8 @@ public class Dungeon {
         });
         entities.removeIf((entity) -> {
             boolean dead = entity.isDead();
-            if (dead && entity instanceof Door) {
-                doored[entity.getX() + entity.getY() * width] = false;
+            if (dead) {
+                entityCache[entity.getX() + entity.getY() * width].remove(entity);
             }
             return dead;
         });
@@ -359,18 +377,13 @@ public class Dungeon {
                 }
             }
         }
-        for (Entity e : entities) {
-            if (e instanceof Door) {
-                this.doored[e.getX() + e.getY() * width] = true;
-            }
-        }
     }
 
     private void clearTiles() {
         for (int i = 0; i < tiles.length; i++) {
             tiles[i] = null;
+            entityCache[i] = new ArrayList();
             solid[i] = false;
-            doored[i] = false;
         }
     }
 }

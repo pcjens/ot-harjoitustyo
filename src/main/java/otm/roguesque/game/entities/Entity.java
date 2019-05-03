@@ -104,8 +104,11 @@ public abstract class Entity {
      * @param y Olion uusi y-koordinaatti.
      */
     public void setPosition(int x, int y) {
+        int oldX = this.x;
+        int oldY = this.y;
         this.x = x;
         this.y = y;
+        dungeon.updateEntityCache(this, oldX, oldY);
     }
 
     /**
@@ -263,26 +266,25 @@ public abstract class Entity {
     }
 
     private boolean hitAndCollide(int newX, int newY) {
-        Entity hitEntity = dungeon.getEntityAt(newX, newY);
-        if (hitEntity != null) {
+        boolean result = false;
+        for (Entity hitEntity : dungeon.getEntitiesAt(newX, newY)) {
             lastEntityInteractedWith = hitEntity;
             hitEntity.reactToAttack(this);
             if (hitEntity.friendlyGroup.equals(this.friendlyGroup) || hitEntity.invulnerable) {
-                return true;
+                result = true;
+                continue;
             }
             hitEntity.takeDamage(attack);
             if (!hitEntity.isDead()) {
-                return true;
+                result = true;
             }
         }
-
-        return false;
+        return result;
     }
 
     private boolean moveAndCollide(int newX, int newY) {
         if (!dungeon.solid(newX, newY)) {
-            this.x = newX;
-            this.y = newY;
+            setPosition(newX, newY);
             return true;
         } else {
             return false;

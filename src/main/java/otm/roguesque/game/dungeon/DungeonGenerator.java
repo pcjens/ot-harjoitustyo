@@ -284,7 +284,7 @@ class DungeonGenerator {
         int missCount = 0, enemyPoints = GlobalRandom.get().nextInt((int) Math.pow(level, 1.2) + 1) + (int) Math.pow(level + 2, 1.3);
         while (enemyPoints >= EnemyType.Rat.getValue() && missCount < 10) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth), y = yOffset + GlobalRandom.get().nextInt(roomHeight);
-            if (dungeon.getEntityAt(x, y) != null) {
+            if (!dungeon.getEntitiesAt(x, y).isEmpty()) {
                 missCount++;
                 continue;
             } else {
@@ -305,7 +305,7 @@ class DungeonGenerator {
         for (int i = 0; i < count; i++) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
             int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
-            if (dungeon.getEntityAt(x, y) != null) {
+            if (!dungeon.getEntitiesAt(x, y).isEmpty()) {
                 i--;
                 continue;
             }

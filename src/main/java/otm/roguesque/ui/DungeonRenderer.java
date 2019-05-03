@@ -139,9 +139,10 @@ public class DungeonRenderer {
                 double drawX = (x - offsetX) * tileSize;
                 double drawY = (y - offsetY) * tileSize;
                 drawTile(ctx, x, y, drawX, drawY, tileSize);
-                Entity entity = dungeon.getEntityAt(x, y);
-                if (entity != null && (player.inLineOfSight(x, y) || entity instanceof Door)) {
-                    drawEntity(ctx, tileSize, entity, drawX, drawY);
+                for (Entity entity : dungeon.getEntitiesAt(x, y)) {
+                    if (player.inLineOfSight(x, y) || entity instanceof Door) {
+                        drawEntity(ctx, tileSize, entity, drawX, drawY);
+                    }
                 }
                 double distanceFromPlayer = Math.min(player.getSightDistance(), Math.sqrt(Math.pow(player.getX() - x, 2) + Math.pow(player.getY() - y, 2)));
                 double visibility = Math.pow(Math.min(1, 1 - (distanceFromPlayer - 2.4) / (player.getSightDistance() - 2.4)), 2);
