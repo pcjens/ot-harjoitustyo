@@ -40,4 +40,5 @@
 |  2.5. |  1 | Replay-tiedostotyypin parantelua |
 |       |  1 | Refaktorointia, osumanotifikaatioiden parantelua, ja tavaroiden lataaminen konfiguraatiotiedostosta |
 |  3.5. |  1 | Refaktorointia, optimointia, tavaroiden laatikoimista |
-| Yht.  | 58 | |
+|       |  1 | Notifikaatioiden korjausta, taistelumekaniikkojen uudelleenkirjoittamista (kts. [edellisen commitin](5118b3f85d85808513dcd89ae66ad98fc0c6067a) lisätiedot) |
+| Yht.  | 59 | |
