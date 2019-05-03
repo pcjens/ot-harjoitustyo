@@ -11,7 +11,7 @@ public class Door extends Entity {
      * Luo uuden oven.
      */
     public Door() {
-        super(100000, 0, 0, "", "", "Doors", "/sprites/Door.png");
+        super(100000, 0, 0, 0, "", "", "Doors", "/sprites/Door.png");
         setInvulnerability(true);
     }
 

@@ -270,7 +270,7 @@ public class InGameState implements GameState {
     }
 
     private void updateTexts() {
-        statusLine = String.format("HP: %d/%d   ATK: %d   DEF: %d", player.getHealth(), player.getMaxHealth(), player.getAttack(), player.getDefense());
+        statusLine = String.format("HP: %d/%d   DMG: %d   ATK: %d   DEF: %d", player.getHealth(), player.getMaxHealth(), player.getDamage(), player.getAttack(), player.getDefense());
         descriptionText = player.getExaminationText();
         if (descriptionText == null && selectionX >= 0 && selectionY >= 0) {
             descriptionText = getDescriptionFromSelection();

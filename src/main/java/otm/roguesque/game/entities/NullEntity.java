@@ -16,7 +16,7 @@ public class NullEntity extends Entity implements AI {
      * vastustajaolioiden luomisen hoitavassa switch-käskyssä.
      */
     public NullEntity() {
-        super(100, 0, 0, "Null", "???", "???", "/sprites/Null.png");
+        super(100, 0, 0, 0, "Null", "???", "???", "/sprites/Null.png");
     }
 
     @Override

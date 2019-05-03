@@ -19,7 +19,7 @@ public class Player extends Entity implements AI {
      * Luo uuden pelaaja-olion.
      */
     public Player() {
-        super(10, 2, 1, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/Player.png");
+        super(10, 1, 1, 2, "Adventurer", "Seeking\n freedom.", "Adventurers", "/sprites/Player.png");
     }
 
     @Override

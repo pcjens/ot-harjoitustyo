@@ -17,24 +17,26 @@ public class Item extends Entity {
 
     private static class ItemData {
 
-        public String identifier;
-        public String displayName;
-        public String description;
-        public int attackBoost;
-        public int defenseBoost;
+        public final String identifier;
+        public final String displayName;
+        public final String description;
+        public final int damageBoost;
+        public final int attackBoost;
+        public final int defenseBoost;
 
-        public ItemData(String identifier, String displayName, String description, int attackBoost, int defenseBoost) {
+        public ItemData(String identifier, String displayName, String description, int damageBoost, int attackBoost, int defenseBoost) {
             this.identifier = identifier;
             this.displayName = displayName;
             this.description = description;
+            this.damageBoost = damageBoost;
             this.attackBoost = attackBoost;
             this.defenseBoost = defenseBoost;
         }
     }
 
     private static ItemData[] ITEMS = new ItemData[]{
-        new ItemData("IronSword", "    Sword\n   of Iron", "It's a sword.\n\nNothing\nspecial.", 1, 0),
-        new ItemData("WoodenShield", "   Shield\n   of Wood", "It's a shield.\n\nNothing\nspecial.", 0, 1)
+        new ItemData("IronSword", "    Sword\n   of Iron", "It's a sword.\n\nNothing\nspecial.", 0, 1, 0),
+        new ItemData("WoodenShield", "   Shield\n   of Wood", "It's a shield.\n\nNothing\nspecial.", 0, 0, 1)
     };
 
     private static HashMap<String, Image> ITEM_IMAGES = new HashMap();
@@ -43,25 +45,32 @@ public class Item extends Entity {
         int i = 0;
         try {
             List<String> lines = Files.readAllLines(Paths.get(System.getProperty("user.dir"), "items.csv"));
-            ITEMS = new ItemData[lines.size()];
+            ItemData[] loadedItems = new ItemData[lines.size()];
             for (String line : lines) {
                 String[] parts = line.split(";");
-                if (parts.length == 5) {
-                    ITEMS[i++] = new ItemData(parts[0].replace("\\n", "\n"),
+                if (parts.length == 6) {
+                    loadedItems[i] = new ItemData(parts[0].replace("\\n", "\n"),
                             parts[1].replace("\\n", "\n"),
                             parts[2].replace("\\n", "\n"),
-                            Integer.parseInt(parts[3]), Integer.parseInt(parts[4]));
+                            Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4]),
+                            Integer.parseInt(parts[5]));
                 } else {
                     System.err.println("Wrong amount of parts on line " + i + ".");
+                    throw new Exception();
                 }
+                i++;
             }
+            ITEMS = loadedItems;
         } catch (IOException ex) {
             System.err.println("Item configuration file 'items.config' is missing, using default item set.");
         } catch (NumberFormatException ex) {
             System.err.println("Couldn't parse number on line " + i + ".");
+        } catch (Exception ex) {
         }
     }
 
+    private int damageBoost = 0;
     private int attackBoost = 0;
     private int defenseBoost = 0;
     private boolean boxed = true;
@@ -75,7 +84,7 @@ public class Item extends Entity {
      * @param level Kentän vaikeustaso mistä tämä tavara löytyy.
      */
     public Item(int level) {
-        super(100000, 0, 0, "", "", "Items", "/sprites/ItemChest.png");
+        super(100000, 0, 0, 0, "", "", "Items", "/sprites/ItemChest.png");
 
         ItemData data = ITEMS[GlobalRandom.get().nextInt(ITEMS.length)];
 
@@ -86,6 +95,7 @@ public class Item extends Entity {
         this.itemName = data.displayName;
         this.itemDescription = data.description;
         this.itemImage = loadItemImage(data.identifier);
+        this.damageBoost = data.damageBoost;
         this.attackBoost = data.attackBoost;
         this.defenseBoost = data.defenseBoost;
     }
@@ -113,7 +123,8 @@ public class Item extends Entity {
         if (boxed) {
             return String.format("%s\n\n%s", getName(), getDescription());
         } else {
-            return String.format("%s\n\n%s\n\nATK: %s\nDEF: %s", getName(), getDescription(), getStringFromBonus(attackBoost), getStringFromBonus(defenseBoost));
+            return String.format("%s\n\n%s\n\nDMG: %s\nATK: %s\nDEF: %s", getName(), getDescription(),
+                    getStringFromBonus(damageBoost), getStringFromBonus(attackBoost), getStringFromBonus(defenseBoost));
         }
     }
 

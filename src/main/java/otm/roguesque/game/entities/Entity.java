@@ -20,6 +20,7 @@ public abstract class Entity {
     private int y;
     private int maxHealth;
     private int health;
+    private int damage;
     private int attack;
     private int defense;
     private String name;
@@ -31,8 +32,9 @@ public abstract class Entity {
 
     private ArrayList<HitNotification> notifications = new ArrayList();
 
-    Entity(int maxHealth, int attack, int defense, String name, String description, String friendlyGroup, String spritePath) {
+    Entity(int maxHealth, int damage, int attack, int defense, String name, String description, String friendlyGroup, String spritePath) {
         this.maxHealth = this.health = maxHealth;
+        this.damage = damage;
         this.attack = attack;
         this.defense = defense;
         this.name = name;
@@ -150,24 +152,25 @@ public abstract class Entity {
     /**
      * Palauttaa olion hyökkäysarvon.
      *
-     * @see otm.roguesque.game.entities.Entity#getDefense()
-     *
-     * @return Hyökkäysarvo. Kun olio lyö vastustajaa, vastustaja menettää
-     * maksimissaan atk - def elämäpisteitä, missä atk on tämä, ja def on
-     * vastustajan puolustusarvo jonka saa funktiolla getDefense.
+     * @return Hyökkäysarvo.
      */
     public int getAttack() {
         return attack;
     }
 
     /**
+     * Palauttaa olion vahinkoarvon.
+     *
+     * @return Vahinkoarvo.
+     */
+    public int getDamage() {
+        return damage;
+    }
+
+    /**
      * Palauttaa olion puolustusarvon.
      *
-     * @see otm.roguesque.game.entities.Entity#getAttack()
-     *
-     * @return Puolustusarvo. Kun vastustaja lyö tätä oliota, olio menettää
-     * maksimissaan atk - def elämäpisteitä, missä atk on vastustajan
-     * hyökkäysarvo, jonka saa funktiolla getAttack, ja def on tämä.
+     * @return Puolustusarvo.
      */
     public int getDefense() {
         return defense;
@@ -208,7 +211,7 @@ public abstract class Entity {
      * @return Kuvaus oliosta.
      */
     public String getRichDescription() {
-        return String.format("%s\n\n%s\n\nHP: %d/%d\nATK: %d\nDEF: %d", name, description, health, maxHealth, attack, defense);
+        return String.format("%s\n\n%s\n\nHP: %d/%d\nDMG: %d\nATK: %d\nDEF: %d", name, description, health, maxHealth, damage, attack, defense);
     }
 
     /**
@@ -261,12 +264,16 @@ public abstract class Entity {
         return moveAndCollide(newX, newY);
     }
 
-    private void takeDamage(int otherAttack) {
-        int atkRoll = otherAttack <= 0 ? otherAttack : (GlobalRandom.get().nextInt(otherAttack) + 1);
-        int defRoll = this.defense <= 0 ? this.defense : (GlobalRandom.get().nextInt(this.defense) + 1);
-        int damage = (int) Math.max(atkRoll / 2, atkRoll - defRoll);
-        this.health -= damage;
-        hitNotify(damage, 0.5f);
+    private void takeDamage(Entity attacker) {
+        if (attacker.damage == 0) {
+            hitNotify(0, 0.5f);
+        } else {
+            int atkRoll = GlobalRandom.get().nextInt(attacker.attack + 2);
+            int defRoll = GlobalRandom.get().nextInt(this.defense + 2);
+            int finalDamage = atkRoll >= defRoll ? (GlobalRandom.get().nextInt(attacker.damage) + 1) : 0;
+            this.health -= finalDamage;
+            hitNotify(finalDamage, 0.5f);
+        }
     }
 
     private boolean hitAndCollide(int newX, int newY) {
@@ -278,7 +285,7 @@ public abstract class Entity {
                 result = true;
                 continue;
             }
-            hitEntity.takeDamage(attack);
+            hitEntity.takeDamage(this);
             if (!hitEntity.isDead()) {
                 result = true;
             }
@@ -356,6 +363,15 @@ public abstract class Entity {
      */
     protected final void setHealth(int health) {
         this.health = health;
+    }
+
+    /**
+     * Asettaa olion vahinkoarvon.
+     *
+     * @param damage Uusi vahinkoarvo.
+     */
+    protected final void setDamage(int damage) {
+        this.damage = damage;
     }
 
     /**

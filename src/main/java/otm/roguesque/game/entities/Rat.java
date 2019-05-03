@@ -14,7 +14,7 @@ public class Rat extends Entity implements AI {
      * Luo uuden rotan.
      */
     public Rat() {
-        super(5, 2, 0, "Rat", "*squeek*", "Small Animals", "/sprites/Rat.png");
+        super(5, 1, 1, 1, "Rat", "*squeek*", "Small Animals", "/sprites/Rat.png");
     }
 
     @Override

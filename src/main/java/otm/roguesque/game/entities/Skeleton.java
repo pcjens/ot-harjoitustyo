@@ -19,7 +19,7 @@ public class Skeleton extends Entity implements AI {
      * Luo uuden luurangon.
      */
     public Skeleton() {
-        super(10, 3, 0, "Skeleton", "Spooky.\n And scary.", "Skeletons", "/sprites/Skeleton.png");
+        super(10, 5, 1, 5, "Skeleton", "Spooky.\n And scary.", "Skeletons", "/sprites/Skeleton.png");
     }
 
     @Override
