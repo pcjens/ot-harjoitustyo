@@ -1,5 +1,9 @@
-jar:/sprites/ItemFireWhip.png;The Fiery Whip of Balgor;Pretty hot. So hot you might get burned.;;2;0;-1;2
-jar:/sprites/ItemIronSword.png;Sword of Iron;It's a sword. Nothing special.;;0;1;0;3
-jar:/sprites/ItemWoodenShield.png;Shield of Wood;It's a shield. Nothing special.;;0;0;1;3
-jar:/sprites/ItemBinoculars.png;Binoculars;You can see very far with these.\n\nSIGHT: +2;binoculars;0;0;0;1
-jar:/sprites/ItemHerbs.png;Magical Herbs;Some nice smelling herbs. Good for relaxing.\n\nTURNS/HEAL: -2;medication;0;0;0;2
+jar:/sprites/ItemFireWhip.png;The Fiery Whip of Balgor;Pretty hot. So hot you might get burned.;;;2;0;-1;3
+jar:/sprites/ItemIronSword.png;Iron Sword;It's a sword. Nothing special.;;;0;1;0;4
+jar:/sprites/ItemWoodenShield.png;Wooden Shield;It's a shield. Nothing special.;;;0;0;1;4
+jar:/sprites/ItemBeltOfStrength.png;Belt of Strength;The belt seems to radiate power. Your strikes will land harder.;;;1;0;0;4
+jar:/sprites/ItemBinoculars.png;Binoculars;You can see further with these.;SIGHT: +2;binoculars;0;0;0;3
+jar:/sprites/ItemHerbs.png;Medicinal Herbs;Some nice smelling herbs. Good for relaxing. Heal more.;HEAL: +1;medication;0;0;0;3
+jar:/sprites/ItemSteelHelmet.png;Steel Helmet;Steel helmet with a visor. Protects well, obstructs vision.;SIGHT: -2;antibinoculars;0;-1;2;3
+jar:/sprites/ItemRainbowSword.png;Sword of Rainbows;Seems very sharp, but enemies might get provoked by it.;;;0;2;-1;3
+jar:/sprites/ItemDeathScythe.png;Scythe of Tuonela;Looks like a scythe with a bone as the handle. Glows spookily.;HEAL: -1;antimedication;3;-1;0;2

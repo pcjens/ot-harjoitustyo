@@ -283,8 +283,8 @@ public abstract class Entity {
             offsetX = -deltaX;
             offsetY = -deltaY;
         } else {
-            offsetX = 0.25 * deltaX;
-            offsetY = 0.25 * deltaY;
+            offsetX = 0.5 * deltaX;
+            offsetY = 0.5 * deltaY;
         }
     }
 

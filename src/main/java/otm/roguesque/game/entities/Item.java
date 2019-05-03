@@ -23,14 +23,16 @@ public class Item extends Entity {
         public final String displayName;
         public final String description;
         public final String effect;
+        public final String customStatInfo;
         public final int damageBoost;
         public final int attackBoost;
         public final int defenseBoost;
 
-        public ItemData(String identifier, String displayName, String description, String effect, int damageBoost, int attackBoost, int defenseBoost) {
+        public ItemData(String identifier, String displayName, String description, String customStatInfo, String effect, int damageBoost, int attackBoost, int defenseBoost) {
             this.identifier = identifier;
             this.displayName = displayName;
             this.description = description;
+            this.customStatInfo = customStatInfo;
             this.effect = effect;
             this.damageBoost = damageBoost;
             this.attackBoost = attackBoost;
@@ -39,8 +41,7 @@ public class Item extends Entity {
     }
 
     private static ItemData[] ITEMS = new ItemData[]{
-        new ItemData("jar:/sprites/ItemIronSword.png", "Sword of Iron", "It's a sword. Nothing special.", "", 0, 1, 0),
-        new ItemData("jar:/sprites/ItemWoodenShield.png", "Shield of Wood", "It's a shield. Nothing special.", "", 0, 0, 1)
+        new ItemData("jar:/sprites/ItemIronSword.png", "Sword of Iron", "It's a sword. Nothing special.", "", "", 0, 1, 0)
     };
 
     static {
@@ -53,26 +54,28 @@ public class Item extends Entity {
                 lineContent = line;
                 String[] parts = line.split(";");
                 lineNumber++;
-                if (parts.length == 8) {
-                    int count = Integer.parseInt(parts[7]);
-                    for (int j = 0; j < count; j++) {
+                if (parts.length == 9) {
+                    int count = Integer.parseInt(parts[8]);
+                    for (int i = 0; i < count; i++) {
                         loadedItems.add(new ItemData(parts[0], parts[1],
                                 parts[2].replace("\\n", "\n"), parts[3],
-                                Integer.parseInt(parts[4]),
+                                parts[4].replace("\\n", "\n"),
                                 Integer.parseInt(parts[5]),
-                                Integer.parseInt(parts[6])));
+                                Integer.parseInt(parts[6]),
+                                Integer.parseInt(parts[7])));
                     }
                 } else {
                     System.err.println("Wrong amount of parts on line " + lineNumber + ": " + lineContent);
-                    throw new Exception();
                 }
             }
-            ITEMS = (ItemData[]) loadedItems.toArray();
+            ITEMS = new ItemData[loadedItems.size()];
+            for (int i = 0; i < loadedItems.size(); i++) {
+                ITEMS[i] = loadedItems.get(i);
+            }
         } catch (IOException ex) {
             System.err.println("Item configuration file 'items.config' is missing or can't be read, using default item set.");
         } catch (NumberFormatException ex) {
             System.err.println("Couldn't parse number on line " + lineNumber + ": " + lineContent);
-        } catch (Exception ex) {
         }
     }
 
@@ -88,6 +91,7 @@ public class Item extends Entity {
         return itemDeck.remove(GlobalRandom.get().nextInt(itemDeck.size()));
     }
 
+    private final String customStatInfo;
     private final String effect;
     private final int damageBoost;
     private final int attackBoost;
@@ -112,6 +116,7 @@ public class Item extends Entity {
         this.setDescription("What could be inside?");
         this.setInvulnerability(true);
 
+        this.customStatInfo = data.customStatInfo;
         this.effect = data.effect;
         this.itemName = data.displayName;
         this.itemDescription = data.description;
@@ -135,6 +140,7 @@ public class Item extends Entity {
             return String.format("%s\n\n%s", getName(), getDescription());
         } else {
             String description = String.format("%s\n\n%s\n", getName(), getDescription());
+            description += customStatInfo.isEmpty() ? "" : String.format("\n%s", customStatInfo);
             description += damageBoost == 0 ? "" : String.format("\nDMG: %s", getStringFromBonus(damageBoost));
             description += attackBoost == 0 ? "" : String.format("\nATK: %s", getStringFromBonus(attackBoost));
             description += defenseBoost == 0 ? "" : String.format("\nDEF: %s", getStringFromBonus(defenseBoost));
@@ -166,8 +172,14 @@ public class Item extends Entity {
             case "binoculars":
                 player.setSightDistance(player.getSightDistance() + 2);
                 break;
+            case "antibinoculars":
+                player.setSightDistance(Math.max(0, player.getSightDistance() - 2));
+                break;
             case "medication":
-                player.setAutoHealCooldown(Math.max(1, player.getAutoHealCooldown() - 2));
+                player.setHealAmount(player.getHealAmount() + 1);
+                break;
+            case "antimedication":
+                player.setHealAmount(Math.max(0, player.getHealAmount() - 1));
                 break;
             default: break;
         }

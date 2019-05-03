@@ -302,13 +302,16 @@ class DungeonGenerator {
     }
 
     private static void generateRoomItems(int count, int xOffset, int yOffset, int roomWidth, int roomHeight) {
-        for (int i = 0; i < count; i++) {
+        int misses = 0;
+        for (int i = 0; i < count && misses < 10; i++) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
             int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
             if (!dungeon.getEntitiesAt(x, y).isEmpty()) {
                 i--;
+                misses++;
                 continue;
             }
+            misses = 0;
             dungeon.spawnEntity(new Item(level), x, y);
         }
     }

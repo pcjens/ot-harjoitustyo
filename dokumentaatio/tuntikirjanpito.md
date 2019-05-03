@@ -43,4 +43,5 @@
 |       |  1 | Notifikaatioiden korjausta, taistelumekaniikkojen uudelleenkirjoittamista (kts. [edellisen commitin](https://github.com/pcjens/otm-roguesque/commit/5118b3f85d85808513dcd89ae66ad98fc0c6067a) lisätiedot) |
 |       |  1 | Tavaroiden korjailua, kuvien lataamisen refaktorointia, automaattinen rivitys lisätietolaatikolle |
 |       |  1 | Uusien tavaroiden lisäämistä |
-| Yht.  | 61 | |
+|       |  2 | Animaatioiden lisäämistä ja uusien tavaroiden lisäämistä |
+| Yht.  | 63 | |

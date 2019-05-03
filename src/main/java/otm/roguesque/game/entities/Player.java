@@ -15,6 +15,7 @@ public class Player extends Entity implements AI {
     private int sightDistance = 7;
     private int autoHealCooldown = 10;
     private int currentAutoHealCooldown = autoHealCooldown;
+    private int healAmount = 1;
 
     /**
      * Luo uuden pelaaja-olion.
@@ -26,14 +27,34 @@ public class Player extends Entity implements AI {
     @Override
     public void processRound() {
         if (getHealth() < getMaxHealth() && --currentAutoHealCooldown <= 0) {
-            setHealth(Math.min(getMaxHealth(), getHealth() + getMaxHealth() / 10));
+            setHealth(Math.min(getMaxHealth(), getHealth() + healAmount));
             currentAutoHealCooldown = autoHealCooldown;
         }
     }
 
     @Override
     public String getRichDescription() {
-        return super.getRichDescription() + String.format("\nSIGHT: %d\nTURNS/HEAL: %d", sightDistance, autoHealCooldown);
+        return super.getRichDescription() + String.format("\nSIGHT: %d\nHEAL: %d", sightDistance, healAmount);
+    }
+
+    /**
+     * Palauttaa määrän elämäpisteitä jonka pelaaja saa autoHealCooldown vuoron
+     * välein.
+     *
+     * @return Elämäpisteiden passiivisen regeneraation määrä.
+     */
+    public int getHealAmount() {
+        return healAmount;
+    }
+
+    /**
+     * Asettaa määrän elämäpisteitä jonka pelaaja saa autoHealCooldown vuoron
+     * välein.
+     *
+     * @param healAmount Uusi elämäpisteiden passiivisen regeneraation määrä.
+     */
+    public void setHealAmount(int healAmount) {
+        this.healAmount = healAmount;
     }
 
     /**
