@@ -251,17 +251,28 @@ public class InGameState implements GameState {
             selectionX = -1;
             selectionY = -1;
         }
-
         if (input.clicked(MouseButton.SECONDARY)) {
             player.resetLastEntityInteractedWith();
             selectionX = -1;
             selectionY = -1;
         }
-
         if (input.clicked(MouseButton.PRIMARY)) {
             player.resetLastEntityInteractedWith();
             selectionX = (int) (input.getMouseX() / tileSize + dungeonRenderer.getOffsetX());
             selectionY = (int) (input.getMouseY() / tileSize + dungeonRenderer.getOffsetY());
+        }
+        if (input.isPressed(Input.CONTROL_SELECT_PLAYER)) {
+            selectPlayer();
+        }
+    }
+
+    private void selectPlayer() {
+        if (selectionX == player.getX() && selectionY == player.getY()) {
+            selectionX = -1;
+            selectionY = -1;
+        } else {
+            selectionX = player.getX();
+            selectionY = player.getY();
         }
     }
 

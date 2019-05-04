@@ -51,6 +51,12 @@ public class Input {
         KeyCode.D, KeyCode.RIGHT, KeyCode.L
     };
     /**
+     * Napit joilla voi valita pelaajan, eli katsoa pelaajan tietoja.
+     */
+    public static final KeyCode[] CONTROL_SELECT_PLAYER = new KeyCode[]{
+        KeyCode.P, KeyCode.E, KeyCode.TAB
+    };
+    /**
      * Napit joilla voi "poistaa valinnan," eli sulkea infolaatikon.
      */
     public static final KeyCode[] CONTROL_CLEAR_SELECTION = new KeyCode[]{
