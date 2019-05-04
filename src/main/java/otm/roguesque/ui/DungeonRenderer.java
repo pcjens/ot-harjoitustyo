@@ -192,7 +192,8 @@ public class DungeonRenderer {
         Entity selectedEntity = dungeon.getPlayer().getLastEntityInteractedWith();
         if (selectedEntity != null) {
             ctx.drawImage(selectionImage,
-                    selectedEntity.getX() * tileSize, selectedEntity.getY() * tileSize,
+                    (selectedEntity.getX() - offsetX + selectedEntity.getOffsetX()) * tileSize,
+                    (selectedEntity.getY() - offsetY + selectedEntity.getOffsetY()) * tileSize,
                     tileSize, tileSize);
         } else if (selectionX >= 0 && selectionY >= 0) {
             ctx.drawImage(selectionImage,
