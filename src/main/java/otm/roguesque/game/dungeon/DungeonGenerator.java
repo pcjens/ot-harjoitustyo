@@ -307,7 +307,7 @@ class DungeonGenerator {
 
     private static void generateFlask(int xOffset, int yOffset, int roomWidth, int roomHeight) {
         int misses = 0;
-        int count = GlobalRandom.get().nextInt(8) - 5;
+        int count = GlobalRandom.get().nextInt(4) - 2;
         for (int i = 0; i < count && misses < 10; i++) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
             int y = yOffset + GlobalRandom.get().nextInt(roomHeight);

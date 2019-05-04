@@ -51,6 +51,7 @@ public class Goblin extends Entity implements AI {
     private Vector huntPlayer(Player player) {
         Path pathToPlayer = getDungeon().getPathTo(this, player);
         if (pathToPlayer != null && pathToPlayer.getLength() < 15 && playerChaseRoundCount < 2) {
+            hunted = player;
             playerChaseRoundCount++;
             return new Vector(pathToPlayer.getNextDeltaX(), pathToPlayer.getNextDeltaY());
         } else {
@@ -62,6 +63,7 @@ public class Goblin extends Entity implements AI {
     private Vector huntForFood() {
         Entity targetRat = getDungeon().getClosestEntityOfType(Rat.class, getX(), getY());
         if (targetRat == null) {
+            hunted = targetRat;
             return null;
         }
         Path pathToRat = getDungeon().getPathTo(this, targetRat);

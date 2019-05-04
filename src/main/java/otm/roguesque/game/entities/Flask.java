@@ -20,7 +20,7 @@ public class Flask extends Entity {
     public Flask() {
         super(0, 100000, 0, 0, 0, "", "", "Flasks", SpriteLoader.loadImage("jar:/sprites/Flask.png"));
         setInvulnerability(true);
-        healAmount = GlobalRandom.get().nextInt(5) + 1;
+        healAmount = GlobalRandom.get().nextInt(5) + 2;
     }
 
     @Override

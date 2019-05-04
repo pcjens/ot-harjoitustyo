@@ -46,5 +46,5 @@
 |       |  2 | Animaatioiden lisäämistä ja uusien tavaroiden lisäämistä |
 |       |  1 | Lohikäärmeiden lisäämistä |
 |  4.5. |  1 | Flaskien lisäämistä ja checkstyle-ongelmien korjaamista |
-|       |  1 | Testien ja bugien korjaamista |
-| Yht.  | 66 | |
+|       |  2 | Testien ja bugien korjaamista |
+| Yht.  | 67 | |

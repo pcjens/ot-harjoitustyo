@@ -70,7 +70,7 @@ public class InGameState implements GameState {
     }
 
     protected void initializeDungeon(long seed) {
-        dungeon = new Dungeon(12, 1);//seed, 1);
+        dungeon = new Dungeon(seed, 1);
         player = dungeon.getPlayer();
         reloadUI();
     }

@@ -52,8 +52,12 @@ public class Dragon extends Entity implements AI {
     }
 
     private Vector huntPlayer(Player player) {
+        if (player.isDead()) {
+            return null;
+        }
         Path pathToPlayer = getDungeon().getPathTo(this, player);
         if (pathToPlayer != null && pathToPlayer.getLength() < 15) {
+            hunted = player;
             return new Vector(pathToPlayer.getNextDeltaX(), pathToPlayer.getNextDeltaY());
         } else {
             return null;
@@ -67,6 +71,7 @@ public class Dragon extends Entity implements AI {
         }
         Path pathToGoblin = getDungeon().getPathTo(this, targetGoblin);
         if (pathToGoblin != null) {
+            hunted = targetGoblin;
             return new Vector(pathToGoblin.getNextDeltaX(), pathToGoblin.getNextDeltaY());
         } else {
             return null;
