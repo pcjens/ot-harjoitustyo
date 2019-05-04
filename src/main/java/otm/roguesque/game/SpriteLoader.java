@@ -58,17 +58,20 @@ public class SpriteLoader {
             case "jar":
                 InputStream stream = SpriteLoader.class.getResourceAsStream(location);
                 return stream != null ? new Image(stream) : NULL_IMAGE;
-            case "file": {
-                try {
-                    return new Image(new FileInputStream(new File(location)));
-                } catch (FileNotFoundException ex) {
-                    System.err.println("No file found at: '" + location + "'");
-                    return NULL_IMAGE;
-                }
-            }
+            case "file":
+                return loadImageFromFile(location);
             default:
                 System.err.println("Invalid scheme in url: '" + url + "'.");
                 return NULL_IMAGE;
+        }
+    }
+
+    private static Image loadImageFromFile(String location) {
+        try {
+            return new Image(new FileInputStream(new File(location)));
+        } catch (FileNotFoundException ex) {
+            System.err.println("No file found at: '" + location + "'");
+            return NULL_IMAGE;
         }
     }
 }

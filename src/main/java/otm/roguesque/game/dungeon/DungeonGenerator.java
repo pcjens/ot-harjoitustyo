@@ -5,6 +5,7 @@ import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Dragon;
 import otm.roguesque.game.entities.Entity;
+import otm.roguesque.game.entities.Flask;
 import otm.roguesque.game.entities.Goblin;
 import otm.roguesque.game.entities.Item;
 import otm.roguesque.game.entities.NullEntity;
@@ -238,6 +239,7 @@ class DungeonGenerator {
 
     private static void generateRoom(RoomType type, int xOffset, int yOffset, int roomWidth, int roomHeight) {
         generateRoomFrame(xOffset, yOffset, roomWidth, roomHeight);
+        generateFlask(xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
         switch (type) {
             case MonsterRoom:
                 generateRoomEnemies(xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
@@ -268,6 +270,22 @@ class DungeonGenerator {
                 }
                 tiles[(x + xOffset) + (y + yOffset) * width] = tile;
             }
+        }
+    }
+
+    private static void generateFlask(int xOffset, int yOffset, int roomWidth, int roomHeight) {
+        int misses = 0;
+        int count = GlobalRandom.get().nextInt(8) - 5;
+        for (int i = 0; i < count && misses < 10; i++) {
+            int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
+            int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
+            if (!dungeon.getEntitiesAt(x, y).isEmpty()) {
+                i--;
+                misses++;
+                continue;
+            }
+            misses = 0;
+            dungeon.spawnEntity(new Flask(), x, y);
         }
     }
 
