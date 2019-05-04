@@ -45,4 +45,5 @@
 |       |  1 | Uusien tavaroiden lisäämistä |
 |       |  2 | Animaatioiden lisäämistä ja uusien tavaroiden lisäämistä |
 |       |  1 | Lohikäärmeiden lisäämistä |
+|       |  1 | Flaskien lisäämistä ja checkstyle-ongelmien korjaamista |
 | Yht.  | 64 | |

@@ -15,6 +15,7 @@ public class Goblin extends Entity implements AI {
 
     private int hunger = 10;
     private int playerChaseRoundCount = 0;
+    private Entity hunted = null;
 
     /**
      * Luo uuden menninkäisen.
@@ -25,29 +26,44 @@ public class Goblin extends Entity implements AI {
 
     @Override
     public void processRound() {
-        Entity target = getDungeon().getPlayer();
-        Vector delta = getVectorTo(target);
-        Path pathToPlayer;
-        if (delta.getDistance() < 10 && (pathToPlayer = getDungeon().getPathTo(this, target)) != null && playerChaseRoundCount < 4) {
-            delta = new Vector(pathToPlayer.getNextDeltaX(), pathToPlayer.getNextDeltaY());
-            playerChaseRoundCount++;
-        } else if (playerChaseRoundCount == 4) {
-            playerChaseRoundCount = 0;
-            delta = new Vector(0, 0);
-        } else if (hunger == 0) {
-            target = getDungeon().getClosestEntityOfType(Rat.class, getX(), getY());
-            if (target != null) {
-                delta = getVectorTo(target).lesserComponentZeroed().unit();
-            }
-        }
-        if (delta.getDistance() > 1) {
-            int r = GlobalRandom.get().nextInt(4);
-            delta = new Vector((int) Math.cos(r * Math.PI / 2.0), (int) Math.sin(r * Math.PI / 2.0));
-            hunger -= hunger > 0 ? 1 : 0;
+        hunger -= hunger > 0 ? 1 : 0;
+        Vector delta = hunger == 0 ? huntForFood() : null;
+        delta = delta == null ? huntPlayer(getDungeon().getPlayer()) : delta;
+        if (delta == null) {
+            delta = wander();
         }
         move(delta.getX(), delta.getY());
-        if (target != null && target.isDead()) {
+        if (hunted != null && hunted.isDead()) {
             hunger = 10;
         }
+    }
+
+    private Vector huntPlayer(Player player) {
+        Path pathToPlayer = getDungeon().getPathTo(this, player);
+        if (pathToPlayer != null && pathToPlayer.getLength() < 15 && playerChaseRoundCount < 2) {
+            playerChaseRoundCount++;
+            return new Vector(pathToPlayer.getNextDeltaX(), pathToPlayer.getNextDeltaY());
+        } else {
+            playerChaseRoundCount = 0;
+            return null;
+        }
+    }
+
+    private Vector huntForFood() {
+        Entity targetRat = getDungeon().getClosestEntityOfType(Rat.class, getX(), getY());
+        if (targetRat == null) {
+            return null;
+        }
+        Path pathToRat = getDungeon().getPathTo(this, targetRat);
+        if (pathToRat != null) {
+            return new Vector(pathToRat.getNextDeltaX(), pathToRat.getNextDeltaY());
+        } else {
+            return null;
+        }
+    }
+
+    private Vector wander() {
+        int r = GlobalRandom.get().nextInt(4);
+        return new Vector((int) Math.cos(r * Math.PI / 2.0), (int) Math.sin(r * Math.PI / 2.0));
     }
 }

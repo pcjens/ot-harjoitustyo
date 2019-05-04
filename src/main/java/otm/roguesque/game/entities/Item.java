@@ -40,7 +40,7 @@ public class Item extends Entity {
         }
     }
 
-    private static ItemData[] ITEMS = new ItemData[]{
+    private static ItemData[] prototypeItemDeck = new ItemData[]{
         new ItemData("jar:/sprites/ItemIronSword.png", "Sword of Iron", "It's a sword. Nothing special.", "", "", 0, 1, 0)
     };
 
@@ -68,9 +68,9 @@ public class Item extends Entity {
                     System.err.println("Wrong amount of parts on line " + lineNumber + ": " + lineContent);
                 }
             }
-            ITEMS = new ItemData[loadedItems.size()];
+            prototypeItemDeck = new ItemData[loadedItems.size()];
             for (int i = 0; i < loadedItems.size(); i++) {
-                ITEMS[i] = loadedItems.get(i);
+                prototypeItemDeck[i] = loadedItems.get(i);
             }
         } catch (IOException ex) {
             System.err.println("Item configuration file 'items.config' is missing or can't be read, using default item set.");
@@ -79,16 +79,13 @@ public class Item extends Entity {
         }
     }
 
-    private static final int ITEM_REPEATS_PER_DECK = 2;
-    private static ArrayList<ItemData> itemDeck = new ArrayList();
+    private static ArrayList<ItemData> currentItemDeck = new ArrayList();
 
     private static ItemData getRandomItem() {
-        if (itemDeck.isEmpty()) {
-            for (int i = 0; i < ITEM_REPEATS_PER_DECK; i++) {
-                itemDeck.addAll(Arrays.asList(ITEMS));
-            }
+        if (currentItemDeck.isEmpty()) {
+            currentItemDeck.addAll(Arrays.asList(prototypeItemDeck));
         }
-        return itemDeck.remove(GlobalRandom.get().nextInt(itemDeck.size()));
+        return currentItemDeck.remove(GlobalRandom.get().nextInt(currentItemDeck.size()));
     }
 
     private final String customStatInfo;

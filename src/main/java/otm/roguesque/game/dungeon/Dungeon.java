@@ -74,28 +74,27 @@ public class Dungeon {
      */
     public void runPlayerAction(PlayerActionType action) {
         switch (action) {
-            case NextLevel:
-                if (canFinish()) {
-                    level++;
-                    regenerateDungeon(GlobalRandom.get().nextLong());
-                }
+            case NextLevel: nextLevel();
                 break;
-            case MoveUp:
-                player.move(0, -1);
+            case MoveUp: player.move(0, -1);
                 break;
-            case MoveLeft:
-                player.move(-1, 0);
+            case MoveLeft: player.move(-1, 0);
                 break;
-            case MoveDown:
-                player.move(0, 1);
+            case MoveDown: player.move(0, 1);
                 break;
-            case MoveRight:
-                player.move(1, 0);
+            case MoveRight: player.move(1, 0);
                 break;
             default:
                 break;
         }
         replay.addAction(action);
+    }
+
+    private void nextLevel() {
+        if (canFinish()) {
+            level++;
+            regenerateDungeon(GlobalRandom.get().nextLong());
+        }
     }
 
     /**

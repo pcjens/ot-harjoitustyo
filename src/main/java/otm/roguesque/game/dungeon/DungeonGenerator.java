@@ -239,7 +239,6 @@ class DungeonGenerator {
 
     private static void generateRoom(RoomType type, int xOffset, int yOffset, int roomWidth, int roomHeight) {
         generateRoomFrame(xOffset, yOffset, roomWidth, roomHeight);
-        generateFlask(xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
         switch (type) {
             case MonsterRoom:
                 generateRoomEnemies(xOffset + 1, yOffset + 1, roomWidth - 2, roomHeight - 2);
@@ -273,22 +272,6 @@ class DungeonGenerator {
         }
     }
 
-    private static void generateFlask(int xOffset, int yOffset, int roomWidth, int roomHeight) {
-        int misses = 0;
-        int count = GlobalRandom.get().nextInt(8) - 5;
-        for (int i = 0; i < count && misses < 10; i++) {
-            int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
-            int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
-            if (!dungeon.getEntitiesAt(x, y).isEmpty()) {
-                i--;
-                misses++;
-                continue;
-            }
-            misses = 0;
-            dungeon.spawnEntity(new Flask(), x, y);
-        }
-    }
-
     private static void generateDoors(int xOffset, int yOffset, int roomWidth, int roomHeight) {
         for (int y = 0; y < roomHeight; y++) {
             for (int x = 0; x < roomWidth; x++) {
@@ -302,6 +285,7 @@ class DungeonGenerator {
     }
 
     private static void generateRoomEnemies(int xOffset, int yOffset, int roomWidth, int roomHeight) {
+        generateFlask(xOffset, yOffset, roomWidth, roomHeight);
         int missCount = 0, enemyPoints = GlobalRandom.get().nextInt((int) Math.pow(level, 1.2) + 1) + (int) Math.pow(level + 2, 1.3);
         while (enemyPoints >= EnemyType.Rat.getValue() && missCount < 10) {
             int x = xOffset + GlobalRandom.get().nextInt(roomWidth), y = yOffset + GlobalRandom.get().nextInt(roomHeight);
@@ -313,12 +297,27 @@ class DungeonGenerator {
             }
             int enemyType = GlobalRandom.get().nextInt(Math.min(Math.max(1, level - 1), EnemyType.values().length));
             for (int typeIndex = enemyType; typeIndex >= 0; typeIndex--) {
-                EnemyType type = EnemyType.values()[typeIndex];
-                if (type.getValue() <= enemyPoints) {
-                    enemyPoints -= type.getValue();
-                    dungeon.spawnEntity(type.createEntity(), x, y);
+                if (EnemyType.values()[typeIndex].getValue() <= enemyPoints) {
+                    enemyPoints -= EnemyType.values()[typeIndex].getValue();
+                    dungeon.spawnEntity(EnemyType.values()[typeIndex].createEntity(), x, y);
                 }
             }
+        }
+    }
+
+    private static void generateFlask(int xOffset, int yOffset, int roomWidth, int roomHeight) {
+        int misses = 0;
+        int count = GlobalRandom.get().nextInt(8) - 5;
+        for (int i = 0; i < count && misses < 10; i++) {
+            int x = xOffset + GlobalRandom.get().nextInt(roomWidth);
+            int y = yOffset + GlobalRandom.get().nextInt(roomHeight);
+            if (!dungeon.getEntitiesAt(x, y).isEmpty()) {
+                i--;
+                misses++;
+                continue;
+            }
+            misses = 0;
+            dungeon.spawnEntity(new Flask(), x, y);
         }
     }
 

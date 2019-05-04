@@ -37,17 +37,25 @@ public class Pathfinder {
         addInitialNeighbors(queue, startX, startY, endX, endY, solid, width, height);
         while (!queue.isEmpty()) {
             Path current = queue.poll();
-            int i = current.getX() + current.getY() * width;
-            if (visited.contains(i)) {
-                continue;
+            Path result = processPath(current, solid, width, height, queue, visited, endX, endY);
+            if (result != null) {
+                return result;
             }
-            visited.add(i);
-            if (current.getX() == endX && current.getY() == endY) {
-                return current;
-            }
-            addNeighbors(queue, visited, current, solid, width, height);
         }
         System.out.println("Couldn't find path from " + startX + ", " + startY + " to " + endX + ", " + endY);
+        return null;
+    }
+
+    private static Path processPath(Path current, boolean[] solid, int width, int height, PriorityQueue<Path> queue, HashSet<Integer> visited, int endX, int endY) {
+        int i = current.getX() + current.getY() * width;
+        if (visited.contains(i)) {
+            return null;
+        }
+        visited.add(i);
+        if (current.getX() == endX && current.getY() == endY) {
+            return current;
+        }
+        addNeighbors(queue, visited, current, solid, width, height);
         return null;
     }
 

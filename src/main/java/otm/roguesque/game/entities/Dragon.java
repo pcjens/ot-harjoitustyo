@@ -14,8 +14,6 @@ import otm.roguesque.util.Vector;
 public class Dragon extends Entity implements AI {
 
     private int hunger = 6;
-    private int startingX = -1;
-    private int startingY = -1;
     private Entity hunted;
 
     /**
@@ -27,17 +25,9 @@ public class Dragon extends Entity implements AI {
 
     @Override
     public void processRound() {
-        if (startingX == -1 && startingY == -1) {
-            initializePosition();
-        }
         hunger -= hunger > 0 ? 1 : 0;
-        Vector delta = null;
-        if (hunger == 0) {
-            delta = huntForFood();
-        }
-        if (delta == null) {
-            delta = huntPlayer(getDungeon().getPlayer());
-        }
+        Vector delta = hunger == 0 ? huntForFood() : null;
+        delta = delta == null ? huntPlayer(getDungeon().getPlayer()) : delta;
         if (delta == null) {
             if (hunger > 3) {
                 return; // Siesta
@@ -49,11 +39,6 @@ public class Dragon extends Entity implements AI {
         if (hunted != null && hunted.isDead()) {
             hunger = 6;
         }
-    }
-
-    private void initializePosition() {
-        this.startingX = getX();
-        this.startingY = getY();
     }
 
     private Vector huntPlayer(Player player) {

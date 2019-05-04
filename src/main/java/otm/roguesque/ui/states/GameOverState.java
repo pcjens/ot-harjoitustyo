@@ -59,13 +59,17 @@ public class GameOverState implements GameState {
             return GameState.STATE_QUIT;
         }
         if (showDebugInfo && saveReplayButton.isClicked()) {
-            try {
-                InGameState.latestReplay.saveTo(Paths.get(System.getProperty("user.dir"),
-                        JOptionPane.showInputDialog("Save file name:", "roguesque-replay.rgsq")));
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Couldn't save replay. Are you lacking permissions?", "Replay not saved", JOptionPane.WARNING_MESSAGE);
-            }
+            saveReplay();
         }
         return -1;
+    }
+
+    private void saveReplay() {
+        try {
+            InGameState.latestReplay.saveTo(Paths.get(System.getProperty("user.dir"),
+                    JOptionPane.showInputDialog("Save file name:", "roguesque-replay.rgsq")));
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Couldn't save replay. Are you lacking permissions?", "Replay not saved", JOptionPane.WARNING_MESSAGE);
+        }
     }
 }
