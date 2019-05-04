@@ -81,9 +81,18 @@ public class Item extends Entity {
 
     private static ArrayList<ItemData> currentItemDeck = new ArrayList();
 
-    private static ItemData getRandomItem() {
+    /**
+     * Alustaa "pakan" tavaroita, josta nostetaan itemeitä jakoon kentällä. Tätä
+     * kuuluu kutsua samalla kun GlobalRandom resetoidaan.
+     */
+    public static void initializeItemDeck() {
+        currentItemDeck.clear();
+        currentItemDeck.addAll(Arrays.asList(prototypeItemDeck));
+    }
+
+    private ItemData getRandomItem() {
         if (currentItemDeck.isEmpty()) {
-            currentItemDeck.addAll(Arrays.asList(prototypeItemDeck));
+            initializeItemDeck();
         }
         return currentItemDeck.remove(GlobalRandom.get().nextInt(currentItemDeck.size()));
     }

@@ -32,6 +32,7 @@ public abstract class Entity {
     private Image image;
     private Entity lastEntityInteractedWith;
     private boolean invulnerable;
+    private boolean aiControlled = true;
 
     private double offsetX = 0;
     private double offsetY = 0;
@@ -105,6 +106,26 @@ public abstract class Entity {
      */
     public Vector pathfindTo(Entity otherEntity) {
         return new Vector(otherEntity.getX() - getX(), otherEntity.getY() - getY());
+    }
+
+    /**
+     * Asettaa olion tekoäly-ohjautuvuuden. Oletuksena tämä on tosi. Jos tämän
+     * asettaa falseksi, tekoälyä ei suoriteta tälle oliolle, ja tämä olio vain
+     * seisoo paikallaan.
+     *
+     * @param aiControlled Ohjaako tekoäly oliota?
+     */
+    public void setAIControlled(boolean aiControlled) {
+        this.aiControlled = aiControlled;
+    }
+
+    /**
+     * Onko tämä olio tekoälyn ohjaama?
+     *
+     * @return Onko tällä oliolla tekoälyä, ja onko se päällä?
+     */
+    public boolean isAIControlled() {
+        return aiControlled && this instanceof AI;
     }
 
     /**

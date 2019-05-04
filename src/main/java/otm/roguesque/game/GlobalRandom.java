@@ -51,6 +51,6 @@ public class GlobalRandom {
      */
     public static void reset(long seed) {
         GlobalRandom.seed = seed;
-        random = new Random(seed);
+        random.setSeed(seed);
     }
 }

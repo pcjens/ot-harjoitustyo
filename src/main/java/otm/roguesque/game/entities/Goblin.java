@@ -24,6 +24,16 @@ public class Goblin extends Entity implements AI {
         super(2, 8, 2, 2, 1, "Goblin", "Looks hungry. And evil.", "Goblins", SpriteLoader.loadImage("jar:/sprites/Goblin.png"));
     }
 
+    /**
+     * Asettaa menninkäisen nälkäisyyden, missä 0 tarkoittaa erittäin nälkäistä,
+     * ja syötyään nälkäisyys palaa 10:n.
+     *
+     * @param hunger Uusi nälkäisyys-arvo.
+     */
+    public void setHunger(int hunger) {
+        this.hunger = hunger;
+    }
+
     @Override
     public void processRound() {
         hunger -= hunger > 0 ? 1 : 0;

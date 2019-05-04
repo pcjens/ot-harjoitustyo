@@ -9,6 +9,7 @@ import otm.roguesque.game.dungeon.replay.Replay;
 import otm.roguesque.game.entities.AI;
 import otm.roguesque.game.entities.Door;
 import otm.roguesque.game.entities.Entity;
+import otm.roguesque.game.entities.Item;
 import otm.roguesque.game.entities.Player;
 import otm.roguesque.util.Path;
 import otm.roguesque.util.Pathfinder;
@@ -63,6 +64,7 @@ public class Dungeon {
         clearTiles();
 
         GlobalRandom.reset(seed);
+        Item.initializeItemDeck();
         DungeonGenerator.generateNewDungeon(this);
         spawnEntity(player, playerSpawnX, playerSpawnY);
     }
@@ -323,7 +325,7 @@ public class Dungeon {
      */
     public void processRound() {
         for (Entity e : entities) {
-            if (e instanceof AI && !e.isDead()) {
+            if (e.isAIControlled() && !e.isDead()) {
                 ((AI) e).processRound();
             }
         }

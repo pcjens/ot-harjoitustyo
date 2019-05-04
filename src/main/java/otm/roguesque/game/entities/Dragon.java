@@ -23,6 +23,16 @@ public class Dragon extends Entity implements AI {
         super(10, 25, 6, 6, 6, "Dragon", "Breathes fire. A day's work for a knight.", "Dragons", SpriteLoader.loadImage("jar:/sprites/Dragon.png"));
     }
 
+    /**
+     * Asettaa lohikäärmeen nälkäisyyden, missä 0 tarkoittaa erittäin nälkäistä,
+     * ja syötyään nälkäisyys palaa 6:n.
+     *
+     * @param hunger Uusi nälkäisyys-arvo.
+     */
+    public void setHunger(int hunger) {
+        this.hunger = hunger;
+    }
+
     @Override
     public void processRound() {
         hunger -= hunger > 0 ? 1 : 0;

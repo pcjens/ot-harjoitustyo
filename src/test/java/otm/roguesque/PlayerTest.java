@@ -4,7 +4,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import otm.roguesque.game.dungeon.Dungeon;
+import otm.roguesque.game.entities.Dragon;
+import otm.roguesque.game.entities.Goblin;
 import otm.roguesque.game.entities.Player;
+import otm.roguesque.game.entities.Rat;
 
 public class PlayerTest {
 
@@ -16,6 +19,60 @@ public class PlayerTest {
         dungeon = new Dungeon(12, 1);
         player = dungeon.getPlayer();
         player.recalculateLineOfSight(true);
+    }
+
+    @Test
+    public void goblinHuntsForRatsOverPlayer() {
+        dungeon.movePlayerNTimes(-2, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        Goblin goblin = new Goblin();
+        goblin.setHunger(0);
+        dungeon.spawnEntity(goblin, player.getX() + 4, player.getY() + 1);
+        Rat rat = new Rat();
+        rat.setAIControlled(false);
+        dungeon.spawnEntity(rat, player.getX(), player.getY() + 2);
+        dungeon.movePlayerNTimes(-8, 0);
+        Assert.assertTrue(!player.isDead());
+        Assert.assertTrue(!rat.isDead());
+        dungeon.movePlayerNTimes(-1, 0);
+        Assert.assertTrue(!player.isDead());
+        Assert.assertTrue(rat.isDead());
+    }
+
+    @Test
+    public void dragonHuntsForPlayerOverRats() {
+        dungeon.movePlayerNTimes(-2, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        Dragon dragon = new Dragon();
+        dragon.setHunger(0);
+        dungeon.spawnEntity(dragon, player.getX() + 4, player.getY() + 1);
+        Rat rat = new Rat();
+        rat.setAIControlled(false);
+        dungeon.spawnEntity(rat, player.getX(), player.getY() + 2);
+        dungeon.movePlayerNTimes(-9, 0);
+        Assert.assertTrue(!player.isDead());
+        Assert.assertTrue(!rat.isDead());
+        dungeon.movePlayerNTimes(-1, 0);
+        Assert.assertTrue(player.isDead());
+        Assert.assertTrue(!rat.isDead());
+    }
+
+    @Test
+    public void dragonHuntsForGoblinsOverPlayer() {
+        dungeon.movePlayerNTimes(-2, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        Dragon dragon = new Dragon();
+        dragon.setHunger(0);
+        dungeon.spawnEntity(dragon, player.getX() + 4, player.getY() + 1);
+        Goblin goblin = new Goblin();
+        goblin.setAIControlled(false);
+        dungeon.spawnEntity(goblin, player.getX(), player.getY() + 2);
+        dungeon.movePlayerNTimes(-8, 0);
+        Assert.assertTrue(!player.isDead());
+        Assert.assertTrue(!goblin.isDead());
+        dungeon.movePlayerNTimes(-1, 0);
+        Assert.assertTrue(!player.isDead());
+        Assert.assertTrue(goblin.isDead());
     }
 
     @Test
@@ -123,11 +180,9 @@ public class PlayerTest {
 
     @Test
     public void playerGetsStatsFromItem() {
-        Assert.assertTrue(player.getAttack() == 1);
         Assert.assertTrue(player.getDefense() == 2);
         movePlayerToItem();
-        Assert.assertTrue(player.getAttack() == 4);
-        Assert.assertTrue(player.getDefense() == 1);
+        Assert.assertTrue(player.getDefense() == 4);
     }
 
     private void movePlayerToItem() {
