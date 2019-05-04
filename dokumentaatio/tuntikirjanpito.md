@@ -47,4 +47,6 @@
 |       |  1 | Lohikäärmeiden lisäämistä |
 |  4.5. |  1 | Flaskien lisäämistä ja checkstyle-ongelmien korjaamista |
 |       |  2 | Testien ja bugien korjaamista |
-| Yht.  | 67 | |
+|       |  2 | Leaderboards-palvelimen ja clientin kirjoittamista |
+|  5.5. |  2 | Leaderboards-palvelimen ja clientin kirjoittamista, sekä niiden testien kirjoittamista |
+| Yht.  | 71 | |

@@ -35,6 +35,8 @@
                     <excludes>
                         <exclude>otm/roguesque/ui/**/*</exclude>
                         <exclude>otm/roguesque/resources/*</exclude>
+                        <!-- Replay on vain debuggaukseen käytettyä koodia, joka ei ole tarpeeksi luotettava, että sitä voisi deterministisesti/järkevästi testata. -->
+                        <exclude>otm/roguesque/game/dungeon/replay/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
