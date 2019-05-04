@@ -21,7 +21,16 @@ public class Player extends Entity implements AI {
      * Luo uuden pelaaja-olion.
      */
     public Player() {
-        super(10, 1, 1, 2, "Adventurer", "Seeking freedom.", "Adventurers", SpriteLoader.loadImage("jar:/sprites/Player.png"));
+        super(0, 10, 1, 1, 2, "Adventurer", "Seeking freedom.", "Adventurers", SpriteLoader.loadImage("jar:/sprites/Player.png"));
+    }
+
+    /**
+     * Palauttaa pelaajan tapoista saatujen pisteiden määrän.
+     *
+     * @return Pelaajan pisteet.
+     */
+    public static int getScore() {
+        return playerScore;
     }
 
     @Override

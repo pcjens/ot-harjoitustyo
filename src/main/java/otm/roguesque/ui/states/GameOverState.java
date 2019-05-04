@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
+import otm.roguesque.game.entities.Player;
 import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
 import otm.roguesque.ui.RoguesqueApp;
@@ -35,7 +36,9 @@ public class GameOverState implements GameState {
 
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_LOGO_SMALL);
-        ctx.fillText("You are dead.", 180.0, 220.0);
+        ctx.fillText("You are dead.", 180.0, 200.0);
+        ctx.setFont(RoguesqueApp.FONT_UI);
+        ctx.fillText("Score: " + Player.getScore(), 250.0, 245.0);
 
         mainmenuButton.draw(ctx);
         quitButton.draw(ctx);

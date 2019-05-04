@@ -15,9 +15,12 @@ import otm.roguesque.util.Vector;
  */
 public abstract class Entity {
 
+    static int playerScore = 0;
+
     private Dungeon dungeon;
     private int x;
     private int y;
+    private int score;
     private int maxHealth;
     private int health;
     private int damage;
@@ -35,7 +38,8 @@ public abstract class Entity {
 
     private ArrayList<HitNotification> notifications = new ArrayList();
 
-    Entity(int maxHealth, int damage, int attack, int defense, String name, String description, String friendlyGroup, Image image) {
+    Entity(int score, int maxHealth, int damage, int attack, int defense, String name, String description, String friendlyGroup, Image image) {
+        this.score = score;
         this.maxHealth = this.health = maxHealth;
         this.damage = damage;
         this.attack = attack;
@@ -338,6 +342,9 @@ public abstract class Entity {
             hitEntity.takeDamage(this);
             if (!hitEntity.isDead()) {
                 result = true;
+            } else if (this instanceof Player) {
+                // Killed something, increment score
+                playerScore += hitEntity.score;
             }
         }
         return result;

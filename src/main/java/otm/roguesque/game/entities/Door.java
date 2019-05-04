@@ -13,7 +13,7 @@ public class Door extends Entity {
      * Luo uuden oven.
      */
     public Door() {
-        super(100000, 0, 0, 0, "", "", "Doors", SpriteLoader.loadImage("jar:/sprites/Door.png"));
+        super(0, 100000, 0, 0, 0, "", "", "Doors", SpriteLoader.loadImage("jar:/sprites/Door.png"));
         setInvulnerability(true);
     }
 

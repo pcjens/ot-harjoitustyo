@@ -105,7 +105,7 @@ public class Item extends Entity {
      * @param level Kentän vaikeustaso mistä tämä tavara löytyy.
      */
     public Item(int level) {
-        super(100000, 0, 0, 0, "", "", "Items", SpriteLoader.loadImage("jar:/sprites/ItemChest.png"));
+        super(0, 100000, 0, 0, 0, "", "", "Items", SpriteLoader.loadImage("jar:/sprites/ItemChest.png"));
 
         ItemData data = getRandomItem();
 

@@ -20,7 +20,7 @@ public class Skeleton extends Entity implements AI {
      * Luo uuden luurangon.
      */
     public Skeleton() {
-        super(10, 2, 4, 5, "Skeleton", "Spooky, scary. Skeleton.", "Skeletons", SpriteLoader.loadImage("jar:/sprites/Skeleton.png"));
+        super(4, 10, 2, 4, 5, "Skeleton", "Spooky, scary. Skeleton.", "Skeletons", SpriteLoader.loadImage("jar:/sprites/Skeleton.png"));
     }
 
     @Override

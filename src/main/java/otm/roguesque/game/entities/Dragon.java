@@ -20,7 +20,7 @@ public class Dragon extends Entity implements AI {
      * Luo uuden lohikäärmeen.
      */
     public Dragon() {
-        super(25, 6, 6, 6, "Dragon", "Breathes fire. A day's work for a knight.", "Dragons", SpriteLoader.loadImage("jar:/sprites/Dragon.png"));
+        super(10, 25, 6, 6, 6, "Dragon", "Breathes fire. A day's work for a knight.", "Dragons", SpriteLoader.loadImage("jar:/sprites/Dragon.png"));
     }
 
     @Override

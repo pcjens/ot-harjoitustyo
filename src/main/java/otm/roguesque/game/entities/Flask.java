@@ -18,7 +18,7 @@ public class Flask extends Entity {
      * Luo uuden juoman.
      */
     public Flask() {
-        super(100000, 0, 0, 0, "", "", "Flasks", SpriteLoader.loadImage("jar:/sprites/Flask.png"));
+        super(0, 100000, 0, 0, 0, "", "", "Flasks", SpriteLoader.loadImage("jar:/sprites/Flask.png"));
         setInvulnerability(true);
         healAmount = GlobalRandom.get().nextInt(5) + 1;
     }

@@ -21,7 +21,7 @@ public class Goblin extends Entity implements AI {
      * Luo uuden menninkäisen.
      */
     public Goblin() {
-        super(8, 2, 2, 1, "Goblin", "Looks hungry. And evil.", "Goblins", SpriteLoader.loadImage("jar:/sprites/Goblin.png"));
+        super(2, 8, 2, 2, 1, "Goblin", "Looks hungry. And evil.", "Goblins", SpriteLoader.loadImage("jar:/sprites/Goblin.png"));
     }
 
     @Override
