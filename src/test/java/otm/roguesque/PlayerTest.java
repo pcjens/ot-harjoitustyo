@@ -20,32 +20,38 @@ public class PlayerTest {
 
     @Test
     public void playerSeesWhatTheyShould() {
+        dungeon.movePlayerNTimes(2, 0);
+        dungeon.movePlayerNTimes(0, -1);
         dungeon.movePlayerNTimes(1, 0);
-        dungeon.movePlayerNTimes(0, 3);
-        Assert.assertTrue(player.inLineOfSight(23, 12));
+        Assert.assertTrue(player.inLineOfSight(11, 13));
     }
 
     @Test
     public void playerDoesNotSeeWhatTheyShouldNot() {
+        dungeon.movePlayerNTimes(2, 0);
+        dungeon.movePlayerNTimes(0, -1);
         dungeon.movePlayerNTimes(1, 0);
-        dungeon.movePlayerNTimes(0, 3);
-        Assert.assertFalse(player.inLineOfSight(22, 12));
+        Assert.assertFalse(player.inLineOfSight(11, 14));
     }
 
     @Test
     public void playerSeesWhatTheyShouldWhenIgnoringDistance() {
-        dungeon.movePlayerNTimes(0, 2);
-        dungeon.movePlayerNTimes(3, 0);
+        dungeon.movePlayerNTimes(2, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        dungeon.movePlayerNTimes(1, 0);
+        dungeon.movePlayerNTimes(-4, 0);
         player.recalculateLineOfSight(true);
-        Assert.assertTrue(player.inLineOfSight(32, 8));
+        Assert.assertTrue(player.inLineOfSight(11, 12));
     }
 
     @Test
     public void playerDoesNotSeeWhatTheyShouldNotWhenIgnoringDistance() {
-        dungeon.movePlayerNTimes(0, 2);
-        dungeon.movePlayerNTimes(3, 0);
+        dungeon.movePlayerNTimes(2, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        dungeon.movePlayerNTimes(1, 0);
+        dungeon.movePlayerNTimes(-3, 0);
         player.recalculateLineOfSight(true);
-        Assert.assertFalse(player.inLineOfSight(33, 8));
+        Assert.assertFalse(player.inLineOfSight(4, 16));
     }
 
     // These should work, as the UI relies on that to display stats.
@@ -64,39 +70,40 @@ public class PlayerTest {
 
     @Test
     public void levelCanBeFinished() {
+        dungeon.movePlayerNTimes(-1, 0);
+        dungeon.movePlayerNTimes(0, 6);
         dungeon.movePlayerNTimes(1, 0);
-        dungeon.movePlayerNTimes(0, 7);
-        dungeon.movePlayerNTimes(-4, 0);
-        dungeon.movePlayerNTimes(0, 7);
-        dungeon.movePlayerNTimes(-19, 0);
-        dungeon.movePlayerNTimes(0, 7);
-        dungeon.movePlayerNTimes(4, 0);
-        dungeon.movePlayerNTimes(0, 8);
-        dungeon.movePlayerNTimes(-3, 0);
+        dungeon.movePlayerNTimes(0, 5);
+        dungeon.movePlayerNTimes(15, 0);
+        dungeon.movePlayerNTimes(0, 1);
+        dungeon.movePlayerNTimes(23, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        dungeon.movePlayerNTimes(8, 0);
         Assert.assertTrue(dungeon.canFinish());
     }
 
     private void moveToExamine() {
-        dungeon.movePlayerNTimes(-6, 0);
+        dungeon.movePlayerNTimes(2, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        dungeon.movePlayerNTimes(5, 0);
         dungeon.movePlayerNTimes(0, 2);
-        dungeon.movePlayerNTimes(-4, 0);
-        dungeon.movePlayerNTimes(0, -2);
-        dungeon.movePlayerNTimes(-4, 0);
-        dungeon.movePlayerNTimes(-1, 0);
+        dungeon.movePlayerNTimes(4, 0);
+        dungeon.movePlayerNTimes(0, -1);
     }
 
     @Test
     public void collisionWorksWhenItHappens() {
         int originalY = player.getY();
+        Assert.assertTrue(player.move(0, -1));
         Assert.assertFalse(player.move(0, -1));
-        Assert.assertTrue(player.getY() == originalY);
+        Assert.assertTrue(player.getY() == originalY - 1);
     }
 
     @Test
     public void collisionWorksWhenItDoesNotHappen() {
         int originalY = player.getY();
-        Assert.assertTrue(player.move(0, 1));
-        Assert.assertTrue(player.getY() == originalY + 1);
+        Assert.assertTrue(player.move(0, -1));
+        Assert.assertTrue(player.getY() == originalY - 1);
     }
 
     @Test
@@ -107,28 +114,28 @@ public class PlayerTest {
     }
 
     private void movePlayerToDeath() {
-        dungeon.movePlayerNTimes(-6, 0);
-        dungeon.movePlayerNTimes(0, 2);
-        dungeon.movePlayerNTimes(-4, 0);
-        dungeon.movePlayerNTimes(0, -2);
-        dungeon.movePlayerNTimes(-4, 0);
-        dungeon.movePlayerNTimes(0, -16);
+        dungeon.movePlayerNTimes(-1, 0);
+        dungeon.movePlayerNTimes(0, 6);
+        dungeon.movePlayerNTimes(1, 0);
+        dungeon.movePlayerNTimes(0, 4);
+        dungeon.movePlayerNTimes(-50, 0);
     }
 
     @Test
     public void playerGetsStatsFromItem() {
-        Assert.assertTrue(player.getAttack() == 2);
-        Assert.assertTrue(player.getDefense() == 1);
+        Assert.assertTrue(player.getAttack() == 1);
+        Assert.assertTrue(player.getDefense() == 2);
         movePlayerToItem();
         Assert.assertTrue(player.getAttack() == 4);
-        Assert.assertTrue(player.getDefense() == 0);
+        Assert.assertTrue(player.getDefense() == 1);
     }
 
     private void movePlayerToItem() {
-        dungeon.movePlayerNTimes(1, 0);
-        dungeon.movePlayerNTimes(0, 7);
-        dungeon.movePlayerNTimes(-4, 0);
-        dungeon.movePlayerNTimes(0, 5);
+        dungeon.movePlayerNTimes(2, 0);
+        dungeon.movePlayerNTimes(0, -1);
+        dungeon.movePlayerNTimes(5, 0);
+        dungeon.movePlayerNTimes(0, 2);
         dungeon.movePlayerNTimes(4, 0);
+        dungeon.movePlayerNTimes(0, -2);
     }
 }

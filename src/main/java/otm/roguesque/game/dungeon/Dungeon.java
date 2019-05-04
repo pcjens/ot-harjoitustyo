@@ -374,12 +374,18 @@ public class Dungeon {
         for (int i = 0; i < Math.abs(x); i++) {
             runPlayerAction(x < 0 ? PlayerActionType.MoveLeft : PlayerActionType.MoveRight);
             processRound();
+            if (player.isDead()) {
+                return;
+            }
             cleanupDeadEntities();
             player.recalculateLineOfSight(false);
         }
         for (int i = 0; i < Math.abs(y); i++) {
             runPlayerAction(y < 0 ? PlayerActionType.MoveUp : PlayerActionType.MoveDown);
             processRound();
+            if (player.isDead()) {
+                return;
+            }
             cleanupDeadEntities();
             player.recalculateLineOfSight(false);
         }

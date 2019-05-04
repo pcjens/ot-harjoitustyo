@@ -3,6 +3,7 @@ package otm.roguesque;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import otm.roguesque.game.SpriteLoader;
 import otm.roguesque.game.dungeon.TileType;
 import otm.roguesque.ui.DungeonRenderer;
 
@@ -21,42 +22,42 @@ public class TileGraphicTest {
     // Enum order / file name equality tests
     @Test
     public void floorImageIsCorrect() {
-        Assert.assertEquals("/sprites/Floor.png", renderer.getTileImageName(TileType.Floor));
+        Assert.assertEquals("jar:/sprites/Floor.png", renderer.getTileImageName(TileType.Floor));
     }
 
     @Test
     public void wallImageIsCorrect() {
-        Assert.assertEquals("/sprites/Wall.png", renderer.getTileImageName(TileType.Wall));
+        Assert.assertEquals("jar:/sprites/Wall.png", renderer.getTileImageName(TileType.Wall));
     }
 
     @Test
     public void corridorImageIsCorrect() {
-        Assert.assertEquals("/sprites/Corridor.png", renderer.getTileImageName(TileType.Corridor));
+        Assert.assertEquals("jar:/sprites/Corridor.png", renderer.getTileImageName(TileType.Corridor));
     }
 
     @Test
     public void ladderImageIsCorrect() {
-        Assert.assertEquals("/sprites/Ladder.png", renderer.getTileImageName(TileType.Ladder));
+        Assert.assertEquals("jar:/sprites/Ladder.png", renderer.getTileImageName(TileType.Ladder));
     }
 
     // File existence tests
     @Test
     public void floorImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Floor)));
+        Assert.assertNotNull(SpriteLoader.loadImage(renderer.getTileImageName(TileType.Floor)));
     }
 
     @Test
     public void wallImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Wall)));
+        Assert.assertNotNull(SpriteLoader.loadImage(renderer.getTileImageName(TileType.Wall)));
     }
 
     @Test
     public void corridorImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Corridor)));
+        Assert.assertNotNull(SpriteLoader.loadImage(renderer.getTileImageName(TileType.Corridor)));
     }
 
     @Test
     public void ladderImageExists() {
-        Assert.assertNotNull(getClass().getResourceAsStream(renderer.getTileImageName(TileType.Ladder)));
+        Assert.assertNotNull(SpriteLoader.loadImage(renderer.getTileImageName(TileType.Ladder)));
     }
 }
