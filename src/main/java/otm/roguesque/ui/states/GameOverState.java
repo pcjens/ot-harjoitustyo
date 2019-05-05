@@ -46,10 +46,10 @@ public class GameOverState implements GameState {
         leaderboardDaily = leaderboards.getTopDaily();
         leaderboardWeekly = leaderboards.getTopWeekly();
         leaderboardAllTime = leaderboards.getTopOfAllTime();
-        refreshTimer = 2.0f;
+        refreshTimer = 10.0f;
         if (animate) {
             animate = false;
-            initializeTime = 10.0f;
+            initializeTime = 2.0f;
         } else {
             initializeTime = 0.0f;
         }
