@@ -39,6 +39,7 @@ public class GameOverState implements GameState {
 
     private float initializeTime;
     private float refreshTimer;
+    private boolean refreshing = false;
 
     @Override
     public void initialize() {
@@ -48,7 +49,7 @@ public class GameOverState implements GameState {
         refreshTimer = 2.0f;
         if (animate) {
             animate = false;
-            initializeTime = 2.0f;
+            initializeTime = 10.0f;
         } else {
             initializeTime = 0.0f;
         }
@@ -134,16 +135,22 @@ public class GameOverState implements GameState {
     }
 
     private void updateLeaderboards(float deltaSeconds) {
-        if (refreshTimer <= 0) {
-            refreshTimer = 2.0f;
-            ArrayList<LeaderboardEntry> dailies = leaderboards.getTopDaily();
-            ArrayList<LeaderboardEntry> weeklies = leaderboards.getTopWeekly();
-            ArrayList<LeaderboardEntry> allTime = leaderboards.getTopOfAllTime();
-            if (dailies != null && weeklies != null && allTime != null) {
-                leaderboardDaily = dailies;
-                leaderboardWeekly = weeklies;
-                leaderboardAllTime = allTime;
-            }
+        if (refreshTimer <= 0 && !refreshing) {
+            refreshing = true;
+            new Thread(() -> {
+                if (leaderboards.serverResponds()) {
+                    ArrayList<LeaderboardEntry> dailies = leaderboards.getTopDaily();
+                    ArrayList<LeaderboardEntry> weeklies = leaderboards.getTopWeekly();
+                    ArrayList<LeaderboardEntry> allTime = leaderboards.getTopOfAllTime();
+                    if (dailies != null && weeklies != null && allTime != null) {
+                        leaderboardDaily = dailies;
+                        leaderboardWeekly = weeklies;
+                        leaderboardAllTime = allTime;
+                    }
+                }
+                refreshing = false;
+                refreshTimer = 10.0f;
+            }).start();
         } else {
             refreshTimer -= deltaSeconds;
         }

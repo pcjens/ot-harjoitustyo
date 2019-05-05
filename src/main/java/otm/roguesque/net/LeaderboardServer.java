@@ -101,6 +101,8 @@ public class LeaderboardServer {
      * @param port Portti jolle palvelin avataan.
      * @param saveToDisk Tallennetaanko leaderboardien tilanne levylle?
      * @param interactive Käynnistetäänkö interaktiivinen käyttöliittymä?
+     * @param saveFile Tiedoston nimi, johon leaderboardien tilanne
+     * tallennetaan, mikäli saveToDisk on true.
      */
     public LeaderboardServer(int port, boolean saveToDisk, boolean interactive, String saveFile) {
         this.saveToDisk = saveToDisk;
