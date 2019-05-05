@@ -53,4 +53,5 @@
 |       |  2 | Mavenin tutkimista, ja (lopulta) server- ja client-profiilien luomista |
 |       |  1 | Pieniä bugi- ja typokorjauksia, refaktorointia |
 |       |  3 | Dokumentaation päivittelyä, debuggaamista, bugien korjausta |
-| Yht.  | 80 | |
+|       |  1 | Dokumentaation päivittelyä, playtestaamista |
+| Yht.  | 81 | |
