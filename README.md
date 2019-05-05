@@ -14,6 +14,7 @@ Ohjelmistotekniikan kurssille.
 ## Releaset
 - [Viikko 5 (v0.1)](https://github.com/pcjens/otm-roguesque/releases/tag/v0.1)
 - [Viikko 6 (v0.3)](https://github.com/pcjens/otm-roguesque/releases/tag/v0.3)
+- [Loppupalautus (v1.0)](https://github.com/pcjens/otm-roguesque/releases/tag/loppupalautus)
 
 ## Komennot
 ### Pelin käynnistäminen
