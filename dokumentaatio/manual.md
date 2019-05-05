@@ -1,4 +1,10 @@
 # Käyttöohje
+Lataa arkisto
+[Roguesque-1.0.zip](https://github.com/pcjens/otm-roguesque/releases/tag/loppupalautus),
+pura se jonnekin, varmista että `items.csv` on samassa kansiossa
+(pitäisi olla, mikäli purit kaiken samaan paikkaan), ja käynnistä
+`Roguesque-1.0.jar`.
+
 ## Pelin tärkeät kontrollit
 - Nuolinäppäimet/WASD/HJKL: Liikuttaa pelaajaa. Jos pelaaja liikkuu
   vastustajan päälle, se lyö vastustajaa. Jos pelaaja liikkuu tavaran
