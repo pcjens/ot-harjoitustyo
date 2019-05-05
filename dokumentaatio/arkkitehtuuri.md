@@ -8,10 +8,8 @@ tule latautumaan.](class-diagram.png)
 Luokkakaavio on hieman vanhasta versiosta ohjelmaa, mutta siitä näkee
 pääosin ohjelman luokat ja niiden väliset suhteet.
 
-`Main` sisältää kaksi osaa: `pom.properties`-tiedoston lukemisen
-versioinformaatiota varten, ja ohjelman käynnistysfunktion, joka
-yksinkertaisesti käynnistää käyttöliittymän `RoguesqueApp`:n
-launchaamalla.
+`Main` sisältää ohjelman käynnistysfunktion, joka yksinkertaisesti
+käynnistää käyttöliittymän `RoguesqueApp`:n launchaamalla.
 
 `RoguesqueApp` sisältää ruudun luontilogiikan, sekä eventtien
 käsittelyn. Eventeistä tieto siirtyy `Input`-luokkaan, joka toimii
@@ -58,8 +56,12 @@ käytännössä tarkoittaa niiden poistamista `Entity`-listalta.
 näe kuvaa, se ei luultavasti ole ladannut tai tule
 latautumaan.](sequence-diagram.png)
 
-## Loppuhuomioita
+## Leaderboardit
+Pelin päätyttyä pelaaja voi lähettää saamansa pisteet
+leaderboard-palvelimelle, ja kaikki koodi (palvelin mukaanlukien)
+tähän liittyen löytyy paketista `otm.roguesque.net`.
 
+## Loppuhuomioita
 Pelin tila on käyttöliittymäluokan sisällä, mikä voi vaikuttaa
 ensisilmäyksellä pahalta logiikan ja presentaation
 sekoittamiselta. Perustelen tämän kuitenkin sillä, että tämä välttää

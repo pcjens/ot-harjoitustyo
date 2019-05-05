@@ -30,6 +30,7 @@ public class LeaderboardServer {
     private ArrayList<LeaderboardEntry> weeklies = new ArrayList();
     private ArrayList<LeaderboardEntry> allTime = new ArrayList();
 
+    private String saveFile;
     private boolean saveToDisk;
     private boolean interactive;
     private ServerSocket serverSocket;
@@ -101,9 +102,10 @@ public class LeaderboardServer {
      * @param saveToDisk Tallennetaanko leaderboardien tilanne levylle?
      * @param interactive Käynnistetäänkö interaktiivinen käyttöliittymä?
      */
-    public LeaderboardServer(int port, boolean saveToDisk, boolean interactive) {
+    public LeaderboardServer(int port, boolean saveToDisk, boolean interactive, String saveFile) {
         this.saveToDisk = saveToDisk;
         this.interactive = interactive;
+        this.saveFile = saveFile;
         loadFromDisk();
 
         try {
@@ -217,7 +219,7 @@ public class LeaderboardServer {
         }
 
         try {
-            saveTo(new FileWriter(new File("roguesque-server-data.csv")));
+            saveTo(new FileWriter(new File(saveFile)));
             System.out.println("[LeaderboardServer] Saved data to disk successfully.");
         } catch (IOException ex) {
             System.err.println("[LeaderboardServer] Saving data to disk failed: " + ex.getMessage());
@@ -247,7 +249,7 @@ public class LeaderboardServer {
             return;
         }
 
-        File file = new File("roguesque-server-data.csv");
+        File file = new File(saveFile);
         if (file.exists()) {
             try {
                 loadFrom(new FileReader(file));

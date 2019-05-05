@@ -19,7 +19,7 @@ public class Item extends Entity {
 
     private static class ItemData {
 
-        public final String identifier;
+        public final String resourceName;
         public final String displayName;
         public final String description;
         public final String effect;
@@ -28,8 +28,8 @@ public class Item extends Entity {
         public final int attackBoost;
         public final int defenseBoost;
 
-        public ItemData(String identifier, String displayName, String description, String customStatInfo, String effect, int damageBoost, int attackBoost, int defenseBoost) {
-            this.identifier = identifier;
+        public ItemData(String resourceName, String displayName, String description, String customStatInfo, String effect, int damageBoost, int attackBoost, int defenseBoost) {
+            this.resourceName = resourceName;
             this.displayName = displayName;
             this.description = description;
             this.customStatInfo = customStatInfo;
@@ -126,7 +126,7 @@ public class Item extends Entity {
         this.effect = data.effect;
         this.itemName = data.displayName;
         this.itemDescription = data.description;
-        this.itemImage = SpriteLoader.loadImage(data.identifier);
+        this.itemImage = SpriteLoader.loadImage(data.resourceName);
         this.damageBoost = data.damageBoost;
         this.attackBoost = data.attackBoost;
         this.defenseBoost = data.defenseBoost;

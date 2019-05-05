@@ -28,7 +28,7 @@ public class LeaderboardsTest {
     @Before
     public void setup() {
         Thread serverThread = new Thread(() -> {
-            server = new LeaderboardServer(PORT, false, false);
+            server = new LeaderboardServer(PORT, false, false, "roguesque-server-data.csv");
             server.start();
         });
         serverThread.start();
