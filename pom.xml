@@ -118,6 +118,7 @@
                         <configuration>
                             <includes>
                                 <include>**/otm/roguesque/ServerMain.java</include>
+                                <include>**/otm/roguesque/Properties.java</include>
                                 <include>**/otm/roguesque/net/*</include>
                             </includes>
                             <testIncludes>

@@ -4,7 +4,7 @@ import otm.roguesque.game.GlobalRandom;
 import otm.roguesque.game.SpriteLoader;
 
 /**
- * Juoma-olio. Antaa pelaajalle heti +5 elämäpistettä. Erittäin hyödyllinen
+ * Juoma-olio. Antaa pelaajalle heti 2-6 elämäpistettä. Erittäin hyödyllinen
  * esimerkiksi jos pelaaja ei healaa Scythe of Tuonelan takia ollenkaan. Tippuu
  * satunnaisesti mihin vaan huoneeseen.
  *

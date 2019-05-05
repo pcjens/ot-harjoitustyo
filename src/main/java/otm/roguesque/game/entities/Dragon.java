@@ -6,7 +6,7 @@ import otm.roguesque.util.Path;
 import otm.roguesque.util.Vector;
 
 /**
- * Lohikäärmé. Syö menninkäisisä kun tulee nälkä (usein), muulloin käy pelaajan
+ * Lohikäärme. Syö menninkäisiä kun tulee nälkä (usein), muulloin käy pelaajan
  * kimppuun (eikä päästä pakoon).
  *
  * @author Jens Pitkänen

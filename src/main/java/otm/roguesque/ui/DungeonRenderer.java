@@ -202,6 +202,13 @@ public class DungeonRenderer {
         }
     }
 
+    /**
+     * Palauttaa urlin laatan kuvaan, tämä on tarkoitettu käytettäväksi
+     * testeille.
+     *
+     * @param tileType Laatan tyyppi/
+     * @return Url.
+     */
     public String getTileImageName(TileType tileType) {
         return tileTypeNames[tileType.ordinal()];
     }

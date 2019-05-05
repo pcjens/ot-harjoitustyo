@@ -25,6 +25,7 @@ import otm.roguesque.ui.RoguesqueApp;
 public class GameOverState implements GameState {
 
     private static boolean animate = false;
+    private static boolean scoreSent = false;
 
     private Button saveReplayButton = new Button(new KeyCode[]{KeyCode.S}, "Save replay", 20, 20, 160, 45, 0);
     private Button mainmenuButton = new Button(new KeyCode[]{KeyCode.M}, "Main menu", 110, 420, 140, 45, 0);
@@ -51,6 +52,7 @@ public class GameOverState implements GameState {
         } else {
             initializeTime = 0.0f;
         }
+        submitScoreButton.setDisabled(scoreSent);
     }
 
     @Override
@@ -174,10 +176,22 @@ public class GameOverState implements GameState {
     }
 
     /**
-     * Preparoi animaation seuraavalle kerralle kun GameOverState tulee
-     * käyntiin. Kutsutaan InGameStatesta.
+     * Signaloi, että pelaaja juuri kuoli. Tätä tietoa käytetään mm. siihen,
+     * että GameOverStaten animaatio pyörii vain kun siihen siirrytään
+     * ensimmäistä kertaa, mutta ei silloin kun siihen palataan
+     * LeaderboardSubmissionStatesta.
      */
-    public static void prepareAnimation() {
+    public static void gameOverHappened() {
         animate = true;
+        scoreSent = false;
+    }
+
+    /**
+     * Signaloi, että pelaajan pisteet lähetettiin leaderboardeille. Tämä sen
+     * takia, ettei pelaajalle turhaan näytetä nappia jolla voisi lähettää
+     * pisteet uudestaan.
+     */
+    public static void playerScoreSent() {
+        scoreSent = true;
     }
 }

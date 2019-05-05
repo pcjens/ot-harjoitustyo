@@ -5,6 +5,8 @@ package otm.roguesque.util;
  *
  * @see otm.roguesque.util.Pathfinder#findPath(int, int, int, int, boolean[],
  * int, int)
+ *
+ * @author Jens Pitkänen
  */
 public class Path implements Comparable<Path> {
 

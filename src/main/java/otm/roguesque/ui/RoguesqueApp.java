@@ -9,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import otm.roguesque.Main;
+import otm.roguesque.Properties;
 import otm.roguesque.ui.states.GameOverState;
 import otm.roguesque.ui.states.GameState;
 import otm.roguesque.ui.states.InGameState;
@@ -89,7 +89,7 @@ public class RoguesqueApp extends Application {
 
         float averageDeltaSeconds = updatePerformanceStats(deltaSeconds);
         if (showDebugInfo) {
-            ctx.fillText("Game version: " + Main.getVersion(), 10, 20);
+            ctx.fillText("Game version: " + Properties.getVersion(), 10, 20);
             ctx.fillText("Average frame time: " + (int) (averageDeltaSeconds * 1000.0) + " ms", 10.0, 40.0);
         }
     }

@@ -19,10 +19,6 @@ import otm.roguesque.util.Pathfinder;
  * tämä viittaa huoneisiin ja vihollisiin / tavaroihin joita niissä huoneissa
  * on.
  *
- * Tämä luokka sisältää myös kenttägeneraation, sillä sen siirtäminen toiseen
- * luokkaan loisi kovin paljon "peilattua" koodia (samoja muuttujia kahdessa
- * paikassa, jotka pitää synkronoida).
- *
  * @author Jens Pitkänen
  */
 public class Dungeon {
@@ -142,8 +138,8 @@ public class Dungeon {
     }
 
     /**
-     * Palauttaa koko kentän korkeus. Käytännössä mikään olio ei koskaan saavuta
-     * kentän rajoja, sillä huoneet ovat rajojen sisällä.
+     * Palauttaa koko kentän korkeuden. Käytännössä mikään olio ei koskaan
+     * saavuta kentän rajoja, sillä huoneet ovat rajojen sisällä.
      *
      * @return Kentän korkeus (pituus y-akselilla).
      */
@@ -292,8 +288,7 @@ public class Dungeon {
     }
 
     /**
-     * Palauttaa vektorin suuntaan, johon koordinaateista pitäisi siirtyä, jotta
-     * seuraisi lyhintä reittiä sen luokse, ja vektorin pituus on reitin pituus.
+     * Palauttaa polun oliosta from olioon to.
      *
      * @param from Polkua seuraava olio.
      * @param to Olio jota seurataan.

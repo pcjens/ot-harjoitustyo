@@ -51,4 +51,5 @@
 |  5.5. |  2 | Leaderboards-palvelimen ja clientin kirjoittamista, sekä niiden testien kirjoittamista |
 |       |  3 | Leaderboards-käyttöliittymän ja testien kirjoittamista, palvelimen pystyttämistä |
 |       |  2 | Mavenin tutkimista, ja (lopulta) server- ja client-profiilien luomista |
-| Yht.  | 76 | |
+|       |  1 | Pieniä bugi- ja typokorjauksia, refaktorointia |
+| Yht.  | 77 | |

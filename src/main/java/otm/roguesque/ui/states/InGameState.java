@@ -164,7 +164,7 @@ public class InGameState implements GameState {
     public int update(Input input, float deltaSeconds, boolean showDebugInfo) {
         if (updateGame(input)) {
             latestReplay = dungeon.getReplay();
-            GameOverState.prepareAnimation();
+            GameOverState.gameOverHappened();
             return GameState.STATE_GAMEOVER;
         }
 

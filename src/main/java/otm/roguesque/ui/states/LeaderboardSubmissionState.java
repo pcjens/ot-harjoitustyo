@@ -92,6 +92,7 @@ public class LeaderboardSubmissionState implements GameState {
         submitButton.update(input);
         backButton.update(input);
         if (submitButton.isClicked() && selectedIndex == -1 && submitScore()) {
+            GameOverState.playerScoreSent();
             return GameState.STATE_GAMEOVER;
         }
         if (backButton.isClicked()) {

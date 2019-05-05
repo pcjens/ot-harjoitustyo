@@ -117,6 +117,7 @@ public class LeaderboardServer {
             @Override
             public void run() {
                 if (!server.serverSocket.isClosed()) {
+                    server.saveToDisk();
                     server.stop();
                 }
             }

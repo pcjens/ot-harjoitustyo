@@ -11,7 +11,7 @@ import otm.roguesque.ui.Button;
 import otm.roguesque.ui.Input;
 
 /**
- * InGameState, paitsi että tämä perustuu Replay:n pelaajan oikeiden
+ * InGameState, paitsi että tämä perustuu Replay:hyn pelaajan oikeiden
  * napinpainalluksien sijaan.
  *
  * @see otm.roguesque.game.dungeon.replay.Replay
