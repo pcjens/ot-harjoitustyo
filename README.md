@@ -65,10 +65,16 @@ mvn test jacoco:report
 Tulos löytyy tiedostosta
 [`target/site/jacoco/index.html`](target/site/jacoco/index.html).
 
-#### Checkstyle
+### Checkstyle
 Koodin laatutarkastukset voi suorittaa seuraavalla komennolla:
 ```sh
 mvn jxr:jxr checkstyle:checkstyle
+```
+
+### JavaDoc
+JavaDocin voi generoida seuraavalla komennolla:
+```sh
+mvn javadoc:javadoc
 ```
 
 ## Muut huomiot
