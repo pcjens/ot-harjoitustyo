@@ -29,14 +29,17 @@ public class MainMenuState implements GameState {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
+        double xOffset = (canvas.getWidth() - 640) / 2;
+        double yOffset = (canvas.getHeight() - 480) / 2;
+
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_LOGO);
-        ctx.fillText("Roguesque", 180.0, 200.0);
+        ctx.fillText("Roguesque", 180.0 + xOffset, 200.0 + yOffset);
 
-        playButton.draw(ctx);
-        quitButton.draw(ctx);
+        playButton.draw(ctx, xOffset, yOffset);
+        quitButton.draw(ctx, xOffset, yOffset);
         if (showDebugInfo) {
-            replayButton.draw(ctx);
+            replayButton.draw(ctx, xOffset, yOffset);
         }
     }
 

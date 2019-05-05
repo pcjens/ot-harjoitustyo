@@ -23,6 +23,9 @@ public class Button {
     private boolean hovered;
     private boolean clicked;
 
+    private double lastOffsetX = 0;
+    private double lastOffsetY = 0;
+
     /**
      * Luo uuden napin.
      *
@@ -77,7 +80,7 @@ public class Button {
      * @param input Käyttöliittymän Input-olio.
      */
     public void update(Input input) {
-        hovered = input.containsMouse(x, y, width, height);
+        hovered = input.containsMouse(x + lastOffsetX, y + lastOffsetY, width, height);
         clicked = input.isPressed(keys) || (hovered && input.clicked(MouseButton.PRIMARY));
     }
 
@@ -87,11 +90,24 @@ public class Button {
      * @param ctx Käyttöliittymän piirtokonteksti.
      */
     public void draw(GraphicsContext ctx) {
-        RenderingUtil.drawBox(ctx, x, y, width, height, hovered);
+        draw(ctx, 0, 0);
+    }
+
+    /**
+     * Piirtää napin, ja lisää annetut arvot napin x- ja y-koordinaatteihin.
+     *
+     * @param ctx Käyttöliittymän piirtokonteksti.
+     * @param xOffset Siirtymä x-akselilla.
+     * @param yOffset Siirtymä y-akselilla.
+     */
+    public void draw(GraphicsContext ctx, double xOffset, double yOffset) {
+        this.lastOffsetX = xOffset;
+        this.lastOffsetY = yOffset;
+        RenderingUtil.drawBox(ctx, x + xOffset, y + yOffset, width, height, hovered);
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_UI);
-        ctx.fillText(text, x + padding, y + 15 + padding);
-        ctx.fillRect(x + padding + hotkeyUnderlineOffset, y + 19 + padding, 10, 2);
+        ctx.fillText(text, x + xOffset + padding, y + 15 + yOffset + padding);
+        ctx.fillRect(x + xOffset + padding + hotkeyUnderlineOffset, y + 19 + yOffset + padding, 10, 2);
     }
 
     /**

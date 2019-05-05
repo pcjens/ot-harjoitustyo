@@ -33,17 +33,19 @@ public class GameOverState implements GameState {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
+        double xOffset = (canvas.getWidth() - 640) / 2;
+        double yOffset = (canvas.getHeight() - 480) / 2;
 
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_LOGO_SMALL);
-        ctx.fillText("You are dead.", 180.0, 200.0);
+        ctx.fillText("You are dead.", 180.0 + xOffset, 200.0 + yOffset);
         ctx.setFont(RoguesqueApp.FONT_UI);
-        ctx.fillText("Score: " + Player.getScore(), 250.0, 245.0);
+        ctx.fillText("Score: " + Player.getScore(), 250.0 + xOffset, 245.0 + yOffset);
 
-        mainmenuButton.draw(ctx);
-        quitButton.draw(ctx);
+        mainmenuButton.draw(ctx, xOffset, yOffset);
+        quitButton.draw(ctx, xOffset, yOffset);
         if (showDebugInfo) {
-            saveReplayButton.draw(ctx);
+            saveReplayButton.draw(ctx, xOffset, yOffset);
         }
     }
 

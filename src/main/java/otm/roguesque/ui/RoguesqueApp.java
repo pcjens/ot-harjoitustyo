@@ -160,6 +160,8 @@ public class RoguesqueApp extends Application {
         mainLoop.start();
         stage.setScene(mainScene);
         stage.setTitle("Roguesque");
+        stage.setMinWidth(640);
+        stage.setMinHeight(480);
         stage.show();
     }
 

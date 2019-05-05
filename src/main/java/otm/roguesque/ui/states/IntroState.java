@@ -28,15 +28,18 @@ public class IntroState implements GameState {
         Canvas canvas = ctx.getCanvas();
         ctx.setFill(Color.BLACK);
         ctx.fillRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
+        double xOffset = (canvas.getWidth() - 640) / 2;
+        double yOffset = (canvas.getHeight() - 480) / 2;
+
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_LOGO);
         float titleOffset = 0.0f;
         if (progress > revealDuration) {
             titleOffset = 40.0f - 40.0f * (postRevealWait - (progress - revealDuration)) / postRevealWait;
         }
-        ctx.fillText("Roguesque", 180.0, 240.0 - titleOffset);
+        ctx.fillText("Roguesque", 180.0 + xOffset, 240.0 - titleOffset + yOffset);
         ctx.setFill(Color.BLACK);
-        ctx.fillRect(140.0, 0.0, 300.0 * Math.max(0.0, revealDuration - progress), 480.0);
+        ctx.fillRect(140.0 + xOffset, yOffset, 300.0 * Math.max(0.0, revealDuration - progress), 480.0);
     }
 
     @Override
