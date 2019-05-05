@@ -48,6 +48,7 @@ vasemmalta oikealle:
 - Tavaran erikoisen efektin id
 - Tavaran antamat vahinkopisteet
 - Tavaran antamat hyökkäyspisteet
+- Tavaran antamat puolustuspisteet
 
 URLeista: pelissä on kuvalatausjärjestelmä joka osaa lukea kuvia sekä
 tiedostojärjestelmästä, että .jarin sisältä. Tätä varten polkujen

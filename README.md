@@ -45,8 +45,9 @@ mvn package -Dserver
 
 #### build.sh
 Skripti `build.sh` sisältää jar-arkiston luomisen lisäksi testaamisen,
-kattavuusraportin luomisen, sekä checkstylen suorittamisen. Tämä
-varmistaa, että luotu ohjelma läpäisee testit.
+kattavuusraportin luomisen, checkstylen suorittamisen, ja zippaamisen
+kaiken tarvittavan (`items.csv`) kanssa. Tuloksena on
+`Roguesque-1.0.zip` valmiina jakoon.
 ```sh
 sh build.sh
 ```

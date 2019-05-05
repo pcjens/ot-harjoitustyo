@@ -6,12 +6,12 @@ tehdyllä käyttöohjeenmukaisella järjestelmätestauksella.
 Yksikkötestit testaavat pelin yksittäisiä osia jotka ovat järkevästi
 testattavissa.
 
-[`TileGraphicTest`](../src/test/java/TileGraphicTest.java) varmistaa,
+[`TileGraphicTest`](../src/test/java/otm/roguesque/TileGraphicTest.java) varmistaa,
 että DungeonRenderer käyttää oikeita polkuja kentän piirtämisessä
 käytettäville kuville, ja että kyseisistä poluista ladatut kuvat
 latautuvat onnistuneesti.
 
-[`PlayerTest`](../src/test/java/PlayerTest.java) testaa pelaajaan liittyviä asioita:
+[`PlayerTest`](../src/test/java/otm/roguesque/PlayerTest.java) testaa pelaajaan liittyviä asioita:
 - Pelaajan näköetäisyysalgoritmia testataan neljällä testillä jotka
   varmistavat, että pelaaja ei näe pidemmälle kuin pitäisi, eikä
   seinien läpi.
@@ -25,12 +25,21 @@ latautuvat onnistuneesti.
 - Varmistetaan, saako pelaaja oikeat muutokset statteihinsa
   nostettuaan tavaran.
 
-### JUnit-yksikkötestien kattavuus
-Huomio: koska kyseessä on peli, testien kattavuus voi helposti näyttää
-kovinkin suurelta, sillä suurin osa koodista on sellaista mikä pitää
-aina ajaa kun peliä pelataan.
+[`EnemyTest`](../src/test/java/otm/roguesque/EnemyTest.java) testaa
+vastustajien tekoälyjen prioriteetteja.
 
-Tässä kuitenkin yksikkötestien kattavuus commitissa 7fe3a5f:
+[`LeaderboardsTest`](../src/test/java/otm/roguesque/LeaderboardsTest.java)
+testaa leaderboardien tietoliikenteen toimintaa käytännössä, oikealla
+serverillä ja oikealla clientillä.
+
+### JUnit-yksikkötestien kattavuus
+Huomio: koska kyseessä on peli, testien kattavuus nousee nopeasti
+muutamalla testillä tiettyyn pisteeseen asti, sillä iso osa koodista
+on sellaista mikä pitää aina ajaa kun peliä pelataan. Toisaalta,
+koodikattavuuden alueella on myös koodia, jota kutsutaan pelkästään
+käyttöliittymästä, eikä siinä ole paljon testattavaa.
+
+Tässä kuitenkin yksikkötestien kattavuus versiossa 1.0 (loppupalautus):
 ![Kuvakaappaus jacoco:n koodikattavuus-reportista](code-coverage.png)
 
 ## Järjestelmätestaus
