@@ -21,7 +21,7 @@ import otm.roguesque.net.LeaderboardServer;
 
 public class LeaderboardsTest {
 
-    private static final int PORT = Leaderboard.DEFAULT_PORT + 1;
+    private static final int PORT = Leaderboard.defaultPort + 1;
     private LeaderboardServer server;
     private LeaderboardClient client;
 

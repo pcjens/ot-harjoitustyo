@@ -32,7 +32,7 @@ public class GameOverState implements GameState {
     private Button submitScoreButton = new Button(new KeyCode[]{KeyCode.S}, "Submit score", 260, 420, 160, 45, 0);
     private Button quitButton = new Button(new KeyCode[]{KeyCode.Q}, "Quit", 430, 420, 80, 45, 0);
 
-    private final LeaderboardClient leaderboards = new LeaderboardClient(Leaderboard.DEFAULT_HOST, Leaderboard.DEFAULT_PORT);
+    private final LeaderboardClient leaderboards = new LeaderboardClient(Leaderboard.defaultHost, Leaderboard.defaultPort);
     private ArrayList<LeaderboardEntry> leaderboardDaily;
     private ArrayList<LeaderboardEntry> leaderboardWeekly;
     private ArrayList<LeaderboardEntry> leaderboardAllTime;
@@ -139,14 +139,9 @@ public class GameOverState implements GameState {
             refreshing = true;
             new Thread(() -> {
                 if (leaderboards.serverResponds()) {
-                    ArrayList<LeaderboardEntry> dailies = leaderboards.getTopDaily();
-                    ArrayList<LeaderboardEntry> weeklies = leaderboards.getTopWeekly();
-                    ArrayList<LeaderboardEntry> allTime = leaderboards.getTopOfAllTime();
-                    if (dailies != null && weeklies != null && allTime != null) {
-                        leaderboardDaily = dailies;
-                        leaderboardWeekly = weeklies;
-                        leaderboardAllTime = allTime;
-                    }
+                    leaderboardDaily = leaderboards.getTopDaily();
+                    leaderboardWeekly = leaderboards.getTopWeekly();
+                    leaderboardAllTime = leaderboards.getTopOfAllTime();
                 }
                 refreshing = false;
                 refreshTimer = 10.0f;

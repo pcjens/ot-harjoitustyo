@@ -43,7 +43,7 @@ public class LeaderboardSubmissionState implements GameState {
     private int hoveredIndex = -1;
     private String errorMessage = null;
 
-    private LeaderboardClient leaderboard = new LeaderboardClient(Leaderboard.DEFAULT_HOST, Leaderboard.DEFAULT_PORT);
+    private LeaderboardClient leaderboard = new LeaderboardClient(Leaderboard.defaultHost, Leaderboard.defaultPort);
 
     @Override
     public void initialize() {

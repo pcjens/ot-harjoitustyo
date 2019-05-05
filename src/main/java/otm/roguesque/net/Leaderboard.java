@@ -16,8 +16,8 @@ import java.util.logging.Logger;
  */
 public class Leaderboard {
 
-    public static String DEFAULT_HOST = "rgsq.pitkanen.dev";
-    public static int DEFAULT_PORT = 5378;
+    public static String defaultHost = "rgsq.pitkanen.dev";
+    public static int defaultPort = 5378;
 
     static {
         File configFile = new File("rgsq-server.config");
@@ -30,9 +30,9 @@ public class Leaderboard {
                     String[] split = line.split("=");
                     if (split.length == 2) {
                         if (split[0].toLowerCase().trim().equals("host")) {
-                            DEFAULT_HOST = split[1];
+                            defaultHost = split[1];
                         } else if (split[0].toLowerCase().trim().equals("port")) {
-                            DEFAULT_PORT = Integer.parseInt(split[1]);
+                            defaultPort = Integer.parseInt(split[1]);
                         }
                     }
                 }

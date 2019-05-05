@@ -45,7 +45,7 @@ public class Main {
     }
 
     private static void printLeaderboards() {
-        LeaderboardClient client = new LeaderboardClient(Leaderboard.DEFAULT_HOST, Leaderboard.DEFAULT_PORT);
+        LeaderboardClient client = new LeaderboardClient(Leaderboard.defaultHost, Leaderboard.defaultPort);
         printLeaderboard("Top 10 entries today:", client.getTopDaily());
         printLeaderboard("Top 10 entries this week:", client.getTopWeekly());
         printLeaderboard("Top 10 entries of all time:", client.getTopOfAllTime());
