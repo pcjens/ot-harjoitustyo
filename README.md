@@ -32,6 +32,18 @@ Jar-arkisto luodaan polkuun
 jar-arkiston voi suorittaa komennolla `java -jar
 target/Roguesque-1.0-SNAPSHOT.jar`.
 
+#### Palvelin-jarin luominen
+Mikäli haluat vain leaderboards-palvelimen suorittavan .jarin, ei
+tarvitse suurinta osaa pelistä siihen sisällyttää. Tämän takia
+Maven-projektissa on `server`-profiili, joka luo .jarin joka
+käynnistyy vain ja ainoastaan palvelimena, eikä sisällä pelikoodia,
+eli esimerkiksi vaadi JavaFX:ää. Server-profiilin saa päälle
+`-Dserver` flagilla:
+```sh
+mvn package -Dserver
+```
+
+#### build.sh
 Skripti `build.sh` sisältää jar-arkiston luomisen lisäksi testaamisen,
 kattavuusraportin luomisen, sekä checkstylen suorittamisen. Tämä
 varmistaa, että luotu ohjelma läpäisee testit.
