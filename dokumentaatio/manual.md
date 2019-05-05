@@ -18,6 +18,22 @@ pura se jonnekin, varmista että `items.csv` on samassa kansiossa
   hyvin, jonka takia ne ovat tämän napin takana), ja main menussa
   pistää Replayn pyörimään.
 
+## Taistelu
+Pelissä hyvin keskeinen toiminta on taistelu vastustajia vastaan,
+tässä on tarkka selitys siitä miten se toimii:
+1. Hyökkääjä yrittää liikkua laatalle, jossa puolustaja
+   on. Taisteluvuoro alkaa.
+2. Taistelun hyökkäysarvoa varten lasketaan satunnaisluku nollan ja
+   hyökkääjän ATK + 1 välillä.
+3. Taistelun puolustusarvoa varten lasketaan satunnaisluku nollan ja
+   puolustajan DEF + 1 välillä.
+4. Mikäli hyökkäysarvo on pienempi kuin puolustusarvo, taistelu loppuu
+   tähän tältä erää. Jos se on yhtä suuri tai suurempi, taistelu
+   jatkuu seuraavaan kohtaan.
+5. Hyökkäys osuu, ja vahinko lasketaan satunnaislukuna yhden ja
+   hyökkääjän DMG välillä. Saatu arvo erotetaan puolustajan HP:sta
+   (elämäpisteistä).
+
 ## Pelin kulku
 - Pelissä olevia nappeja voi joko klikata hiirellä, tai painaa
   alleviivattua kirjainta näppäimistöllä.  

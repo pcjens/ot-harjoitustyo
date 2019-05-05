@@ -43,26 +43,46 @@ Tässä kuitenkin yksikkötestien kattavuus versiossa 1.0 (loppupalautus):
 ![Kuvakaappaus jacoco:n koodikattavuus-reportista](code-coverage.png)
 
 ## Järjestelmätestaus
-Kokeiltu versio: 1.0-SNAPSHOT, commit 7fe3a5f.
+Kokeiltu versio: 1.0 (loppupalautus).
 
 ### Asennus ym. ohjelman pystyyn pistäminen
-Ohjelmalla ei ole tässä vaiheessa mitään
-konfiguraatiotiedostoja/ulkoisia resursseja, joten koko peli koostuu
-suoritettavasta .jar-tiedostosta.
+Puran `Roguesque-1.0.zip`-arkiston ohjeen mukaisesti, ja varmistan,
+että `Roguesque-1.0.jar`:n vieressä on `items.csv`.
 
 ### Ohjelman kulku
-Käynnistän pelin komennolla `java -jar Roguesque-1.0-SNAPSHOT.jar`,
-kuten Java-ohjelmat yleensäkin. Alkuun avautuu ruutu josta voi pelata
+Käynnistän pelin komennolla `java -jar Roguesque-1.0.jar`, kuten
+Java-ohjelmat yleensäkin. Alkuun avautuu ruutu josta voi pelata
 (`Play`-nappi) tai sulkea pelin (`Quit`-nappi), klikkaan `Play`
 käyttöohjeen mukaisesti. Käyttöohjeessa mainitut näppäimet hahmon
-liikkuttamiseksi toimivat. Myöskin hyökkääminen toimii kuten
-käyttöohjeessa kuvailtiin. Näkökenttä toimii myös käyttöohjeen
-mukaisesti, testasin saamalla rotan seuraamaan pelaajaa, ja
-liikkumalla pois päin. Kun rotta jää pimeyteen, se katoaa. Käyn hetken
-aikaa luolaa läpi, ja löydän tikkaat. Käyttöohjeen mukaisesti liikun
-tikkaiden päälle, ja painan M-näppäintä, ja pelaaja siirtyy seuraavaan
-kenttään. Lopuksi vielä painan F3-näppäintä, ja kaikenlaista
-informaatiota ilmestyy ruudulle. Debug-informaationäkymäkin siis
-vaikuttaa toimivan.
+liikkuttamiseksi sekä pelaajan valitsemiseksi toimivat. Myöskin
+hyökkääminen toimii kuten käyttöohjeessa kuvailtiin. Näkökenttä toimii
+myös käyttöohjeen mukaisesti, testaan saamalla rotan seuraamaan
+pelaajaa, ja liikkumalla pois päin. Kun rotta jää pimeyteen, se
+katoaa. Käyn hetken aikaa luolaa läpi, ja löydän tikkaat. Käyttöohjeen
+mukaisesti liikun tikkaiden päälle, ja painan M-näppäintä, ja pelaaja
+siirtyy uuteen kenttään. Lopuksi vielä painan F3-näppäintä, ja
+kaikenlaista informaatiota ilmestyy
+ruudulle. Debug-informaationäkymäkin siis vaikuttaa toimivan.
+
+Kokeilen vaihtaa `items.csv`:ssä kaikkien tavaroiden kuva-resurssin
+poluksi `file:Test.png`, ja tallennan pelin kanssa samaan kansioon
+kuvan nimeltä `Test.png`. Testaan peliä, ja kaikkien arkuista
+löytyvien tavaroiden grafiikka on piirtämäni `Test.png`.  
+![Kuva yllä kuvatusta
+tilanteesta.](screenshots/switched-item-graphic.png)
+
+Sijoitan `Roguesque-1.0.jar`-arkiston kanssa samaan kansioon
+`rgsq-server.config` tiedoston, sisällöllä:
+
+```
+HOST=127.0.0.1
+PORT=5378
+```
+
+Käynnistän palvelimen komennolla `java -jar Roguesque-1.0.jar
+--server`, ja pelaan pelin. Leaderboardit vaikuttavat olevan tyhjät,
+lukuunottamatta juuri lisäämääni pisteytystä. Kun suljen palvelimen
+Ctrl-C:llä, huomaan `roguesque-server-data.csv`-tiedoston ilmestyneen,
+ja se sisältää juuri lisäämäni pisteytyksen.
 
 Peli siis toimii käyttöohjeen mukaisesti.
