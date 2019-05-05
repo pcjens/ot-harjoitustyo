@@ -37,8 +37,10 @@
                     <excludes>
                         <exclude>otm/roguesque/ui/**/*</exclude>
                         <exclude>otm/roguesque/resources/*</exclude>
-                        <!-- Replay on vain debuggaukseen käytettyä koodia, joka ei ole tarpeeksi luotettava, että sitä voisi deterministisesti/järkevästi testata. -->
+                        <!-- Replay on vain debuggaukseen käytettyä koodia, joka ei ole tarpeeksi luotettava, että sitä voisi deterministisesti/järkevästi testata JUnitilla. -->
                         <exclude>otm/roguesque/game/dungeon/replay/*</exclude>
+                        <!-- Pelin juuri sisältää vain valmiisiin buildeihin ja käynnistykseen liittyvää funktionaalisuutta, joten sitä ei voi järkevästi testata JUnitilla. -->
+                        <exclude>otm/roguesque/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
