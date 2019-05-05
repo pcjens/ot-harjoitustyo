@@ -52,5 +52,5 @@
 |       |  3 | Leaderboards-käyttöliittymän ja testien kirjoittamista, palvelimen pystyttämistä |
 |       |  2 | Mavenin tutkimista, ja (lopulta) server- ja client-profiilien luomista |
 |       |  1 | Pieniä bugi- ja typokorjauksia, refaktorointia |
-|       |  2 | Dokumentaation päivittelyä, debuggaamista, bugien korjausta |
-| Yht.  | 79 | |
+|       |  3 | Dokumentaation päivittelyä, debuggaamista, bugien korjausta |
+| Yht.  | 80 | |
