@@ -33,6 +33,13 @@ public class Player extends Entity implements AI {
         return playerScore;
     }
 
+    /**
+     * Asettaa pelaajan tapoista saatujen pisteiden määrän takaisin nollaan.
+     */
+    public static void resetScore() {
+        playerScore = 0;
+    }
+
     @Override
     public void processRound() {
         if (getHealth() < getMaxHealth() && --currentAutoHealCooldown <= 0) {
