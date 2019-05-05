@@ -49,4 +49,5 @@
 |       |  2 | Testien ja bugien korjaamista |
 |       |  2 | Leaderboards-palvelimen ja clientin kirjoittamista |
 |  5.5. |  2 | Leaderboards-palvelimen ja clientin kirjoittamista, sekä niiden testien kirjoittamista |
-| Yht.  | 71 | |
+|       |  3 | Leaderboards-käyttöliittymän ja testien kirjoittamista, palvelimen pystyttämistä |
+| Yht.  | 74 | |

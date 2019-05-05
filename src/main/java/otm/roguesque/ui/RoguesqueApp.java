@@ -14,6 +14,7 @@ import otm.roguesque.ui.states.GameOverState;
 import otm.roguesque.ui.states.GameState;
 import otm.roguesque.ui.states.InGameState;
 import otm.roguesque.ui.states.IntroState;
+import otm.roguesque.ui.states.LeaderboardSubmissionState;
 import otm.roguesque.ui.states.MainMenuState;
 import otm.roguesque.ui.states.ReplayGameState;
 
@@ -32,6 +33,10 @@ public class RoguesqueApp extends Application {
      * Pienempi logo-fontti.
      */
     public static final Font FONT_LOGO_SMALL = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 50.0);
+    /**
+     * Normaalitekstiä suurempi fontti.
+     */
+    public static final Font FONT_UI_LARGE = Font.loadFont(RoguesqueApp.class.getResourceAsStream("/fonts/vt323/VT323-Regular.ttf"), 36.0);
     /**
      * Normaalitekstin fontti.
      */
@@ -71,6 +76,7 @@ public class RoguesqueApp extends Application {
         gameStates[GameState.STATE_INGAME] = new InGameState();
         gameStates[GameState.STATE_REPLAY] = new ReplayGameState();
         gameStates[GameState.STATE_GAMEOVER] = new GameOverState();
+        gameStates[GameState.STATE_LEADERBOARD_SUBMISSION] = new LeaderboardSubmissionState();
 
         currentGameStateIndex = GameState.STATE_INTRO;
         gameStates[currentGameStateIndex].initialize();
@@ -157,15 +163,22 @@ public class RoguesqueApp extends Application {
 
         setupEvents(mainScene);
 
+        setupStage(stage);
         mainLoop.start();
+        stage.show();
+    }
+
+    private void setupStage(Stage stage) {
         stage.setScene(mainScene);
         stage.setTitle("Roguesque");
         stage.setMinWidth(640);
         stage.setMinHeight(480);
-        stage.show();
     }
 
     private void setupEvents(Scene scene) {
+        mainScene.setOnKeyTyped((event) -> {
+            input.addTypedKey(event.getCharacter());
+        });
         mainScene.setOnKeyPressed((event) -> {
             input.addPressedKey(event.getCode());
         });

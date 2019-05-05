@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
  */
 public class Button {
 
+    private static final Color DISABLED_OVERLAY_COLOR = new Color(0, 0, 0, 0.4);
+
     private KeyCode[] keys;
     private String text;
     private int x;
@@ -25,6 +27,8 @@ public class Button {
 
     private double lastOffsetX = 0;
     private double lastOffsetY = 0;
+
+    private boolean disabled = false;
 
     /**
      * Luo uuden napin.
@@ -85,6 +89,16 @@ public class Button {
     }
 
     /**
+     * Asettaa napin päälle / pois päältä.
+     *
+     * @param disabled True, niin nappia ei voi painaa ja se tummentuu, false,
+     * niin nappia voi painaa ja se näkyy normaalisti.
+     */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    /**
      * Piirtää napin.
      *
      * @param ctx Käyttöliittymän piirtokonteksti.
@@ -103,11 +117,15 @@ public class Button {
     public void draw(GraphicsContext ctx, double xOffset, double yOffset) {
         this.lastOffsetX = xOffset;
         this.lastOffsetY = yOffset;
-        RenderingUtil.drawBox(ctx, x + xOffset, y + yOffset, width, height, hovered);
+        RenderingUtil.drawBox(ctx, x + xOffset, y + yOffset, width, height, isHovered());
         ctx.setFill(Color.WHITE);
         ctx.setFont(RoguesqueApp.FONT_UI);
         ctx.fillText(text, x + xOffset + padding, y + 15 + yOffset + padding);
         ctx.fillRect(x + xOffset + padding + hotkeyUnderlineOffset, y + 19 + yOffset + padding, 10, 2);
+        if (disabled) {
+            ctx.setFill(DISABLED_OVERLAY_COLOR);
+            ctx.fillRect(x + xOffset, y + yOffset, width, height);
+        }
     }
 
     /**
@@ -170,7 +188,7 @@ public class Button {
      * @return Onko hiiri napin päällä?
      */
     public boolean isHovered() {
-        return hovered;
+        return !disabled && hovered;
     }
 
     /**
@@ -179,6 +197,6 @@ public class Button {
      * @return Onko hiiri napin päällä ja painettu pohjaan?
      */
     public boolean isClicked() {
-        return clicked;
+        return !disabled && clicked;
     }
 }

@@ -11,7 +11,6 @@ import javafx.application.Application;
 import otm.roguesque.net.Leaderboard;
 import otm.roguesque.net.LeaderboardClient;
 import otm.roguesque.net.LeaderboardEntry;
-import otm.roguesque.net.LeaderboardServer;
 import otm.roguesque.ui.RoguesqueApp;
 
 /**
@@ -54,8 +53,7 @@ public class Main {
         if (args.length == 0) {
             Application.launch(RoguesqueApp.class);
         } else if (args.length == 1 && (args[0].equals("--server") || args[0].equals("-s"))) {
-            LeaderboardServer server = new LeaderboardServer(Leaderboard.DEFAULT_PORT, true, true);
-            server.start();
+            ServerMain.main(args);
         } else if (args.length == 1 && (args[0].equals("--leaderboards") || args[0].equals("-l"))) {
             printLeaderboards();
         } else {

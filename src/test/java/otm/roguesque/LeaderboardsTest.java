@@ -27,12 +27,13 @@ public class LeaderboardsTest {
 
     @Before
     public void setup() {
-        new Thread(() -> {
+        Thread serverThread = new Thread(() -> {
             server = new LeaderboardServer(PORT, false, false);
             server.start();
-        }).start();
+        });
+        serverThread.start();
         try {
-            new Thread().join();
+            serverThread.join();
         } catch (InterruptedException ex) {
             Logger.getLogger(LeaderboardsTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -71,9 +72,9 @@ public class LeaderboardsTest {
         String error = client.sendNewEntry(entry);
         Assert.assertNull(error);
         ArrayList<LeaderboardEntry> entries = client.getTopDaily();
-        Assert.assertTrue(entries.size() == 1);
-        Assert.assertTrue(entries.get(0).getName().equals(entry.getName()));
-        Assert.assertTrue(entries.get(0).getScore() == entry.getScore());
+        Assert.assertEquals(entries.size(), 1);
+        Assert.assertEquals(entries.get(0).getName(), entry.getName());
+        Assert.assertEquals(entries.get(0).getScore(), entry.getScore());
     }
 
     @Test
@@ -91,8 +92,8 @@ public class LeaderboardsTest {
         StringWriter writer = new StringWriter();
         server.saveTo(writer);
         String[] parts = writer.getBuffer().toString().split(";");
-        Assert.assertTrue(parts[0].equals("ACE"));
-        Assert.assertTrue(parts[1].equals("12"));
+        Assert.assertEquals("ACE", parts[0]);
+        Assert.assertEquals("12", parts[1]);
     }
 
     @Test
@@ -103,5 +104,22 @@ public class LeaderboardsTest {
         Assert.assertFalse(entries.isEmpty());
         Assert.assertTrue(entries.get(0).getName().equals("OUO"));
         Assert.assertTrue(entries.get(0).getScore() == 1);
+    }
+
+    @Test
+    public void validNameValidates() {
+        Assert.assertNull(client.sendNewEntry(new LeaderboardEntry("BOB", 10)));
+    }
+
+    @Test
+    public void invalidNameDoesNotValidate() {
+        String invalidNameError = client.sendNewEntry(new LeaderboardEntry("B B", 10));
+        Assert.assertEquals("ERROR: Invalid name.", invalidNameError);
+
+        String tooLongNameError = client.sendNewEntry(new LeaderboardEntry("LONG", 10));
+        Assert.assertEquals("ERROR: Name not 3 letters.", tooLongNameError);
+
+        String tooShortNameError = client.sendNewEntry(new LeaderboardEntry("SH", 10));
+        Assert.assertEquals("ERROR: Name not 3 letters.", tooShortNameError);
     }
 }

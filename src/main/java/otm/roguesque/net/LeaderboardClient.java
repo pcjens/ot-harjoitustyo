@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 /**
  * Apuluokka jolla voi lähettää ja vastaanottaa tietoa LeaderboardServeriltä.
+ * Huomio tämän luokan toiminnasta: jokainen funktio jolla kommunikoidaan
+ * palvelimen kanssa aloittaa uuden yhteyden ja sulkee sen. Passivisesti ei ole
+ * yhtään socketia auki.
  *
  * @author Jens Pitkänen
  */
@@ -22,8 +25,7 @@ public class LeaderboardClient {
     private BufferedReader reader;
 
     /**
-     * Tallentaa hostin ja portin, ja preparoi luokan kommunikoimaan palvelimen
-     * kanssa.
+     * Tallentaa hostin ja portin, ei ota vielä yhteyttä.
      *
      * @param host Palvelimen hostname, eli käytännössä ip.
      * @param port Palvelimen portti.
@@ -44,7 +46,7 @@ public class LeaderboardClient {
      */
     public String sendNewEntry(LeaderboardEntry entry) {
         if (!openConnection()) {
-            return "ERROR: could not form connection to server";
+            return "ERROR: Could not form connection to server.";
         }
         writer.println("here comes a new entry");
         writer.println(entry.getName() + ";" + entry.getScore());
@@ -56,7 +58,7 @@ public class LeaderboardClient {
                 return result;
             }
         } catch (IOException ex) {
-            return "ERROR: an exception occurred during transit";
+            return "ERROR: An exception occurred during transit.";
         }
         closeConnection();
         return null;
@@ -156,7 +158,6 @@ public class LeaderboardClient {
                 return true;
             }
         } catch (IOException ex) {
-            System.err.println("[LeaderboardClient] IOException when creating a connection: " + ex.getMessage());
             return false;
         }
     }

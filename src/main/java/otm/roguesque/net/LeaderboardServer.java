@@ -112,6 +112,15 @@ public class LeaderboardServer {
             System.err.println("[LeaderboardServer] IOException when starting server: " + ex.getMessage());
         }
 
+        final LeaderboardServer server = this;
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                if (!server.serverSocket.isClosed()) {
+                    server.stop();
+                }
+            }
+        });
     }
 
     /**
@@ -159,12 +168,9 @@ public class LeaderboardServer {
 
     private void readNewEntry(BufferedReader reader, PrintWriter writer) throws IOException {
         String[] parts = reader.readLine().split(";");
-        if (parts.length != 2) {
-            writer.println("ERROR: too many parts");
-            return;
-        }
-        if (parts[0].length() != 3) {
-            writer.println("ERROR: name not 3 letters");
+        boolean tooManyParts = parts.length != 2, notThreeLetters = parts[0].length() != 3, invalidName = !LeaderboardEntry.isValid(parts[0]);
+        if (tooManyParts || notThreeLetters || invalidName) {
+            writer.println(tooManyParts ? "ERROR: Too many parts." : (notThreeLetters ? "ERROR: Name not 3 letters." : (invalidName ? "ERROR: Invalid name." : "ERROR: Unknown error.")));
             return;
         }
         try {
@@ -172,7 +178,7 @@ public class LeaderboardServer {
             saveToDisk();
             writer.println("it has been done");
         } catch (NumberFormatException ex) {
-            writer.println("ERROR: could not parse score");
+            writer.println("ERROR: Could not parse score.");
         }
     }
 
@@ -196,9 +202,7 @@ public class LeaderboardServer {
     }
 
     private void addEntryToList(LeaderboardEntry entry, ArrayList<LeaderboardEntry> list) {
-        if (list.stream().anyMatch((e) -> e.equals(entry))) {
-            return;
-        }
+        list.removeIf((e) -> e.getName().equals(entry.getName()) && e.getScore() == entry.getScore());
         list.add(entry);
         list.sort((a, b) -> b.compareTo(a));
         while (list.size() > 10) {

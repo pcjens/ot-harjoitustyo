@@ -89,4 +89,36 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry> {
             return other.name.equals(name) && other.score == score && other.time.equals(time);
         }
     }
+
+    /**
+     * Palauttaa tiedon siitä, onko nimi sopiva Leaderboardille.
+     *
+     * @param name Nimi jota testataan.
+     * @return Onko nimessä tasan 3 kirjainta, ja onko sen kaikki merkit Basic
+     * Latin -blokin näkyviä symboleita?
+     */
+    public static boolean isValid(String name) {
+        if (name.length() != 3) {
+            return false;
+        }
+        for (int i : name.codePoints().toArray()) {
+            if (!codepointIsValid(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Kertoo onko merkki Basic Latin -blokin näkyviä symboleita, käytetään
+     * isValidissa.
+     *
+     * @see otm.roguesque.net.LeaderboardEntry#isValid(java.lang.String)
+     *
+     * @param codepoint Merkin codepoint.
+     * @return Onko merkki validi.
+     */
+    public static boolean codepointIsValid(int codepoint) {
+        return codepoint > 0x20 && codepoint < 0x7F;
+    }
 }

@@ -57,13 +57,21 @@ public class Input {
         KeyCode.P, KeyCode.E, KeyCode.TAB
     };
     /**
-     * Napit joilla voi "poistaa valinnan," eli sulkea infolaatikon.
+     * Napit joilla voi "poistaa valinnan," eli sulkea infolaatikon, tai poistaa
+     * tekstikentän valinnan.
      */
     public static final KeyCode[] CONTROL_CLEAR_SELECTION = new KeyCode[]{
         KeyCode.ESCAPE
     };
+    /**
+     * Napit joilla voi valita tekstikentän.
+     */
+    public static final KeyCode[] CONTROL_SELECT_FIELD = new KeyCode[]{
+        KeyCode.TAB
+    };
 
     private final ArrayList<KeyCode> keysPressed = new ArrayList();
+    private final ArrayList<String> charsTyped = new ArrayList();
     private final ArrayList<MouseButton> mouseButtonsPressed = new ArrayList();
     private double mouseX;
     private double mouseY;
@@ -78,10 +86,20 @@ public class Input {
     }
 
     /**
+     * Rekisteröi uuden kirjoitetun kirjaimen. Kutsutaan RoguesqueAppista.
+     *
+     * @param c Kirjoitettu kirjain.
+     */
+    public void addTypedKey(String c) {
+        charsTyped.add(c);
+    }
+
+    /**
      * Resetoi painetut napit, tapahtuu jokaisen ruutupäivityksen jälkeen.
      */
     public void clearInputs() {
         keysPressed.clear();
+        charsTyped.clear();
         mouseButtonsPressed.clear();
     }
 
@@ -146,6 +164,16 @@ public class Input {
      */
     public double getMouseY() {
         return mouseY;
+    }
+
+    /**
+     * Palauttaa listan niistä kirjaimista joita tällä päivityksellä
+     * kirjoitettiin, kirjoitusjärjestykssä.
+     *
+     * @return Kirjoitetut kirjaimet.
+     */
+    public ArrayList<String> getTypedChars() {
+        return charsTyped;
     }
 
     /**
