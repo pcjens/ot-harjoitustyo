@@ -61,6 +61,14 @@ Pelin päätyttyä pelaaja voi lähettää saamansa pisteet
 leaderboard-palvelimelle, ja kaikki koodi (palvelin mukaanlukien)
 tähän liittyen löytyy paketista `otm.roguesque.net`.
 
+`LeaderboardClient` toimii pelaajan näkökulman edustajana, ja sen
+funktioilla voi saada palvelimelta listan tämän hetkisistä
+leaderboardeista, ja lähettää uuden pisteytyksen palvelimelle. Sillä
+voi myös tarkistaa, onko palvelin ylhäällä. `LeaderboardServer` toimii
+palvelimena joka ottaa vastaan Clientin antamia tuloksia, ja palauttaa
+sen tietoja tämänhetkisistä top 10:stä. Server ja Client käyttävät
+kummatkin `LeaderboardEntry` luokkaa pisteytyksien tallentamiseen.
+
 ## Loppuhuomioita
 Pelin tila on käyttöliittymäluokan sisällä, mikä voi vaikuttaa
 ensisilmäyksellä pahalta logiikan ja presentaation

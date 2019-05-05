@@ -57,6 +57,13 @@ kenoviivaa. Esimerkki-kuva .jarista olisi
 `jar:/sprites/Player.png`. Jos `Player.png` olisi tiedostona kansiossa
 jossa .jar käynnistetään, voitaisiin käyttää urlia `file:Player.png`.
 
+## Leaderboardien lukeminen ilman peliin menoa
+Pelin voi käynnistää flagilla `--leaderboards`, jolloin se listaa
+terminaaliin tämänhetkiset leaderboardit:
+```sh
+java -jar Roguesque-1.0.jar --leaderboards
+```
+
 ## Leaderboard-palvelimen vaihto
 Pelissä on mahdollista lähettää pisteet netissä oleville
 leaderboarderille, ja verrata muiden pelaajien saavutuksiin. Mikäli

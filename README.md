@@ -28,9 +28,9 @@ alla.
 mvn package
 ```
 Jar-arkisto luodaan polkuun
-[`target/Roguesque-1.0-SNAPSHOT.jar`](target/Roguesque-1.0-SNAPSHOT.jar). Luodun
+[`target/Roguesque-1.0.jar`](target/Roguesque-1.0.jar). Luodun
 jar-arkiston voi suorittaa komennolla `java -jar
-target/Roguesque-1.0-SNAPSHOT.jar`.
+target/Roguesque-1.0.jar`.
 
 #### Palvelin-jarin luominen
 Mikäli haluat vain leaderboards-palvelimen suorittavan .jarin, ei
